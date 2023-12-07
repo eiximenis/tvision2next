@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Tvision2.Console</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tvision2.Console\Tvision2.Console.csproj" />
+      <ProjectReference Include="..\Tvision2.Core\Tvision2.Core.csproj" />
+    </ItemGroup>
+
+</Project>
