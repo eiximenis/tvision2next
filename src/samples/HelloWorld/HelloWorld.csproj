@@ -7,4 +7,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Tvision2.Engine\Tvision2.Engine.csproj" />
+    </ItemGroup>
+
 </Project>
