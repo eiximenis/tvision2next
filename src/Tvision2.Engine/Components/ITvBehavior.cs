@@ -20,6 +20,9 @@ public readonly record struct BehaviorResult<T>(T State, DirtyStatus DirtyStatus
     public bool IsDirty => DirtyStatus != DirtyStatus.Clean;
 }
 
+/// <summary>
+/// A Behavior that processes a State of type T
+/// </summary>
 public interface ITvBehavior<T>
 {
     BehaviorResult<T> Do(in BehaviorContext<T> context);

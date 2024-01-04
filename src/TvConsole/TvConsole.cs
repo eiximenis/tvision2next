@@ -60,7 +60,6 @@ public static partial  class TvConsole
     }
     
     public static void WriteLine(string msg)
-    
     {
         if (_writeForeground)
         {
@@ -74,5 +73,7 @@ public static partial  class TvConsole
         }
         System.Console.WriteLine(msg);
     }
+    
+    
 }
 

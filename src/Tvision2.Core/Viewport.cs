@@ -21,10 +21,9 @@ static class ViewportUpdateReasonExtensions
 
 public class Viewport
 {
+    
     public TvPoint Position { get; private set; }
     public TvBounds Bounds { get; private set; }
     public static Viewport Null() => new Viewport() { Position = TvPoint.Zero, Bounds = TvBounds.Empty };
-    
-    
-    
+    public bool IsNull => Bounds.IsEmpty;
 }

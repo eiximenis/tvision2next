@@ -17,6 +17,22 @@ public class AnsiConsoleDriver : IConsoleDriver
         _options = options;
         _colorManager = new AnsiColorManager();
     }
+
+    public void Init()
+    {
+        if (_options.UseAlternateBuffer)
+        {
+            System.Console.Write(AnsiEscapeSequences.SMCUP);
+        }
+    }
+
+    public void Teardown()
+    {
+        if (_options.UseAlternateBuffer)
+        {
+            System.Console.Write(AnsiEscapeSequences.RMCUP);
+        }
+    }
     
     public void WriteCharacterAt(int x, int y, Rune character, CharacterAttribute attribute)
     {

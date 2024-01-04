@@ -82,13 +82,10 @@ public sealed class TvComponent<T> : TvComponent
     {
         State = newState;
     }
-
-    public IDrawersAdder<T> IfViewport(Func<Viewport, bool> condition) => new DrawersAdder<T>(this, condition);
-
-
+    
     public void AddDrawer(ITvDrawer<T> drawer) => _drawers.Add(drawer);
 
-    public void AddDrawer(Action<RenderContext, T> drawerAction) => AddDrawer(new FuncDrawer<T>(drawerAction));
+    public void AddDrawer(Action<ConsoleContext, T> drawerAction) => AddDrawer(new FuncDrawer<T>(drawerAction));
 
     internal void AddAdaptativeDrawerDefinition(ITvDrawer<T> drawer, Func<Viewport, bool> condition)
     {
@@ -140,20 +137,19 @@ public sealed class TvComponent<T> : TvComponent
 
 
 
-    public override void Draw(VirtualConsoleLayer console)
+    public override void Draw(VirtualConsole console)
     {
-        if (!Viewport.IsNull)
+        if (Viewport.IsNull) return;
+        
+        var context = new ConsoleContext(console, Viewport);
+        foreach (var drawer in _adaptativeDrawersSelected)
         {
-            var context = new RenderContext(Viewport, console, Metadata);
-            foreach (var drawer in _adaptativeDrawersSelected)
-            {
-                drawer.Draw(context, State);
-            }
+            drawer.Draw(context, State);
+        }
 
-            foreach (var drawer in _drawers)
-            {
-                drawer.Draw(context, State);
-            }
+        foreach (var drawer in _drawers)
+        {
+            drawer.Draw(context, State);
         }
     }
 
@@ -170,4 +166,3 @@ public sealed class TvComponent<T> : TvComponent
         }
     }
 }
-
