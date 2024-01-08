@@ -23,11 +23,11 @@ public class Tvision2Engine
         
     }
 
-    public async Task NextCycle()
+    internal async Task NextCycle()
     {
     }
 
-    public async Task Teardown()
+    internal async Task Teardown()
     {
     }
 }

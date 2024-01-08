@@ -5,11 +5,12 @@ namespace Tvision2.Core.Engine.Components;
 
 public abstract class TvComponent
 {
-
     public TvComponentMetadata Metadata {get; }
     public Guid Id { get; }
 
     private readonly Viewport _viewport;
+    
+    public LayerSelector Layer { get; private set; }
 
     protected TvComponent()
     {
@@ -17,8 +18,10 @@ public abstract class TvComponent
         Metadata = new TvComponentMetadata(this);
         _viewport = Viewport.Null();
         // _viewport.OnUpdated += Viewport_Updated;
+        Layer = LayerSelector.Standard;
     }
 
+    internal void UseLayer(LayerSelector layer) => Layer = layer;
     private void Viewport_Updated(object? _, ViewportUpdateReason reason)
     {
         if (reason == ViewportUpdateReason.Resized)

@@ -1,8 +1,7 @@
 using Tvision2.Core.Engine.Events;
+using Tvision2.Engine.Components;
 
 namespace Tvision2.Core.Engine.Components;
-
-
 
 public class TvComponentTreeNode
 {
@@ -67,8 +66,6 @@ class TvComponentTree  :  ITvComponentTreeActions
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
 
-    public bool IsRealTree { get => true; }
-
     public IEnumerable<TvComponentTreeNode> Roots { get => _roots; }
 
     public ITvComponentTreeActions On() => this;
@@ -95,10 +92,9 @@ class TvComponentTree  :  ITvComponentTreeActions
         }
     }
     
-    public Task<TvComponentTreeNode> Add(TvComponent component) => AddRoot(component, LayerSelector.Standard);
+    public Task<TvComponentTreeNode> Add(TvComponent component) => Add(component, LayerSelector.Standard);
     public async Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer)
     {
-        component.UseLayer(layer);
         var rootMetadata = component.Metadata;
         _roots.Add(rootMetadata.Node);
         await rootMetadata.AttachToTree(this);
@@ -115,14 +111,10 @@ class TvComponentTree  :  ITvComponentTreeActions
         return rootMetadata.Node;
     }
 
-    public Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) => AddChild(child, parent, null);
-    public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent, LayerSelector? layer)
+    public Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) => AddChild(child, parent, LayerSelector.Standard);
+    public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent, LayerSelector layer)
     {
-        if (layer is not null)
-        {
-            child.UseLayer(layer);
-        }
-        // If layer has not been passed, and parent is not enabled, child will "inherit" the layer of the parent, once parent is set.
+        child.UseLayer(layer);
         var childMetadata = child.Metadata;
         await parent.Metadata.AddChild(child);
         await _onNodeAdded.Invoke(childMetadata.Node);

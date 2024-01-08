@@ -4,6 +4,7 @@ public class TvComponentMetadata
 {
     private readonly TvComponent _owner;
     private readonly TvComponentTreeNode _node;
+    public TvComponentTreeNode Node { get => _node; }
     internal TvComponentMetadata(TvComponent owner)
     {
         _owner = owner;
