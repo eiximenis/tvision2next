@@ -31,10 +31,6 @@ public abstract class TvComponent
     }
     public Viewport Viewport => _viewport;
 
-    public void AddChild(TvComponent child)
-    {
-        child.Metadata.AddChild(child);
-    }
     
     public abstract void Draw(VirtualConsole console);
     public abstract UpdateResult Update(UpdateContext updateContext);
@@ -42,6 +38,7 @@ public abstract class TvComponent
     protected abstract void UpdateAdaptativeDrawersForUpdatedViewport();
 
     /// <summary>
+    /// Easy shortcut for creating stateless components
     /// Easy shortcut for creating stateless components
     /// </summary>
     public static TvComponent<Unit> CreateStatelessComponent() => new TvComponent<Unit>(Unit.Value);

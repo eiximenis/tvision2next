@@ -3,84 +3,53 @@ using Tvision2.Engine.Components;
 
 namespace Tvision2.Core.Engine.Components;
 
-public class TvComponentTreeNode
-{
-    private readonly LinkedList<TvComponentTreeNode> _childs;
-    public TvComponentMetadata ComponentData { get; }
-    public TvComponentTreeNode? Parent { get; private set; }
-    public bool IsRoot => Parent is null;
-
-
-    public TvComponentTreeNode(TvComponentMetadata metadata)
-    {
-        _childs = new LinkedList<TvComponentTreeNode>();
-        ComponentData = metadata;
-    }
-    
-    public TvComponentTreeNode Root()
-    {
-        var node = this;
-        while (node.Parent is not null)
-        {
-            node = node.Parent;
-        }
-        return node;
-    }
-
-    public void AddChild(TvComponentTreeNode child)
-    {
-        _childs.AddLast(child);
-        child.Parent = this;
-    }
-    
-    public void RemoveChild(TvComponentTreeNode child)
-    {
-        if (_childs.Remove(child))
-        {
-            child.Parent = null;
-        }
-    }
-    
-    public IEnumerable<TvComponentTreeNode> Descendants() =>
-        _childs.SelectMany(c => c.SubTree());
-    
-    public IEnumerable<TvComponentTreeNode> SubTree() =>
-        _childs.SelectMany(c => c.SubTree()).Union(new[] { this });
-}
-
-
 public interface ITvComponentTreeActions
 {
-    IActionsChain<TvComponentTreeNode> NodeAdded { get; }
     IActionsChain<TvComponentTreeNode> RootAdded { get; }
-        
+    IActionsChain<TvComponentTreeNode> NodeAdded { get; }
     IActionsChain<Unit> TreeUpdated { get; } 
 }
 
-class TvComponentTree  :  ITvComponentTreeActions
+public interface ITvComponentTree
+{
+    ITvComponentTreeActions On();
+    Task<TvComponentTreeNode> Add(TvComponent component);
+    Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer);
+    Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent);
+}
+
+class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 {
     private readonly List<TvComponentTreeNode> _roots;
-    private readonly ActionsChain<TvComponentTreeNode> _onNodeAdded;
     private readonly ActionsChain<TvComponentTreeNode> _onRootAdded;
+    private readonly ActionsChain<TvComponentTreeNode> _onNodeAdded;
     private readonly ActionsChain<Unit> _onTreeUpdated;
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
+    private readonly SortedList<byte, List<TvComponentTreeNode>> _sortedNodes;
 
     public IEnumerable<TvComponentTreeNode> Roots { get => _roots; }
 
     public ITvComponentTreeActions On() => this;
-    IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.NodeAdded => _onNodeAdded;
     IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.RootAdded => _onRootAdded;
+    IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.NodeAdded => _onNodeAdded;
     IActionsChain<Unit> ITvComponentTreeActions.TreeUpdated => _onTreeUpdated;
 
     public TvComponentTree()
     {
         _dirty = false;
         _sharedTags = new Dictionary<Type, object>();
+        _sortedNodes = new SortedList<byte, List<TvComponentTreeNode>>();
         _roots = new List<TvComponentTreeNode>();
-        _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
+        _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
         _onTreeUpdated = new ActionsChain<Unit>();
+        
+        // Create the 256 layers to allow fast retrieval of nodes sorted by layer
+        for (var idx = 0; idx < LayerSelector.MaxLayerIndex; idx++)
+        {
+            _sortedNodes.Add((byte)idx, new List<TvComponentTreeNode>());
+        }
     }
 
     internal async Task NewCycle()
@@ -95,36 +64,62 @@ class TvComponentTree  :  ITvComponentTreeActions
     public Task<TvComponentTreeNode> Add(TvComponent component) => Add(component, LayerSelector.Standard);
     public async Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer)
     {
+        component.UseLayer(layer);
         var rootMetadata = component.Metadata;
-        _roots.Add(rootMetadata.Node);
-        await rootMetadata.AttachToTree(this);
-        var subtree = rootMetadata.Node.Descendants();
-        foreach (var node in subtree)
-        {
-            await node.Component.Metadata.AttachToTree(rootMetadata.OwnerTree);
-        }
-
+        var rootNode = rootMetadata.Node;
+        _roots.Add(rootNode);
+        await DoAddSubtree(rootNode, layer);
         await _onRootAdded.Invoke(rootMetadata.Node);
-        await _onNodeAdded.Invoke(rootMetadata.Node);
         _dirty = true;
-
         return rootMetadata.Node;
     }
 
-    public Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) => AddChild(child, parent, LayerSelector.Standard);
+    private async Task DoAddSubtree(TvComponentTreeNode stRoot, LayerSelector layer)
+    {
+        foreach (var node in stRoot.SubTree())
+        {
+            var metadata = node.ComponentData;
+            if (metadata.IsAttached) continue;            // If node is already attached we skip it
+
+            var component = metadata.Component;
+            if (component.Layer.IsNone)
+            {
+                component.UseLayer(layer);
+            }
+
+            var key = component.Layer.LayerIndex;
+            _sortedNodes[key].Add(node);
+            metadata.AttachToTree(this);
+            if (!node.IsRoot)
+            {
+                await _onNodeAdded.Invoke(node);
+            }
+        }
+    }
+
+
+    public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) =>
+        await AddChild(child, parent, LayerSelector.Standard);
+    
+    /// <summary>
+    /// Adds a component as a child of another component. This **does not** add the parent component to the tree.
+    /// </summary>
     public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent, LayerSelector layer)
     {
-        child.UseLayer(layer);
+        if (child == parent) throw new ArgumentException("Cannot add a component as a child of itself");
         var childMetadata = child.Metadata;
-        await parent.Metadata.AddChild(child);
-        await _onNodeAdded.Invoke(childMetadata.Node);
-        _dirty = true;
-        
-        return childMetadata.Node;
+        if (childMetadata.IsAttached) throw new InvalidOperationException("Cannot add a component that is already attached to a tree");
+        var parentMetadata = parent.Metadata;
+        parentMetadata.AddChild(child);
+        var childNode = childMetadata.Node;
+        if (parentMetadata.IsAttached)
+        {
+            await DoAddSubtree(childNode, layer);
+        }
+        return childNode;
     }
 
     public IEnumerable<TvComponentTreeNode> Nodes() => _roots.SelectMany(r => r.SubTree());
-
 
     public void AddSharedTag<TTag>(TTag tag) where TTag : class
     {

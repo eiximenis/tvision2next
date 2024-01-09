@@ -9,20 +9,22 @@ public static class Tv2App
 {
 
     private static IHost? _host;
-    public static async Task<Tvision2Engine> Start(Action<ITvision2Options>? optionsAction = null)
+    public static async Task<IHost> Setup(Action<ITvision2Options>? optionsAction = null)
     {   
         var options = new Tvision2Options();
         optionsAction?.Invoke(options);
         var builder = new HostBuilder().UseTvision2(options);
         _host = builder.Build();
-        await _host.RunAsync();
-        return _host.Services.GetRequiredService<Tvision2Engine>();
+        return _host;
     }
     
-    public  static Task End()
+    public static async Task Run()
     {
-        System.Console.Write("Ending...");
-        return Task.CompletedTask;
+        if (_host is null)
+        {
+            throw new InvalidOperationException("Setup must be called before running the application");
+        }
+        await _host.RunAsync();
     }
         
 }

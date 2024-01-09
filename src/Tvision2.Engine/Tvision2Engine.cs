@@ -4,12 +4,12 @@ public class Tvision2Engine
 {
     public bool Running { get; private set; } = false;
     private readonly Tvision2Options _options;
-    private readonly TvUiManager _uiManager;
-
-
+    public TvUiManager UI { get; }
+    
     public Tvision2Engine(Tvision2Options options)
     {
         _options = options;
+        UI = new TvUiManager(_options.ConsoleOptions);
     }
     
     public async Task Initialize()
