@@ -10,14 +10,14 @@ public class TvUiManager
     public ITvComponentTree ComponentTree => _tree;
     private readonly VirtualConsole _console;
 
-    public TvUiManager(ConsoleOptions options)
+    public TvUiManager(VirtualConsole console)
     {
         _tree = new TvComponentTree();
-        _console = new VirtualConsole(TvBounds.FromRowsAndCols(24,80), TvColor.Black);
+        _console = console;
     }
     
 
-    internal void Draw(VirtualConsole console)
+    internal void Draw()
     {
         foreach (var root in _tree.Roots)
         {

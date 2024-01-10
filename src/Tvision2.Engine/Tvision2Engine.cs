@@ -1,3 +1,5 @@
+using Tvision2.Core.Engine.Render;
+
 namespace Tvision2.Core.Engine;
 
 public class Tvision2Engine
@@ -9,7 +11,7 @@ public class Tvision2Engine
     public Tvision2Engine(Tvision2Options options)
     {
         _options = options;
-        UI = new TvUiManager(_options.ConsoleOptions);
+        UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(24,80), TvColor.Black));
     }
     
     public async Task Initialize()
@@ -25,6 +27,7 @@ public class Tvision2Engine
 
     internal async Task NextCycle()
     {
+        UI.Draw();
     }
 
     internal async Task Teardown()

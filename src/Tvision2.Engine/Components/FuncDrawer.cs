@@ -3,14 +3,14 @@ using Tvision2.Core.Engine.Render;
 
 namespace Tvision2.Engine.Components;
 
-class StatelessFuncDrawer : ITvDrawer<Unit>
+class StatelessFuncDrawer<T> : ITvDrawer<T>
 {
     private readonly Action<ConsoleContext> _renderAction;
     public StatelessFuncDrawer(Action<ConsoleContext> renderAction)
     {
         _renderAction = renderAction;
     }
-    public void Draw(in ConsoleContext context, Unit _) => _renderAction(context);
+    public void Draw(in ConsoleContext context, T _) => _renderAction(context);
 
 }
 

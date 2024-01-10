@@ -1,4 +1,5 @@
 using Tvision2.Core.Console;
+using Wcwidth;
 
 namespace Tvision2.Core.Engine.Render;
 
@@ -15,6 +16,46 @@ public class VirtualConsole
     
     public TvBounds Bounds { get; }
     public bool IsDirty { get; private set; }
+    
+   public void DrawAt(string text, int maxLen, TvPoint location, CharacterAttribute attr, in Viewzone cropzone)
+   {
+       if (!cropzone.ContainsLine(location.Y) || !cropzone.ContainsColumn(location.X))
+       {
+           return;
+       }
+       
+       var lineBuffer = _buffer.AsSpan(location.Y * Bounds.Width, Bounds.Width);
+       var startcol = location.X;
+       var endcol = Math.Min(cropzone.BottomRight.X, Bounds.Width -1);  
+       var dirty = IsDirty;
+       var runes = text.EnumerateRunes();
+       var idx = startcol;
+
+       while (runes.MoveNext())
+       {
+           var rune = runes.Current;
+           ref var cchar = ref lineBuffer[idx];
+           var newchar = new ConsoleCharacter(rune, attr);
+           var runeWidth = UnicodeCalculator.GetWidth(rune);
+           if (runeWidth > 0)
+           {
+               if (!cchar.Equals(newchar))
+               {
+                   lineBuffer[idx] = newchar;
+                   dirty = true;
+
+                   if (runeWidth == 2)
+                   {
+                       lineBuffer[idx + 1] = ConsoleCharacter.Null;
+                   }
+               }
+               idx += runeWidth;
+               if (idx >= endcol) { break; }
+           }
+       }
+
+       IsDirty = dirty;
+   }
     
     public VirtualConsole(TvBounds bounds, TvColor defaultBack)
     {

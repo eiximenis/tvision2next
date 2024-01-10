@@ -85,6 +85,7 @@ public sealed class TvComponent<T> : TvComponent
     
     public void AddDrawer(ITvDrawer<T> drawer) => _drawers.Add(drawer);
 
+    public void AddDrawer(Action<ConsoleContext> drawerAction) => AddDrawer(new StatelessFuncDrawer<T>(drawerAction));
     public void AddDrawer(Action<ConsoleContext, T> drawerAction) => AddDrawer(new FuncDrawer<T>(drawerAction));
 
     internal void AddAdaptativeDrawerDefinition(ITvDrawer<T> drawer, Func<Viewport, bool> condition)
