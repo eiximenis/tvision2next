@@ -19,7 +19,7 @@ public readonly struct ConsoleContext
 
     public void DrawStringAt(string text, TvPoint location, TvColorsPair colors)
     {
-        var attr = new CharacterAttribute(colors.ForeGround, colors.Background, CharacterAttributeModifiers.Normal);
+        var attr = new CharacterAttribute(colors.Foreground, colors.Background, CharacterAttributeModifiers.Normal);
 
         var consoleLocation = ViewPointToConsolePoint(location, _viewport.Position);
         var maxcols = (_viewport.Bounds.Width - location.X);
@@ -34,6 +34,6 @@ public readonly struct ConsoleContext
         }
 
         maxcols = maxcols < currentWidth ? maxcols : currentWidth;
-        _console.DrawAt(text, maxcols, consoleLocation, attr, _viewport.ViewZone);
+        _console.DrawAt(text, maxcols, consoleLocation, attr, _viewport.Viewzone);
     }
 }

@@ -42,6 +42,7 @@ public class VirtualConsole
                if (!cchar.Equals(newchar))
                {
                    lineBuffer[idx] = newchar;
+                   _dirtyMap[idx] = DirtyStatus.Dirty;
                    dirty = true;
 
                    if (runeWidth == 2)
@@ -68,6 +69,8 @@ public class VirtualConsole
     
     public void Flush(IConsoleDriver consoleDriver)
     {
+        if (!IsDirty) { return; }
+        
         var height = Bounds.Height;
         var width = Bounds.Width;
         var idx = 0;

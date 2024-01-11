@@ -4,6 +4,8 @@ namespace Tvision2.Core;
 
 public readonly struct TvBounds : IEquatable<TvBounds>
 {
+    
+    public static TvBounds ConsoleBounds => new TvBounds(System.Console.WindowHeight, System.Console.WindowWidth);
     public int Width { get; }
     public int Height { get; }
         

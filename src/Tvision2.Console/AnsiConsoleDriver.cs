@@ -8,11 +8,11 @@ namespace Tvision2.Console;
 public class AnsiConsoleDriver : IConsoleDriver
 {
     private readonly AnsiColorManager _colorManager;
-    private readonly AnsiConsoleOptions _options;
+    private readonly ConsoleOptions _options;
     
     public ConsoleOptions ConsoleOptions => _options;
 
-    public AnsiConsoleDriver(AnsiConsoleOptions options)
+    public AnsiConsoleDriver(ConsoleOptions options)
     {
         _options = options;
         _colorManager = new AnsiColorManager();

@@ -43,19 +43,4 @@ public class TvComponentMetadata
         _ownerTree = null;
     }
     
-    private bool _drawPending;
-    internal bool GetAndCleanIsDrawPending()
-    {
-        var retVal = _drawPending;
-        _drawPending = false;
-        return retVal;
-    }
-    internal void SetDrawPending()
-    {
-        _drawPending = true;
-    }
-    internal bool HasDrawPending()
-    {
-        return _drawPending;
-    }
 }

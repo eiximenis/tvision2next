@@ -8,7 +8,7 @@ public abstract class TvComponent
     public TvComponentMetadata Metadata {get; }
     public Guid Id { get; }
 
-    private readonly Viewport _viewport;
+    private Viewport _viewport;
     
     public LayerSelector Layer { get; private set; }
 
@@ -30,7 +30,11 @@ public abstract class TvComponent
         }
     }
     public Viewport Viewport => _viewport;
-
+    
+    public void UseViewport(Viewport newViewport)
+    {
+        _viewport = newViewport;
+    }
     
     public abstract void Draw(VirtualConsole console);
     public abstract UpdateResult Update(UpdateContext updateContext);
@@ -166,4 +170,5 @@ public sealed class TvComponent<T> : TvComponent
             }
         }
     }
+    
 }

@@ -21,18 +21,19 @@ static class ViewportUpdateReasonExtensions
 
 public class Viewport
 {
-
-    private Viewzone _viewzone;
-    public TvPoint Position { get; private set; }
-    public TvBounds Bounds { get; private set; }
-    public static Viewport Null() => new Viewport() { Position = TvPoint.Zero, Bounds = TvBounds.Empty };
+    private readonly Viewzone _viewzone;
+    public TvPoint Position { get; }
+    public TvBounds Bounds { get;  }
+    public static Viewport FullViewport { get; } = new Viewport(TvPoint.Zero, TvBounds.ConsoleBounds);
+    public static Viewport Null() => new Viewport(TvPoint.Zero, TvBounds.Empty);
     public bool IsNull => Bounds.IsEmpty;
 
-    public Viewport()
+    public Viewport(TvPoint position, TvBounds bounds)
     {
-        // TODO: Update viewzone when position or bounds change
+        Position = position;
+        Bounds = bounds;
         _viewzone = new Viewzone(Position, Bounds);
     }
 
-    public Viewzone ViewZone => _viewzone;
+    public Viewzone Viewzone => _viewzone;
 }

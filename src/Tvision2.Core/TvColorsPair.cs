@@ -2,11 +2,11 @@ namespace Tvision2.Core;
 
 public readonly ref struct TvColorsPair
 {
-    public TvColor ForeGround { get; }
+    public TvColor Foreground { get; }
     public TvColor Background { get; }
     private TvColorsPair(TvColor fore, TvColor back)
     {
-        ForeGround = fore;
+        Foreground = fore;
         Background = back;
     }
 
