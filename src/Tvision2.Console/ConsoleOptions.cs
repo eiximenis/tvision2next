@@ -1,4 +1,4 @@
-namespace Tvision2.Core.Console;
+namespace Tvision2.Console;
 
 public interface IConsoleOptions
 {

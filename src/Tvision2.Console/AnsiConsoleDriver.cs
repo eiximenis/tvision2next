@@ -9,8 +9,6 @@ public class AnsiConsoleDriver : IConsoleDriver
 {
     private readonly AnsiColorManager _colorManager;
     private readonly ConsoleOptions _options;
-    
-    public ConsoleOptions ConsoleOptions => _options;
 
     public AnsiConsoleDriver(ConsoleOptions options)
     {

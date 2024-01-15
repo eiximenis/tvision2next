@@ -36,4 +36,11 @@ public readonly struct ConsoleContext
         maxcols = maxcols < currentWidth ? maxcols : currentWidth;
         _console.DrawAt(text, maxcols, consoleLocation, attr, _viewport.Viewzone);
     }
+
+    public void Fill(TvColor bgColor)
+    {
+        var attr = new CharacterAttribute(bgColor, bgColor, CharacterAttributeModifiers.Normal);
+        var consoleLocation = ViewPointToConsolePoint(TvPoint.Zero, _viewport.Position);
+        _console.FillRect(consoleLocation, attr, _viewport.Viewzone);
+    }
 }

@@ -25,6 +25,7 @@ public class VirtualConsole
        }
        
        var lineBuffer = _buffer.AsSpan(location.Y * Bounds.Width, Bounds.Width);
+       var dirtyBuffer = _dirtyMap.AsSpan(location.Y * Bounds.Width, Bounds.Width);
        var startcol = location.X;
        var endcol = Math.Min(cropzone.BottomRight.X, Bounds.Width -1);  
        var dirty = IsDirty;
@@ -42,7 +43,7 @@ public class VirtualConsole
                if (!cchar.Equals(newchar))
                {
                    lineBuffer[idx] = newchar;
-                   _dirtyMap[idx] = DirtyStatus.Dirty;
+                   dirtyBuffer[idx] = DirtyStatus.Dirty;
                    dirty = true;
 
                    if (runeWidth == 2)
@@ -55,6 +56,42 @@ public class VirtualConsole
            }
        }
 
+       IsDirty = dirty;
+   }
+   
+   public void FillRect(TvPoint location, CharacterAttribute attr,in Viewzone cropzone)
+   {
+       if (!cropzone.ContainsLine(location.Y) || !cropzone.ContainsColumn(location.X))
+       {
+           return;
+       }
+
+       var dirty = false;
+       
+       var startcol = location.X;
+       var endcol = Math.Min(cropzone.BottomRight.X, Bounds.Width -1);
+       var startrow = location.Y;
+       var endrow = Math.Min(cropzone.BottomRight.Y, Bounds.Height - 1);
+       
+       var idx = startcol;
+
+       for (var crow = startrow; crow <= endrow; crow++)
+       {
+           var lineBuffer = _buffer.AsSpan((startrow + crow) * Bounds.Width, Bounds.Width);
+           var dirtyBuffer = _dirtyMap.AsSpan((startrow + crow) * Bounds.Width, Bounds.Width);
+           for (var ccol = startcol; ccol <= endcol; ccol++)
+           {
+               var newchar = new ConsoleCharacter(' ', attr);
+               ref var cchar = ref lineBuffer[idx];
+               
+               if (cchar != newchar)
+               {
+                   lineBuffer[ccol] = newchar;
+                   dirtyBuffer[ccol] = DirtyStatus.Dirty;
+                   dirty = true;
+               }
+           }
+       }
        IsDirty = dirty;
    }
     
@@ -109,5 +146,4 @@ public class VirtualConsole
         }
         IsDirty = false;
     }
-
 }

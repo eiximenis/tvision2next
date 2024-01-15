@@ -10,7 +10,6 @@ public interface IConsoleDriver
     void Init() { }
     void SetCursorVisibility(bool isVisible);
     void End() { }
-    ConsoleOptions ConsoleOptions { get; } 
     void ClearScreen(TvColor fore, TvColor back);
     void SetWindowsSize(TvBounds value);
     bool CanChangeWindowsSize { get; }
