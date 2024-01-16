@@ -14,11 +14,11 @@ public interface ITvision2Options
 public class Tvision2Options : ITvision2Options
 {
     public ConsoleOptions ConsoleOptions { get; } = new ();
+    private BackgroundDefinition? _backgroundDefinition;
 
-    public BackgroundDefinition BackgroundDefinition { get; private set; } =
-        DefaultBackgroundDefinitionsProvider.SolidColorBackground(TvColor.Black);
+    public BackgroundDefinition BackgroundDefinition => _backgroundDefinition ?? DefaultBackgroundDefinitionsProvider.SolidColorBackground(TvColor.Black);
 
-    ITvision2Options ITvision2Options.AddConsoleOptions(Action<IConsoleOptions>? optionsAction = null)
+    ITvision2Options ITvision2Options.AddConsoleOptions(Action<IConsoleOptions>? optionsAction)
     {
         optionsAction?.Invoke(ConsoleOptions);
         return this;
@@ -26,7 +26,7 @@ public class Tvision2Options : ITvision2Options
 
     ITvision2Options ITvision2Options.WithBackground(BackgroundDefinition definition)
     {
-        BackgroundDefinition = definition;
+        _backgroundDefinition = definition;
         return this;
     }
 }

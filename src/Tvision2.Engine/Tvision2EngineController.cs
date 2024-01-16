@@ -31,6 +31,7 @@ public class Tvision2EngineController : BackgroundService
             stopwatch.Stop();
             var ellapsed = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
+            // Debug.WriteLine("Frame ms: " + ellapsed);
             if (ellapsed < frametimeMs)
             {
                 await Task.Delay((int)(frametimeMs - ellapsed));

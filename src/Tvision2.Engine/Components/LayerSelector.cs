@@ -6,13 +6,16 @@ public readonly struct LayerSelector
     private const byte NONE_INDEX = 0;
     private const byte TOP_INDEX= byte.MaxValue;
     private const byte STANDARD_INDEX = 127;
-    private const byte BOTTOM_INDEX = 1;
+    private const byte BOTTOM_INDEX = 2;
+    private const byte BG_INDEX = 1;
     
     public static int MaxLayerIndex => byte.MaxValue;
     public static LayerSelector Top => new(TOP_INDEX);
     public static LayerSelector Bottom => new(BOTTOM_INDEX);
     public static LayerSelector Standard => new(STANDARD_INDEX);
-    public static LayerSelector None => new (NONE_INDEX); 
+    public static LayerSelector None => new (NONE_INDEX);
+
+    internal static LayerSelector Background => new(BG_INDEX);
 
     public static LayerSelector FromIndex(byte index)
     {

@@ -1,6 +1,6 @@
-using Tvision2.Engine.Components;
+using Tvision2.Core.Engine.Components;
 
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 class NewStateBehavior<T> :  ITvBehavior<T>
 {
@@ -12,7 +12,7 @@ class NewStateBehavior<T> :  ITvBehavior<T>
         _equalityComparer = equalityComparer;
     }
 
-    public BehaviorResult<T> Do(in BehaviorContext<T> context)
+    public void Do(BehaviorContext<T> context)
     {
         var newState = _getNewState(context.State);
         var isSameState = _equalityComparer switch
@@ -20,6 +20,6 @@ class NewStateBehavior<T> :  ITvBehavior<T>
             StateEqualityComparer.ByReference => ReferenceEquals(newState, context.State),
             _ => context.State.Equals(newState)
         };
-        return isSameState ? context.UnchangedResult() : context.NewStateResult(newState);
+        if (!isSameState) { context.ReplaceState(newState);}
     }
 }

@@ -1,5 +1,6 @@
 using Tvision2.Core.Engine.Render;
 using Tvision2.Engine.Components;
+using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Core.Engine.Components;
@@ -38,12 +39,11 @@ public abstract class TvComponent
     }
     
     public abstract void Draw(VirtualConsole console);
-    public abstract UpdateResult Update(UpdateContext updateContext);
+    public abstract DirtyStatus Update(TvConsoleEvents events);
 
     protected abstract void UpdateAdaptativeDrawersForUpdatedViewport();
 
     /// <summary>
-    /// Easy shortcut for creating stateless components
     /// Easy shortcut for creating stateless components
     /// </summary>
     public static TvComponent<Unit> CreateStatelessComponent() => new TvComponent<Unit>(Unit.Value);
@@ -71,6 +71,7 @@ public sealed class TvComponent<T> : TvComponent
 
     private readonly List<ITvDrawer<T>> _drawers;
     private readonly List<ITvBehavior<T>> _behaviors;
+    private  readonly  BehaviorContext<T> _behaviorContext;
     public T State { get; private set; }
 
 
@@ -81,6 +82,7 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors = new List<ITvBehavior<T>>();
         _adaptativeDrawerDefinitions = new List<AdaptativeDrawerDefinition<T>>();
         _adaptativeDrawersSelected = new List<ITvDrawer<T>>();
+        _behaviorContext = new BehaviorContext<T>(this);
     }
 
     public void SetState(T newState)
@@ -113,7 +115,7 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors.Add(new NewStateBehavior<T>(newStateGenerator, comparer));
     }
 
-    public void AddBehavior(Func<BehaviorContext<T>, BehaviorResult<T>> behaviorAction)
+    public void AddBehavior(Action<BehaviorContext<T>> behaviorAction)
     {
         _behaviors.Add(new ActionBehavior<T>(behaviorAction));
     }
@@ -123,22 +125,17 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors.Add(behavior);
     }
 
-    public override UpdateResult Update(UpdateContext updateContext)
+    public override DirtyStatus Update(TvConsoleEvents events)
     {
         var originalState = State;
-        var dirty = false;
         foreach (var behavior in _behaviors)
         {
-            var context = new BehaviorContext<T>(State, originalState);
-            var result = behavior.Do(in context);
-            dirty = dirty || result.IsDirty;
-            if (result.DirtyStatus == DirtyStatus.NewState)
-            {
-                State = result.State;
-            }
+            behavior.Do(_behaviorContext);
         }
 
-        return dirty ? UpdateResult.Dirty : UpdateResult.Clean;
+        var result = _behaviorContext.ApplyChanges();
+
+        return result;
     }
 
 
