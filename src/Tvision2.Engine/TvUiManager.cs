@@ -1,6 +1,7 @@
 using Tvision2.Core.Console;
 using Tvision2.Core.Engine.Components;
 using Tvision2.Core.Engine.Render;
+using Tvision2.Engine.Render;
 
 namespace Tvision2.Core.Engine;
 

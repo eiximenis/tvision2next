@@ -2,6 +2,7 @@ using Tvision2.Console;
 using Tvision2.Core.Console;
 using Tvision2.Core.Engine.Render;
 using Tvision2.Engine.Components;
+using Tvision2.Engine.Render;
 
 namespace Tvision2.Core.Engine;
 
@@ -16,7 +17,9 @@ public class Tvision2Engine
     {
         _options = options;
         _consoleDriver = new AnsiConsoleDriver(_options.ConsoleOptions);
-        UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(24,80), TvColor.Black), _consoleDriver);
+        var crows = System.Console.WindowHeight;
+        var ccols = System.Console.WindowWidth;
+        UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(crows,ccols), TvColor.Black), _consoleDriver);
         UI.ComponentTree.Add(_options.BackgroundDefinition.CreateBackgroundComponent(), LayerSelector.Bottom);
     }
     

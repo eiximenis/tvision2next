@@ -16,7 +16,7 @@ public class Tvision2Options : ITvision2Options
     public ConsoleOptions ConsoleOptions { get; } = new ();
 
     public BackgroundDefinition BackgroundDefinition { get; private set; } =
-        SolidBackgroundDefinitionProvider.SolidColorBackground(TvColor.Black);
+        DefaultBackgroundDefinitionsProvider.SolidColorBackground(TvColor.Black);
 
     ITvision2Options ITvision2Options.AddConsoleOptions(Action<IConsoleOptions>? optionsAction = null)
     {

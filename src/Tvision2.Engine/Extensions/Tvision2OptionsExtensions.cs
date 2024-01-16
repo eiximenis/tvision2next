@@ -9,7 +9,7 @@ public static class Tvision2OptionsExtensions
 {
     public static ITvision2Options WithBackground(this ITvision2Options options, TvColor bgColor)
     {
-        var backgroundDefinition = SolidBackgroundDefinitionProvider.SolidColorBackground(bgColor);
+        var backgroundDefinition = DefaultBackgroundDefinitionsProvider.SolidColorBackground(bgColor);
         return options.WithBackground(backgroundDefinition);
         return options;
     }

@@ -29,7 +29,7 @@ public class BackgroundDefinition
     }
 }
 
-public static class SolidBackgroundDefinitionProvider
+public static class DefaultBackgroundDefinitionsProvider
 {
     public static BackgroundDefinition SolidColorBackground(TvColor bgColor) => 
         new BackgroundDefinition().UseDrawer(ctx => ctx.Fill(bgColor));

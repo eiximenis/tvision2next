@@ -1,4 +1,5 @@
 using Tvision2.Core.Console;
+using Tvision2.Engine.Render;
 using Wcwidth;
 
 namespace Tvision2.Core.Engine.Render;

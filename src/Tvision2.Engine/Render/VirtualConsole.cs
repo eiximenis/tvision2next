@@ -1,7 +1,8 @@
+using Tvision2.Core;
 using Tvision2.Core.Console;
 using Wcwidth;
 
-namespace Tvision2.Core.Engine.Render;
+namespace Tvision2.Engine.Render;
 
 public class VirtualConsole
 {   enum DirtyStatus
@@ -72,8 +73,7 @@ public class VirtualConsole
        var endcol = Math.Min(cropzone.BottomRight.X, Bounds.Width -1);
        var startrow = location.Y;
        var endrow = Math.Min(cropzone.BottomRight.Y, Bounds.Height - 1);
-       
-       var idx = startcol;
+
 
        for (var crow = startrow; crow <= endrow; crow++)
        {
@@ -82,7 +82,7 @@ public class VirtualConsole
            for (var ccol = startcol; ccol <= endcol; ccol++)
            {
                var newchar = new ConsoleCharacter(' ', attr);
-               ref var cchar = ref lineBuffer[idx];
+               ref var cchar = ref lineBuffer[ccol];
                
                if (cchar != newchar)
                {
