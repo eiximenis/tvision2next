@@ -19,7 +19,7 @@ public abstract class TvComponent
     {
         Id = Guid.NewGuid();
         Metadata = new TvComponentMetadata(this);
-        _viewport = Viewport.Null();
+        _viewport = Viewports.Null();
         // _viewport.OnUpdated += Viewport_Updated;
         Layer = LayerSelector.Standard;
         Layout = LayoutManagers.Absolute;

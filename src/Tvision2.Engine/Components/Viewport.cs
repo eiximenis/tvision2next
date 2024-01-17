@@ -19,13 +19,19 @@ static class ViewportUpdateReasonExtensions
         (reason & ViewportUpdateReason.Resized) == ViewportUpdateReason.Resized;
 }
 
+
+public static class Viewports
+{
+    public static Viewport FullViewport { get; } = new Viewport(TvPoint.Zero, TvBounds.ConsoleBounds);
+    public static Viewport Null() => new Viewport(TvPoint.Zero, TvBounds.Empty);
+}
+
 public class Viewport
 {
     private Viewzone _viewzone;
     public TvPoint Position { get; private set; }
     public TvBounds Bounds { get; private set; }
-    public static Viewport FullViewport { get; } = new Viewport(TvPoint.Zero, TvBounds.ConsoleBounds);
-    public static Viewport Null() => new Viewport(TvPoint.Zero, TvBounds.Empty);
+
     public bool IsNull => Bounds.IsEmpty;
     
     public bool HasLayoutPending { get; private set; }

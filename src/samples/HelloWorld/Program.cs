@@ -25,9 +25,7 @@ var background = new BackgroundDefinition().UseDrawer(ctx =>
 Tv2App.Configure(opt => opt.WithBackground(background));
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 var component = TvComponent.CreateStatelessComponent();
-component.UseViewport(Viewport.Null());
-component.Viewport.Resize(TvBounds.FromRowsAndCols(1,20));
-component.UseLayout(LayoutManagers.Fixed(TvPoint.FromXY(3, 3)));
+component.UseLayout(LayoutManagers.Blocked(TvPoint.FromXY(3, 3), TvBounds.FromRowsAndCols(1, 4)));
 component.AddDrawer(ctx => ctx.DrawStringAt(_text, TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.White, TvColor.Black)));
 component.AddBehavior(ctx =>
 {

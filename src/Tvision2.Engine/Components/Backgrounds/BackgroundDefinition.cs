@@ -23,7 +23,7 @@ public class BackgroundDefinition
     {
         var bgComponent = TvComponent.CreateStatelessComponent();
         bgComponent.AddDrawer(Drawer);
-        bgComponent.UseViewport(Viewport.FullViewport);
+        bgComponent.UseViewport(Viewports.FullViewport);
         return bgComponent;
     }
 }
