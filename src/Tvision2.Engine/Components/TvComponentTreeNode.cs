@@ -3,7 +3,7 @@ namespace Tvision2.Engine.Components;
 public class TvComponentTreeNode
 {
     private readonly LinkedList<TvComponentTreeNode> _childs;
-    public TvComponentMetadata ComponentData { get; }
+    public TvComponentMetadata Metadata { get; }
     public TvComponentTreeNode? Parent { get; private set; }
     public bool IsRoot => Parent is null;
     private TvComponentTreeNode[] _flattened;
@@ -12,7 +12,7 @@ public class TvComponentTreeNode
     {
         _childs = new LinkedList<TvComponentTreeNode>();
         _flattened = new[] { this };
-        ComponentData = metadata;
+        Metadata = metadata;
     }
 
     public TvComponentTreeNode Root()

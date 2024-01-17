@@ -75,7 +75,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     {
         foreach (var node in stRoot.SubTree())
         {
-            var metadata = node.ComponentData;
+            var metadata = node.Metadata;
             if (metadata.IsAttached) continue;            // If node is already attached we skip it
 
             var component = metadata.Component;
@@ -98,7 +98,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 
     private static int NodeWithBottomComponentFirst(TvComponentTreeNode n1, TvComponentTreeNode n2)
     {
-        return LayerSelector.CompareBottomFirst(n1.ComponentData.Component.Layer, n2.ComponentData.Component.Layer);
+        return LayerSelector.CompareBottomFirst(n1.Metadata.Component.Layer, n2.Metadata.Component.Layer);
     }
 
     public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) =>

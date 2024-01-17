@@ -5,6 +5,7 @@ using Tvision2.Engine;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Components.Backgrounds;
 using Tvision2.Engine.Extensions;
+using Tvision2.Engine.Layout;
 
 string _text = "Hello World!";
 
@@ -24,7 +25,9 @@ var background = new BackgroundDefinition().UseDrawer(ctx =>
 Tv2App.Configure(opt => opt.WithBackground(background));
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 var component = TvComponent.CreateStatelessComponent();
-component.UseViewport(Viewport.FullViewport);
+component.UseViewport(Viewport.Null());
+component.Viewport.Resize(TvBounds.FromRowsAndCols(1,20));
+component.UseLayout(LayoutManagers.Fixed(TvPoint.FromXY(3, 3)));
 component.AddDrawer(ctx => ctx.DrawStringAt(_text, TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.White, TvColor.Black)));
 component.AddBehavior(ctx =>
 {

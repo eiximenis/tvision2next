@@ -1,4 +1,6 @@
-namespace Tvision2.Core;
+using Tvision2.Core;
+
+namespace Tvision2.Engine.Components;
 
 public readonly record struct Viewzone(TvPoint TopLeft, TvBounds Bounds)
 {

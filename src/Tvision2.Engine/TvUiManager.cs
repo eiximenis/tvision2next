@@ -20,32 +20,43 @@ public class TvUiManager
         _consoleDriver = consoleDriver;
         _componentsToDraw = new List<TvComponent>();
     }
-    
-
-    internal void Draw()
-    {
-        foreach (var cmpNode in _tree.ByLayerBottomFirst)
-        {
-            var metadata = cmpNode.ComponentData;
-            var component = metadata.Component;
-            component.Draw(_console);
-        }
-
-        _console.Flush(_consoleDriver);
-    }
-
     internal async Task<bool> Update(TvConsoleEvents events)
     {
         await _tree.NewCycle();
         var someDrawPending = false;
         foreach (var cmpNode in _tree.ByLayerBottomFirst)
         {
-            var metadata = cmpNode.ComponentData;
+            var metadata = cmpNode.Metadata;
             var component = metadata.Component;
             var result = component.Update(events);
             someDrawPending = result != DirtyStatus.Clean;
             // TODO: We could calculate pending draws to call only Draw() on components that are needed.
         }
         return someDrawPending;
+    }
+    
+    internal void CalculateLayout()
+    {
+        foreach (var cmpNode in _tree.ByLayerBottomFirst)
+        {
+            var cmp = cmpNode.Metadata.Component;
+            if (cmp.Viewport.HasLayoutPending)
+            {
+                cmp.Layout.UpdateLayout(cmp.Metadata);
+                cmp.Viewport.LayoutUpdated();
+            }
+        }
+    }
+
+    internal void Draw()
+    {
+        foreach (var cmpNode in _tree.ByLayerBottomFirst)
+        {
+            var metadata = cmpNode.Metadata;
+            var component = metadata.Component;
+            component.Draw(_console);
+        }
+
+        _console.Flush(_consoleDriver);
     }
 }

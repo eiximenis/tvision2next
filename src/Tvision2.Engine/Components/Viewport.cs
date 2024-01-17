@@ -1,6 +1,6 @@
-namespace Tvision2.Core;
+using Tvision2.Core;
 
-
+namespace Tvision2.Engine.Components;
     
 [Flags]
 public enum ViewportUpdateReason
@@ -21,19 +21,40 @@ static class ViewportUpdateReasonExtensions
 
 public class Viewport
 {
-    private readonly Viewzone _viewzone;
-    public TvPoint Position { get; }
-    public TvBounds Bounds { get;  }
+    private Viewzone _viewzone;
+    public TvPoint Position { get; private set; }
+    public TvBounds Bounds { get; private set; }
     public static Viewport FullViewport { get; } = new Viewport(TvPoint.Zero, TvBounds.ConsoleBounds);
     public static Viewport Null() => new Viewport(TvPoint.Zero, TvBounds.Empty);
     public bool IsNull => Bounds.IsEmpty;
+    
+    public bool HasLayoutPending { get; private set; }
 
     public Viewport(TvPoint position, TvBounds bounds)
     {
         Position = position;
         Bounds = bounds;
         _viewzone = new Viewzone(Position, Bounds);
+        HasLayoutPending = true;
     }
 
     public Viewzone Viewzone => _viewzone;
+
+    public void MoveTo(TvPoint newPos)
+    {
+        Position = newPos;
+        HasLayoutPending = true;
+    }
+
+    public void Resize(TvBounds newBounds)
+    {
+        Bounds = newBounds;
+        HasLayoutPending = true;
+    }
+
+    internal void LayoutUpdated()
+    {
+        _viewzone = new Viewzone(Position, Bounds);
+        HasLayoutPending = false;
+    }
 }
