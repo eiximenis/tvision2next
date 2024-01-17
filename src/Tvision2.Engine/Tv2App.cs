@@ -1,9 +1,8 @@
-using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tvision2.Engine.Components.Extensions;
 
-namespace Tvision2.Core.Engine;
+namespace Tvision2.Engine;
 
 public static class Tv2App
 {

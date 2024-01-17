@@ -1,6 +1,6 @@
 using Tvision2.Engine.Components.Events;
 
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 public class UpdateContext
 {

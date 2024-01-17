@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.Extensions.Hosting;
 
-namespace Tvision2.Core.Engine;
+namespace Tvision2.Engine;
 
 public class Tvision2EngineController : BackgroundService
 {

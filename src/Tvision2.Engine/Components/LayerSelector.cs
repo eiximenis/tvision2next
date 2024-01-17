@@ -30,4 +30,13 @@ public readonly struct LayerSelector
     {
         LayerIndex = layerIndex;
     }
+
+    public static int CompareBottomFirst(LayerSelector l1, LayerSelector l2) => l1.LayerIndex - l2.LayerIndex;
+    public static int CompareTopFirst(LayerSelector l1, LayerSelector l2) => l2.LayerIndex - l1.LayerIndex;
+
+    public int CompareWith(LayerSelector layer)
+    {
+        return LayerIndex - layer.LayerIndex;
+    }
+    
 }

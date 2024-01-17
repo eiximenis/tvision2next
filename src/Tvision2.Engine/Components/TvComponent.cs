@@ -1,9 +1,8 @@
-using Tvision2.Core.Engine.Render;
-using Tvision2.Engine.Components;
+using Tvision2.Core;
 using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Render;
 
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 public abstract class TvComponent
 {

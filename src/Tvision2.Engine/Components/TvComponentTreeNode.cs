@@ -1,6 +1,4 @@
-using System.Collections.Immutable;
-
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 public class TvComponentTreeNode
 {

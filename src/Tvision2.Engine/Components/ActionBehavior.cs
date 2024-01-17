@@ -1,6 +1,4 @@
-using Tvision2.Engine.Components;
-
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 class ActionBehavior<T> : ITvBehavior<T>
 {

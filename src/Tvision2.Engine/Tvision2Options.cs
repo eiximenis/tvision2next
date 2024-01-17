@@ -1,9 +1,8 @@
 using Tvision2.Console;
-using Tvision2.Core.Console;
-using Tvision2.Engine.Components;
+using Tvision2.Core;
 using Tvision2.Engine.Components.Backgrounds;
 
-namespace Tvision2.Core.Engine;
+namespace Tvision2.Engine;
 
 
 public interface ITvision2Options

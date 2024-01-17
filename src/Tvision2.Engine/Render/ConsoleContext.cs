@@ -1,8 +1,8 @@
+using Tvision2.Core;
 using Tvision2.Core.Console;
-using Tvision2.Engine.Render;
 using Wcwidth;
 
-namespace Tvision2.Core.Engine.Render;
+namespace Tvision2.Engine.Render;
 
 public readonly struct ConsoleContext
 {
@@ -13,6 +13,8 @@ public readonly struct ConsoleContext
         _console = console;
         _viewport = viewport;
     }
+
+    public Viewzone Viewzone => _viewport.Viewzone;
     
     
     private static TvPoint ViewPointToConsolePoint(TvPoint viewPoint, TvPoint viewportPosition) => viewPoint + viewportPosition;

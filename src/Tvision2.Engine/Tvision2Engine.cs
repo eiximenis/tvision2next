@@ -1,11 +1,11 @@
 using Tvision2.Console;
+using Tvision2.Core;
 using Tvision2.Core.Console;
-using Tvision2.Core.Engine.Render;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Render;
 
-namespace Tvision2.Core.Engine;
+namespace Tvision2.Engine;
 
 public class Tvision2Engine
 {
@@ -37,7 +37,7 @@ public class Tvision2Engine
 
     internal async Task NextCycle()
     {
-        await UI.Update(false, new TvConsoleEvents());
+        await UI.Update(new TvConsoleEvents());
         UI.Draw();
     }
 

@@ -1,5 +1,3 @@
-using Tvision2.Core.Engine.Components;
-
 namespace Tvision2.Engine.Components;
 
 class NewStateBehavior<T> :  ITvBehavior<T>

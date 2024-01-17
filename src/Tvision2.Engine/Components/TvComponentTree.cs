@@ -1,7 +1,7 @@
-using Tvision2.Core.Engine.Events;
-using Tvision2.Engine.Components;
+using Tvision2.Core;
+using Tvision2.Engine.Events;
 
-namespace Tvision2.Core.Engine.Components;
+namespace Tvision2.Engine.Components;
 
 public interface ITvComponentTreeActions
 {
@@ -26,7 +26,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private readonly ActionsChain<Unit> _onTreeUpdated;
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
-    private readonly SortedList<byte, List<TvComponentTreeNode>> _sortedNodes;
+    private readonly List<TvComponentTreeNode> _sortedNodes;
 
     public IEnumerable<TvComponentTreeNode> Roots { get => _roots; }
 
@@ -35,22 +35,19 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.NodeAdded => _onNodeAdded;
     IActionsChain<Unit> ITvComponentTreeActions.TreeUpdated => _onTreeUpdated;
 
+    public IEnumerable<TvComponentTreeNode> ByLayerBottomFirst => _sortedNodes;
+
     public TvComponentTree()
     {
         _dirty = false;
         _sharedTags = new Dictionary<Type, object>();
-        _sortedNodes = new SortedList<byte, List<TvComponentTreeNode>>();
+        _sortedNodes = new List<TvComponentTreeNode>();
         _roots = new List<TvComponentTreeNode>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
         _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
         _onTreeUpdated = new ActionsChain<Unit>();
-        
-        // Create the 256 layers to allow fast retrieval of nodes sorted by layer
-        for (var idx = 0; idx < LayerSelector.MaxLayerIndex; idx++)
-        {
-            _sortedNodes.Add((byte)idx, new List<TvComponentTreeNode>());
-        }
     }
+    
 
     internal async Task NewCycle()
     {
@@ -87,16 +84,22 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
                 component.UseLayer(layer);
             }
 
-            var key = component.Layer.LayerIndex;
-            _sortedNodes[key].Add(node);
+            _sortedNodes.Add(node);
             metadata.AttachToTree(this);
             if (!node.IsRoot)
             {
                 await _onNodeAdded.Invoke(node);
             }
         }
+
+        _sortedNodes.Sort(NodeWithBottomComponentFirst);
     }
 
+
+    private static int NodeWithBottomComponentFirst(TvComponentTreeNode n1, TvComponentTreeNode n2)
+    {
+        return LayerSelector.CompareBottomFirst(n1.ComponentData.Component.Layer, n2.ComponentData.Component.Layer);
+    }
 
     public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) =>
         await AddChild(child, parent, LayerSelector.Standard);

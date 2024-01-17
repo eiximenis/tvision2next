@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
 using Tvision2.Core;
-using Tvision2.Core.Engine;
 using Tvision2.Engine.Components.Backgrounds;
 
 namespace Tvision2.Engine.Extensions;
