@@ -1,3 +1,5 @@
+using Tvision2.Engine.Events;
+
 namespace Tvision2.Engine.Components;
 
 public class TvComponentMetadata
@@ -8,12 +10,17 @@ public class TvComponentMetadata
     internal bool IsAttached { get; private set; }
     public TvComponentTreeNode Node { get => _node; }
     public TvComponent Component => _owner;
+    private readonly ActionsChain<ViewportUpdateReason> _viewportUpdated;
+    
+    public IActionsChain<ViewportUpdateReason> ViewportUpdated => _viewportUpdated;
+    
     internal TvComponentMetadata(TvComponent owner)
     {
         _owner = owner;
         _node = new TvComponentTreeNode(this);
         IsAttached = false;
         _ownerTree = null;
+        _viewportUpdated = new ActionsChain<ViewportUpdateReason>();
     }
     internal void AddChild(TvComponent child)
     {
@@ -42,5 +49,12 @@ public class TvComponentMetadata
         IsAttached = false;
         _ownerTree = null;
     }
-    
+
+    internal async Task RaiseViewportUpdated(ViewportUpdateReason reason)
+    {
+        if (IsAttached)
+        {
+            await _viewportUpdated.Invoke(reason);
+        }
+    }
 }

@@ -38,7 +38,7 @@ public class Tvision2Engine
     internal async Task NextCycle()
     {
         await UI.Update(new TvConsoleEvents());
-        UI.CalculateLayout();
+        await UI.CalculateLayout();
         UI.Draw();
     }
 

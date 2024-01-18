@@ -35,15 +35,19 @@ public class TvUiManager
         return someDrawPending;
     }
     
-    internal void CalculateLayout()
+    internal async Task CalculateLayout()
     {
         foreach (var cmpNode in _tree.ByLayerBottomFirst)
         {
             var cmp = cmpNode.Metadata.Component;
-            if (cmp.Viewport.HasLayoutPending)
+            if (cmp.Viewport.HasLayoutPending || cmp.Layout.HasLayoutPending)
             {
-                cmp.Layout.UpdateLayout(cmp.Metadata);
+                var updated = cmp.Layout.UpdateLayout(cmp.Metadata);
                 cmp.Viewport.LayoutUpdated();
+                if (updated != ViewportUpdateReason.None)
+                {
+                    await cmp.Metadata.RaiseViewportUpdated(updated);
+                }
             }
         }
     }

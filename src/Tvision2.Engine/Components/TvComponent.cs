@@ -1,6 +1,6 @@
 using Tvision2.Core;
 using Tvision2.Engine.Components.Events;
-using Tvision2.Engine.Layout;
+using Tvision2.Engine.Layouts;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Engine.Components;
@@ -27,7 +27,11 @@ public abstract class TvComponent
 
     internal void UseLayer(LayerSelector layer) => Layer = layer;
 
-    public void UseLayout(ILayoutManager layout) => Layout = layout;
+    public void UseLayout(ILayoutManager layout)
+    {
+        Layout.Dismiss();
+        Layout = layout;
+    }
 
     private void Viewport_Updated(object? _, ViewportUpdateReason reason)
     {

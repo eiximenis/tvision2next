@@ -5,7 +5,8 @@ using Tvision2.Engine;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Components.Backgrounds;
 using Tvision2.Engine.Extensions;
-using Tvision2.Engine.Layout;
+using Tvision2.Engine.Layouts;
+using Tvision2.Layouts;
 
 string _text = "Hello World!";
 
@@ -25,7 +26,6 @@ var background = new BackgroundDefinition().UseDrawer(ctx =>
 Tv2App.Configure(opt => opt.WithBackground(background));
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 var component = TvComponent.CreateStatelessComponent();
-component.UseLayout(LayoutManagers.Blocked(TvPoint.FromXY(3, 3), TvBounds.FromRowsAndCols(1, 4)));
 component.AddDrawer(ctx => ctx.DrawStringAt(_text, TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.White, TvColor.Black)));
 component.AddBehavior(ctx =>
 {
@@ -37,6 +37,11 @@ component.AddBehavior(ctx =>
     ctx.Move(TvPoint.FromXY(col, row));
 });
 await app.UI.ComponentTree.Add(component);
+
+var component2 = TvComponent.CreateStatelessComponent();
+component2.AddDrawer(ctx => ctx.DrawStringAt("Second label", TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.LightBlack)));
+component2.DockTo(component);
+await app.UI.ComponentTree.Add(component2);
 
 System.Console.WriteLine("Doing things");
 

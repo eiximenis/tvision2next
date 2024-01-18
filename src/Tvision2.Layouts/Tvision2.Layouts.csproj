@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Tvision2.Engine\Tvision2.Engine.csproj" />
-      <ProjectReference Include="..\..\Tvision2.Layouts\Tvision2.Layouts.csproj" />
+      <ProjectReference Include="..\Tvision2.Core\Tvision2.Core.csproj" />
+      <ProjectReference Include="..\Tvision2.Engine\Tvision2.Engine.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,8 +5,11 @@ namespace Tvision2.Engine.Components;
 [Flags]
 public enum ViewportUpdateReason
 {
+    None = 0x0,
     Moved = 0x1,
-    Resized = 0x2
+    Resized = 0x2,
+    MovedAndResizes = Moved | Resized,
+    All = Moved | Resized
 }
 
 
@@ -46,16 +49,18 @@ public class Viewport
 
     public Viewzone Viewzone => _viewzone;
 
-    public void MoveTo(TvPoint newPos)
+    public ViewportUpdateReason MoveTo(TvPoint newPos)
     {
         Position = newPos;
         HasLayoutPending = true;
+        return ViewportUpdateReason.Moved;
     }
 
-    public void Resize(TvBounds newBounds)
+    public ViewportUpdateReason Resize(TvBounds newBounds)
     {
         Bounds = newBounds;
         HasLayoutPending = true;
+        return ViewportUpdateReason.Resized;
     }
 
     internal void LayoutUpdated()

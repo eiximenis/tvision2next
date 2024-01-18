@@ -1,7 +1,7 @@
 using Tvision2.Core;
 using Tvision2.Engine.Components;
 
-namespace Tvision2.Engine.Layout;
+namespace Tvision2.Engine.Layouts;
 
 public static class LayoutManagers
 {
@@ -14,38 +14,45 @@ public static class LayoutManagers
 
 public class BlockedLayoutManager(TvPoint position, TvBounds bounds) : ILayoutManager
 {
-    public void UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
     {
         var cmp = metadata.Component;
+        var updated = ViewportUpdateReason.None;
         if (cmp.Viewport.Position != position)
         {
-            cmp.Viewport.MoveTo(position);
+            updated |= cmp.Viewport.MoveTo(position);
+             
         }
 
         if (cmp.Viewport.Bounds != bounds)
         {
-            cmp.Viewport.Resize(bounds);
+            updated |= cmp.Viewport.Resize(bounds);
         }
+        
+        return updated;
     }
 }
 
 class FixedLayoutManager(TvPoint position) : ILayoutManager
 {
-    public void UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
     {
         var cmp = metadata.Component;
         if (cmp.Viewport.Position != position)
         {
-            cmp.Viewport.MoveTo(position);
+            return cmp.Viewport.MoveTo(position);
         }
+
+        return ViewportUpdateReason.None;
     }
 }
 
 class AbsoluteLayoutManager : ILayoutManager
 {
-    public void UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
     {
         // Absolute position is a no-op because nothing needs to be calculated.
+        return ViewportUpdateReason.All;
     }
     
 }
