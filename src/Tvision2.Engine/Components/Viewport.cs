@@ -34,6 +34,8 @@ public class Viewport
     private Viewzone _viewzone;
     public TvPoint Position { get; private set; }
     public TvBounds Bounds { get; private set; }
+    public TvPoint BottomRight => Position + Bounds;
+    
 
     public bool IsNull => Bounds.IsEmpty;
     
@@ -51,6 +53,8 @@ public class Viewport
 
     public ViewportUpdateReason MoveTo(TvPoint newPos)
     {
+        if (Position == newPos) return ViewportUpdateReason.None;
+        
         Position = newPos;
         HasLayoutPending = true;
         return ViewportUpdateReason.Moved;
@@ -58,6 +62,8 @@ public class Viewport
 
     public ViewportUpdateReason Resize(TvBounds newBounds)
     {
+        if (Bounds == newBounds) return ViewportUpdateReason.None;
+        
         Bounds = newBounds;
         HasLayoutPending = true;
         return ViewportUpdateReason.Resized;

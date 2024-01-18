@@ -78,8 +78,8 @@ public class VirtualConsole
 
        for (var crow = startrow; crow <= endrow; crow++)
        {
-           var lineBuffer = _buffer.AsSpan((startrow + crow) * Bounds.Width, Bounds.Width);
-           var dirtyBuffer = _dirtyMap.AsSpan((startrow + crow) * Bounds.Width, Bounds.Width);
+           var lineBuffer = _buffer.AsSpan(crow * Bounds.Width, Bounds.Width);
+           var dirtyBuffer = _dirtyMap.AsSpan(crow * Bounds.Width, Bounds.Width);
            for (var ccol = startcol; ccol <= endcol; ccol++)
            {
                var newchar = new ConsoleCharacter(' ', attr);

@@ -21,9 +21,8 @@ public class BackgroundDefinition
     
     internal TvComponent<Unit> CreateBackgroundComponent()
     {
-        var bgComponent = TvComponent.CreateStatelessComponent();
+        var bgComponent = TvComponent.CreateStatelessComponent(Viewports.FullViewport);
         bgComponent.AddDrawer(Drawer);
-        bgComponent.UseViewport(Viewports.FullViewport);
         return bgComponent;
     }
 }

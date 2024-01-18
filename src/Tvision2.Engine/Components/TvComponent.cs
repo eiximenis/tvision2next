@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using Tvision2.Core;
 using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Layouts;
@@ -15,11 +16,11 @@ public abstract class TvComponent
     
     public ILayoutManager Layout { get; private set; }
 
-    protected TvComponent()
+    protected TvComponent(Viewport? viewport)
     {
         Id = Guid.NewGuid();
         Metadata = new TvComponentMetadata(this);
-        _viewport = Viewports.Null();
+        _viewport = viewport ?? Viewports.Null();
         // _viewport.OnUpdated += Viewport_Updated;
         Layer = LayerSelector.Standard;
         Layout = LayoutManagers.Absolute;
@@ -42,11 +43,6 @@ public abstract class TvComponent
     }
     public Viewport Viewport => _viewport;
     
-    public void UseViewport(Viewport newViewport)
-    {
-        _viewport = newViewport;
-    }
-    
     public abstract void Draw(VirtualConsole console);
     public abstract DirtyStatus Update(TvConsoleEvents events);
 
@@ -55,9 +51,9 @@ public abstract class TvComponent
     /// <summary>
     /// Easy shortcut for creating stateless components
     /// </summary>
-    public static TvComponent<Unit> CreateStatelessComponent() => new TvComponent<Unit>(Unit.Value);
+    public static TvComponent<Unit> CreateStatelessComponent(Viewport? viewport = null) => new TvComponent<Unit>(Unit.Value, viewport);
     
-    public static TvComponent<T> Create<T>(T state) => new TvComponent<T>(state);
+    public static TvComponent<T> Create<T>(T state, Viewport? viewport = null) => new TvComponent<T>(state, viewport);
 
 }
 
@@ -84,7 +80,7 @@ public sealed class TvComponent<T> : TvComponent
     public T State { get; private set; }
 
 
-    public TvComponent(T initialState)
+    public TvComponent(T initialState, Viewport? viewport) : base(viewport)
     {
         State = initialState;
         _drawers = new List<ITvDrawer<T>>();

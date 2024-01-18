@@ -37,8 +37,7 @@ public class BehaviorContext<T>
     {
         _resultActions.Add(c =>
         {
-            Viewport v = new Viewport(c.Viewport.Position, newBounds);
-            c.UseViewport(v);
+            c.Viewport.Resize(newBounds);
             return DirtyStatus.ViewportUpdated;
         });
     }
@@ -47,8 +46,7 @@ public class BehaviorContext<T>
     {
         _resultActions.Add(c =>
         {
-            Viewport v = new Viewport(position, c.Viewport.Bounds);
-            c.UseViewport(v);
+            c.Viewport.MoveTo(position);
             return DirtyStatus.ViewportUpdated;
         });
     }

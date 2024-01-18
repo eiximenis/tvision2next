@@ -5,8 +5,8 @@ namespace Tvision2.Layouts;
 
 public static class TvComponent_LayoutsExtensions
 {
-    public static void DockTo(this TvComponent docked, TvComponent container)
+    public static void DockTo(this TvComponent docked, TvComponent container, Dock dock)
     {
-        docked.UseLayout(new DockLayout(container.Metadata));
+        docked.UseLayout(new DockLayout(container.Metadata, dock));
     }
 }
