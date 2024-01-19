@@ -16,6 +16,8 @@ public interface ITvComponentTree
     Task<TvComponentTreeNode> Add(TvComponent component);
     Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer);
     Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent);
+    IEnumerable<TvComponentTreeNode> Roots { get; }
+    IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; } 
 }
 
 class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
@@ -28,7 +30,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private readonly Dictionary<Type, object> _sharedTags;
     private readonly List<TvComponentTreeNode> _sortedNodes;
 
-    public IEnumerable<TvComponentTreeNode> Roots { get => _roots; }
+    public IEnumerable<TvComponentTreeNode> Roots => _roots;
 
     public ITvComponentTreeActions On() => this;
     IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.RootAdded => _onRootAdded;

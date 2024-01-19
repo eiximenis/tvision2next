@@ -17,11 +17,13 @@ public class Given_TextDrawn_In_VirtualConsole
         var attr = new CharacterAttribute(TvColor.Blue, TvColor.Green, CharacterAttributeModifiers.Normal);
         var viewzone = new Viewzone(TvPoint.Zero, bounds);
         var stringToWrite = "Testing VirtualConsole";
+        var row = 2;
+        var col = 3;
         
-        console.DrawAt(stringToWrite, TvPoint.FromXY(3,2), attr, viewzone);
+        console.DrawAt(stringToWrite, TvPoint.FromXY(col,row), attr, viewzone);
         console.Flush(driver);
         
-        var charsWritten = driver.GetCharsOfLine(2,3,stringToWrite.Length);
+        var charsWritten = driver.GetCharsOfLine(row,col,stringToWrite.Length);
         var strWritten = new string(charsWritten.ToArray());
         strWritten.Should().Be(stringToWrite);
     }
@@ -33,17 +35,40 @@ public class Given_TextDrawn_In_VirtualConsole
         var driver = new InMemoryConsoleDriver(bounds);
         var console = new VirtualConsole(bounds, TvColor.Black );
         var attr = new CharacterAttribute(TvColor.Blue, TvColor.Green, CharacterAttributeModifiers.Normal);
+        var row = 2;
+        var col = 3;
         var viewCols = 5;
-        var viewzone = new Viewzone(TvPoint.FromXY(3,2), TvBounds.FromRowsAndCols(1, viewCols));
+        var viewzone = new Viewzone(TvPoint.FromXY(col,row), TvBounds.FromRowsAndCols(1, viewCols));
         var stringToWrite = "Testing VirtualConsole";
         var stringExpected = stringToWrite.Substring(0, viewCols);
         
-        console.DrawAt(stringToWrite, TvPoint.FromXY(3,2), attr, viewzone);
+        console.DrawAt(stringToWrite, TvPoint.FromXY(col,row), attr, viewzone);
         console.Flush(driver);
         
-        var charsWritten = driver.GetCharsOfLine(2,3,stringToWrite.Length);
+        var charsWritten = driver.GetCharsOfLine(row,col,stringToWrite.Length);
         var strWritten = new string(charsWritten.ToArray());
         strWritten.Should().StartWith(stringExpected);
+    }
+
+    [Fact]
+    public void Outside_Of_Viewzone_Then_No_Text_Should_Be_Written()
+    {
+        var bounds = TvBounds.FromRowsAndCols(24, 80);
+        var driver = new InMemoryConsoleDriver(bounds);
+        var console = new VirtualConsole(bounds, TvColor.Black );
+        var attr = new CharacterAttribute(TvColor.Blue, TvColor.Green, CharacterAttributeModifiers.Normal);
+        var row = 2;
+        var col = 3;
+        var viewCols = 5;
+        var viewzone = new Viewzone(TvPoint.FromXY(col,row + 2), TvBounds.FromRowsAndCols(1, viewCols));        // viewzone two rows below
+        var stringToWrite = "Testing VirtualConsole";
+        
+        console.DrawAt(stringToWrite, TvPoint.FromXY(col,row), attr, viewzone);
+        console.Flush(driver);
+        
+        var charsWritten = driver.GetCharsOfLine(row,col,stringToWrite.Length);
+        var strWritten = new string(charsWritten.ToArray());
+        strWritten.Should<char>().OnlyContain(c => c == '\0');
     }
 
 }
