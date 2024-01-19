@@ -24,21 +24,8 @@ public readonly struct ConsoleContext
     public void DrawStringAt(string text, TvPoint location, TvColorsPair colors)
     {
         var attr = new CharacterAttribute(colors.Foreground, colors.Background, CharacterAttributeModifiers.Normal);
-
         var consoleLocation = ViewPointToConsolePoint(location, _viewport.Position);
-        var maxcols = (_viewport.Bounds.Width - location.X);
-
-        var currentWidth = 0;
-        var runes = text.EnumerateRunes();
-        while (runes.MoveNext())
-        {
-            var rune = runes.Current;
-            var runewidth = UnicodeCalculator.GetWidth(rune);
-            currentWidth += runewidth < 1 ? 1 : runewidth;
-        }
-
-        maxcols = maxcols < currentWidth ? maxcols : currentWidth;
-        _console.DrawAt(text, maxcols, consoleLocation, attr, _viewport.Viewzone);
+        _console.DrawAt(text,consoleLocation, attr, _viewport.Viewzone);
     }
 
     public void Fill(TvColor bgColor)

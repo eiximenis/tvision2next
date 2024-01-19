@@ -19,7 +19,7 @@ public class VirtualConsole
     public TvBounds Bounds { get; }
     public bool IsDirty { get; private set; }
     
-   public void DrawAt(string text, int maxLen, TvPoint location, CharacterAttribute attr, in Viewzone cropzone)
+   public void DrawAt(string text,  TvPoint location, CharacterAttribute attr, in Viewzone cropzone)
    {
        if (!cropzone.ContainsLine(location.Y) || !cropzone.ContainsColumn(location.X))
        {
@@ -54,7 +54,7 @@ public class VirtualConsole
                    }
                }
                idx += runeWidth;
-               if (idx >= endcol) { break; }
+               if (idx > endcol) { break; }
            }
        }
 
