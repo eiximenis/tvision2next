@@ -49,8 +49,8 @@ public static class TvColorNames
         private const int ANSI3BIT_MAX_VALUE = 7;
         public const int ANSI4BIT_MAX_VALUE = 15;
 
-        private const short PALETTIZED_GRAY_START_IDX = 232;
-        private const short PALETTIZED_GRAY_RANGE = 24;
+        public const short PALETTIZED_GRAY_START_IDX = 232;
+        public const short PALETTIZED_GRAY_RANGE = 24;
         private TvColor(int value) => Value = value;
         public static readonly TvColor Black = new TvColor(TvColorNames.Black);
         public static readonly TvColor Red = new TvColor(TvColorNames.Red);
