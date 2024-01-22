@@ -119,7 +119,8 @@ public class Given_ComponentTree
         TvComponent root = TvComponent.CreateStatelessComponent();
         var child = root;
         async Task DoAddChild() => await ui.ComponentTree.AddChild(child, root);
+        
         await Assert.ThrowsAsync<ArgumentException>(DoAddChild);
     }
-    
+
 }

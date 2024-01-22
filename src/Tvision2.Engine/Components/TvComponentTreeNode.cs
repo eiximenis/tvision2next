@@ -8,7 +8,7 @@ public class TvComponentTreeNode
     public bool IsRoot => Parent is null;
     private TvComponentTreeNode[] _flattened;
     
-    public TvComponentTreeNode(TvComponentMetadata metadata)
+    internal TvComponentTreeNode(TvComponentMetadata metadata)
     {
         _childs = new LinkedList<TvComponentTreeNode>();
         _flattened = new[] { this };
@@ -26,7 +26,7 @@ public class TvComponentTreeNode
         return node;
     }
 
-    public void AddChild(TvComponentTreeNode child)
+    internal void AddChild(TvComponentTreeNode child)
     {
         _childs.AddLast(child);
         child.Parent = this;
