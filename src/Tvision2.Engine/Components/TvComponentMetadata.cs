@@ -7,7 +7,7 @@ public class TvComponentMetadata
     private readonly TvComponent _owner;
     private readonly TvComponentTreeNode _node;
     private TvComponentTree? _ownerTree;
-    internal bool IsAttached { get; private set; }
+    public bool IsAttached { get; private set; }
     public TvComponentTreeNode Node { get => _node; }
     public TvComponent Component => _owner;
     private readonly ActionsChain<ViewportUpdateReason> _viewportUpdated;
