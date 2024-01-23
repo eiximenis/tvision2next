@@ -1,6 +1,6 @@
+using Tvision2.Console.Events;
 using Tvision2.Core.Console;
 using Tvision2.Engine.Components;
-using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Engine;

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
+using Tvision2.Console.Events;
 using Tvision2.Core;
-using Tvision2.Engine.Components.Events;
 using Tvision2.Engine.Layouts;
 using Tvision2.Engine.Render;
 
@@ -90,7 +90,7 @@ public sealed class TvComponent<T> : TvComponent
         _behaviorContext = new BehaviorContext<T>(this);
     }
 
-    public void SetState(T newState)
+    internal void SetState(T newState)
     {
         State = newState;
     }
@@ -133,6 +133,7 @@ public sealed class TvComponent<T> : TvComponent
     public override DirtyStatus Update(TvConsoleEvents events)
     {
         var originalState = State;
+        _behaviorContext.SetEvents(events);
         foreach (var behavior in _behaviors)
         {
             behavior.Do(_behaviorContext);

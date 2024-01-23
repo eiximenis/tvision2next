@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Core.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Engine.Tests", "tests\Tvision2.Engine.Tests\Tvision2.Engine.Tests.csproj", "{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Controls", "Tvision2.Controls\Tvision2.Controls.csproj", "{ABE04AD5-DFA0-464D-A86D-58527124B880}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Messaging", "Tvision2.Messaging\Tvision2.Messaging.csproj", "{3F11C54F-6272-4B50-9729-A5DB4D346800}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,14 @@ Global
 		{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE04AD5-DFA0-464D-A86D-58527124B880}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE04AD5-DFA0-464D-A86D-58527124B880}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE04AD5-DFA0-464D-A86D-58527124B880}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE04AD5-DFA0-464D-A86D-58527124B880}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F11C54F-6272-4B50-9729-A5DB4D346800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F11C54F-6272-4B50-9729-A5DB4D346800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F11C54F-6272-4B50-9729-A5DB4D346800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F11C54F-6272-4B50-9729-A5DB4D346800}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DF345B4-76C8-430D-9E31-E92A40FBB452} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}

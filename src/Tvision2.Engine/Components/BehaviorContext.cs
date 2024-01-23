@@ -1,3 +1,4 @@
+using Tvision2.Console.Events;
 using Tvision2.Core;
 
 namespace Tvision2.Engine.Components;
@@ -15,9 +16,14 @@ public class BehaviorContext<T>
     {
         _owner = owner;
         _resultActions = new List<Func<TvComponent<T>, DirtyStatus>>();
+        Events = TvConsoleEvents.Empty;
     }
+    
+    public TvConsoleEvents Events { get; private set; }
 
     public T  State => _owner.State;
+
+    internal void SetEvents(TvConsoleEvents events) => Events = events;
     
     public void ReplaceState(T newState) 
     {

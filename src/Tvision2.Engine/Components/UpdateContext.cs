@@ -1,4 +1,4 @@
-using Tvision2.Engine.Components.Events;
+using Tvision2.Console.Events;
 
 namespace Tvision2.Engine.Components;
 
