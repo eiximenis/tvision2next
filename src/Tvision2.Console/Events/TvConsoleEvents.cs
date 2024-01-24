@@ -2,13 +2,23 @@ using System.Runtime.InteropServices;
 
 namespace Tvision2.Console.Events;
 
-public interface ITvConsoleEventsRead
+public interface ITvConsoleEventsSequences
 {
     Span<TvConsoleKeyboardEvent> KeyboardEvents { get; }
     Span<TvConsoleMouseEvent> MouseEvents { get; }
+
+    static ITvConsoleEventsSequences Empty => TvConsoleEventsEmpty.Instance;
 }
 
-public class TvConsoleEvents : ITvConsoleEventsRead
+class TvConsoleEventsEmpty : ITvConsoleEventsSequences
+{
+    public static TvConsoleEventsEmpty Instance { get; } = new ();
+
+    public Span<TvConsoleKeyboardEvent> KeyboardEvents => Span<TvConsoleKeyboardEvent>.Empty;
+    public Span<TvConsoleMouseEvent> MouseEvents => Span<TvConsoleMouseEvent>.Empty;
+}
+
+public class TvConsoleEvents : ITvConsoleEventsSequences
 {
     private readonly List<TvConsoleKeyboardEvent> _keyboardEvents;
     private readonly List<TvConsoleMouseEvent> _mouseEvents;
@@ -35,14 +45,12 @@ public class TvConsoleEvents : ITvConsoleEventsRead
     public void Add(TvConsoleKeyboardEvent @event) => _keyboardEvents.Add(@event);
     public void Add(TvConsoleMouseEvent @event) => _mouseEvents.Add(@event);
 
-    ITvConsoleEventsRead GetReadEvents() => this;
-
     public void Clear()
     {
         _mouseEvents.Clear();
         _keyboardEvents.Clear();
     }
 
-    Span<TvConsoleKeyboardEvent> ITvConsoleEventsRead.KeyboardEvents => CollectionsMarshal.AsSpan(_keyboardEvents);
-    Span<TvConsoleMouseEvent> ITvConsoleEventsRead.MouseEvents => CollectionsMarshal.AsSpan(_mouseEvents);
+    Span<TvConsoleKeyboardEvent> ITvConsoleEventsSequences.KeyboardEvents => CollectionsMarshal.AsSpan(_keyboardEvents);
+    Span<TvConsoleMouseEvent> ITvConsoleEventsSequences.MouseEvents => CollectionsMarshal.AsSpan(_mouseEvents);
 }

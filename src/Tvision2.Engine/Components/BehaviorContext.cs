@@ -15,15 +15,15 @@ public class BehaviorContext<T>
     public BehaviorContext(TvComponent<T> owner)
     {
         _owner = owner;
+        Events = ITvConsoleEventsSequences.Empty;
         _resultActions = new List<Func<TvComponent<T>, DirtyStatus>>();
-        Events = TvConsoleEvents.Empty;
     }
     
-    public TvConsoleEvents Events { get; private set; }
+    public ITvConsoleEventsSequences Events { get; private set; }
 
     public T  State => _owner.State;
 
-    internal void SetEvents(TvConsoleEvents events) => Events = events;
+    internal void SetEvents(ITvConsoleEventsSequences events) => Events = events;
     
     public void ReplaceState(T newState) 
     {

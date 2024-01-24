@@ -5,26 +5,24 @@ namespace Tvision2.Controls;
 public abstract class TvControl
 {
     public Guid Id { get; } = Guid.NewGuid();
-    
-    public string Name { get; }
+    protected readonly TvComponent _component;
 
-    public TvControl(string name)
+    public TvComponent AsComponent() => _component;
+
+    public string Name { get; set; } = "";
+
+    public TvControl(TvComponent component)
     {
-        Name = name;
+        _component = component;
     }
 }
 
 public class TvControl<TState, TOptions> : TvControl
 {
-    private readonly TvComponent<TState> _component;
-    
-    public TvControl(string name, TState state) : base(name)
-    {
-        _component = TvComponent.Create(state);
-    }
+    private readonly TOptions _options;
 
-    public TvComponent AsComponent()
+    public TvControl(TState state, TOptions options) : base(TvComponent.Create(state))
     {
-        return _component;
+        _options = options;
     }
 }

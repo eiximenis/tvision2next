@@ -12,12 +12,14 @@ public class Tvision2Engine
     public bool Running { get; private set; } = false;
     private readonly Tvision2Options _options;
     private readonly IConsoleDriver _consoleDriver;
+    private readonly TvConsoleEvents _consoleEvents;
     public TvUiManager UI { get; }
     
     public Tvision2Engine(Tvision2Options options)
     {
         _options = options;
         _consoleDriver = new AnsiConsoleDriver(_options.ConsoleOptions);
+        _consoleEvents = new TvConsoleEvents();
         var crows = System.Console.WindowHeight;
         var ccols = System.Console.WindowWidth;
         UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(crows,ccols), TvColor.Black), _consoleDriver);
@@ -37,7 +39,8 @@ public class Tvision2Engine
 
     internal async Task NextCycle()
     {
-        await UI.Update(new TvConsoleEvents());
+        _consoleEvents.Clear();
+        await UI.Update(_consoleEvents);
         await UI.CalculateLayout();
         UI.Draw();
     }

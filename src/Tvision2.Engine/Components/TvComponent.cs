@@ -44,7 +44,7 @@ public abstract class TvComponent
     public Viewport Viewport => _viewport;
     
     public abstract void Draw(VirtualConsole console);
-    public abstract DirtyStatus Update(TvConsoleEvents events);
+    public abstract DirtyStatus Update(ITvConsoleEventsSequences events);
 
     protected abstract void UpdateAdaptativeDrawersForUpdatedViewport();
 
@@ -76,7 +76,7 @@ public sealed class TvComponent<T> : TvComponent
 
     private readonly List<ITvDrawer<T>> _drawers;
     private readonly List<ITvBehavior<T>> _behaviors;
-    private  readonly  BehaviorContext<T> _behaviorContext;
+    private readonly  BehaviorContext<T> _behaviorContext;
     public T State { get; private set; }
 
 
@@ -125,27 +125,23 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors.Add(new ActionBehavior<T>(behaviorAction));
     }
 
+
     public void AddBehavior(ITvBehavior<T> behavior)
     {
         _behaviors.Add(behavior);
     }
 
-    public override DirtyStatus Update(TvConsoleEvents events)
+    public override DirtyStatus Update(ITvConsoleEventsSequences events)
     {
-        var originalState = State;
         _behaviorContext.SetEvents(events);
         foreach (var behavior in _behaviors)
         {
             behavior.Do(_behaviorContext);
         }
-
         var result = _behaviorContext.ApplyChanges();
-
         return result;
     }
-
-
-
+    
     public override void Draw(VirtualConsole console)
     {
         if (Viewport.IsNull) return;

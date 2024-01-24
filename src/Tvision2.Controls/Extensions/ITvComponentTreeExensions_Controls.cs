@@ -9,6 +9,6 @@ public static class ITvComponentTreeExensions_Controls
         TvControl<TState, TOptions> control) => tree.Add(control.AsComponent());
 
     public static Task<TvComponentTreeNode> AddChild<TState, TOptions>(this ITvComponentTree tree,
-        TvControl<TState, TOptions> child, TvControl parent) => tree.AddChild(child.AsComponent(), parent.);
+        TvControl<TState, TOptions> child, TvControl parent) => tree.AddChild(child.AsComponent(), parent.AsComponent());
 
 }

@@ -14,6 +14,8 @@ public class TvComponentMetadata
     
     public IActionsChain<ViewportUpdateReason> ViewportUpdated => _viewportUpdated;
     
+    public void TagWith<T>(string key, T data) where T : class => _node.SetTag(key, data);
+    
     internal TvComponentMetadata(TvComponent owner)
     {
         _owner = owner;
