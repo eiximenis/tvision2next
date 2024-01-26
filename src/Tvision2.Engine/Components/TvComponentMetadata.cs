@@ -1,3 +1,4 @@
+using Tvision2.Core;
 using Tvision2.Engine.Events;
 
 namespace Tvision2.Engine.Components;
@@ -14,7 +15,8 @@ public class TvComponentMetadata
     
     public IActionsChain<ViewportUpdateReason> ViewportUpdated => _viewportUpdated;
     
-    public void TagWith<T>(string key, T data) where T : class => _node.SetTag(key, data);
+    public void TagWith<T>(string tag, T data) where T : class => _node.SetTag(tag, data);
+    public bool HasTag(string tag) => _node.HasTag(tag);
     
     internal TvComponentMetadata(TvComponent owner)
     {

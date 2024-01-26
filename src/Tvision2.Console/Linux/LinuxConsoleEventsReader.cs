@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Tvision2.Console.Events;
+using Tvision2.Console.Input;
 using Tvision2.Console.Linux.Interop;
 
 namespace Tvision2.Console.Linux

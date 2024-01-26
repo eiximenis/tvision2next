@@ -54,7 +54,7 @@ public abstract class TvComponent
     public static TvComponent<Unit> CreateStatelessComponent(Viewport? viewport = null) => new TvComponent<Unit>(Unit.Value, viewport);
     
     public static TvComponent<T> Create<T>(T state, Viewport? viewport = null) => new TvComponent<T>(state, viewport);
-
+    
 }
 
 public sealed class TvComponent<T> : TvComponent
@@ -76,7 +76,10 @@ public sealed class TvComponent<T> : TvComponent
 
     private readonly List<ITvDrawer<T>> _drawers;
     private readonly List<ITvBehavior<T>> _behaviors;
-    private readonly  BehaviorContext<T> _behaviorContext;
+
+    private readonly List<Func<IServiceProvider, ITvBehavior<T>>> _behaviorCreators;
+
+    private readonly BehaviorContext<T> _behaviorContext;
     public T State { get; private set; }
 
 
@@ -85,6 +88,7 @@ public sealed class TvComponent<T> : TvComponent
         State = initialState;
         _drawers = new List<ITvDrawer<T>>();
         _behaviors = new List<ITvBehavior<T>>();
+        _behaviorCreators = new List<Func<IServiceProvider, ITvBehavior<T>>>();
         _adaptativeDrawerDefinitions = new List<AdaptativeDrawerDefinition<T>>();
         _adaptativeDrawersSelected = new List<ITvDrawer<T>>();
         _behaviorContext = new BehaviorContext<T>(this);
@@ -94,7 +98,7 @@ public sealed class TvComponent<T> : TvComponent
     {
         State = newState;
     }
-    
+
     public void AddDrawer(ITvDrawer<T> drawer) => _drawers.Add(drawer);
 
     public void AddDrawer(Action<ConsoleContext> drawerAction) => AddDrawer(new StatelessFuncDrawer<T>(drawerAction));
@@ -157,8 +161,7 @@ public sealed class TvComponent<T> : TvComponent
             drawer.Draw(context, State);
         }
     }
-
-
+    
     protected override void UpdateAdaptativeDrawersForUpdatedViewport()
     {
         _adaptativeDrawersSelected.Clear();

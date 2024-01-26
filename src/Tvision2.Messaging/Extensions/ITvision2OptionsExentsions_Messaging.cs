@@ -12,3 +12,8 @@ public static class ITvision2OptionsExentsions_Messaging
         return builder;
     }
 }
+
+static class Tvision2EngineExtensions_Messaging
+{
+    public static MessageBus GetMessageBus() => Tv2App.GetEngine().GetRegisteredComponent<MessageBus>();
+}

@@ -33,7 +33,7 @@ public class WindowsConsoleEventsReader : IConsoleEventsReader
         }
     }
 
-    private TvConsoleEvents AddWin32Events(TvConsoleEvents events, Span<INPUT_RECORD> buffer)
+    private void AddWin32Events(TvConsoleEvents events, Span<INPUT_RECORD> buffer)
     {
         foreach (var record in buffer)
         {
@@ -56,8 +56,6 @@ public class WindowsConsoleEventsReader : IConsoleEventsReader
                     break;
             }
         }
-
-        return events;
     }
 
     private TvConsoleMouseEvent CreateMouseEventFromWin32(in MOUSE_EVENT_RECORD recordMouseEvent)

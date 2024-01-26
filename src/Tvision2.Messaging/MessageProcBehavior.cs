@@ -6,12 +6,15 @@ class MessageProcBehavior<T> : ITvBehavior<T>
 {
 
     private readonly Func<Task> _messsageProc;
-    public MessageProcBehavior(Func<Task> messageProc)
+    private readonly MessageBus _bus;
+    public MessageProcBehavior(Func<Task> messageProc, MessageBus bus)
     {
         _messsageProc = messageProc;
     }
     
     public void Do(BehaviorContext<T> context)
     {
+        
     }
+    
 }

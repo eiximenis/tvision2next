@@ -1,4 +1,4 @@
-namespace Tvision2.Console;
+namespace Tvision2.Console.Input;
 
 public interface IInputSequences
 {

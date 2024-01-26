@@ -1,8 +1,13 @@
 namespace Tvision2.Controls;
 
-public class TvLabel : TvControl<string, string>
+public class TvLabelOptions
 {
-    public TvLabel(string text, string? name) : base(name ?? "label", text )
+    
+}
+
+public class TvLabel : TvControl<string,  TvLabelOptions>
+{
+    public TvLabel(string text, string? name) : base(
     {
     }   
     

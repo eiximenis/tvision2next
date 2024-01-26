@@ -35,5 +35,7 @@ public static class Tv2App
         }
         await _host.RunAsync();
     }
-        
+    
+    public static ITvision2Engine  GetEngine() => 
+        _host?.Services.GetRequiredService<Tvision2Engine>() as ITvision2Engine ??  throw new InvalidOperationException("Setup must be called before running the application");
 }
