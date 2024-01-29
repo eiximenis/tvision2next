@@ -13,11 +13,16 @@ public abstract class TvComponent
     public Guid Id { get; }
     private Viewport _viewport;
     public LayerSelector Layer { get; private set; }
+
+    private bool _invalidated;
+    private bool _stateChanged;
     
     public ILayoutManager Layout { get; private set; }
 
     protected TvComponent(Viewport? viewport)
     {
+        _invalidated = false;
+        _stateChanged = false;
         Id = Guid.NewGuid();
         Metadata = new TvComponentMetadata(this);
         _viewport = viewport ?? Viewports.Null();
@@ -25,6 +30,10 @@ public abstract class TvComponent
         Layer = LayerSelector.Standard;
         Layout = LayoutManagers.Absolute;
     }
+
+    public void Invalidate() => _invalidated = true;
+
+    protected void StateChanged() => _stateChanged = true;
 
     internal void UseLayer(LayerSelector layer) => Layer = layer;
 
@@ -44,7 +53,27 @@ public abstract class TvComponent
     public Viewport Viewport => _viewport;
     
     public abstract void Draw(VirtualConsole console);
-    public abstract DirtyStatus Update(ITvConsoleEventsSequences events);
+
+    public DirtyStatus Update(ITvConsoleEventsSequences events)
+    {
+        var status = DoUpdate(events);
+        if (_invalidated)
+        {
+            _invalidated = false;
+            status |= DirtyStatus.Invalidated;
+        }
+
+        if (_stateChanged)
+        {
+            _stateChanged = false;
+            status |= DirtyStatus.StateChanged;
+        }
+
+        return status;
+    }
+    public abstract DirtyStatus DoUpdate(ITvConsoleEventsSequences events);
+    
+    
 
     protected abstract void UpdateAdaptativeDrawersForUpdatedViewport();
 
@@ -94,9 +123,10 @@ public sealed class TvComponent<T> : TvComponent
         _behaviorContext = new BehaviorContext<T>(this);
     }
 
-    internal void SetState(T newState)
+    public void SetState(T newState)
     {
         State = newState;
+        StateChanged();
     }
 
     public void AddDrawer(ITvDrawer<T> drawer) => _drawers.Add(drawer);
@@ -135,7 +165,7 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors.Add(behavior);
     }
 
-    public override DirtyStatus Update(ITvConsoleEventsSequences events)
+    public override DirtyStatus DoUpdate(ITvConsoleEventsSequences events)
     {
         _behaviorContext.SetEvents(events);
         foreach (var behavior in _behaviors)
