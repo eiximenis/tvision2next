@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+using Tvision2.Controls.Extensions;
 using Tvision2.Core;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
@@ -9,29 +11,23 @@ public class TvLabelOptions
     
 }
 
-public class TvLabel
+public class TvLabel : TvControl<string, TvLabelOptions>
 {
-    private TvComponent<string> _component;
-
     public string Text
     {
         get => _component.State;
         set => _component.SetState(value);
     }
 
-    private TvLabelOptions Options { get;  }
-
-    public TvComponent AsComponent() => _component;
-
-    public TvLabel(Action<TvLabelOptions>? optionsSetup = null, TvComponent<string>? existingComponent = null)
+    public TvLabel(TvComponent<string> existingComponent, TvLabelOptions options) : base(existingComponent, options) 
     {
-        Options = new TvLabelOptions();
-        optionsSetup?.Invoke(Options);
         var text = "TvLabel";
-        var viewport = new Viewport(TvPoint.Zero, TvBounds.FromRowsAndCols(1, text.Length));
-        _component = existingComponent ?? new TvComponent<string>(text, viewport);
         _component.AddDrawer(LabelDrawer);
         Text = text;
+    }
+    public TvLabel(TvComponent<string> existingComponent, Action<TvLabelOptions>? optionsAction = null) :
+        this(existingComponent, TvControl.RunOptionsAction(new TvLabelOptions(), optionsAction))
+    {
     }
 
     private void LabelDrawer(ConsoleContext ctx)

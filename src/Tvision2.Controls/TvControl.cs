@@ -2,12 +2,55 @@ using Tvision2.Engine.Components;
 
 namespace Tvision2.Controls;
 
-public abstract class TvControl
+public static class TvControl
 {
     internal const string CONTROL_TAG = "Tvision2::Control";
+     
 
-    public static void Wrap<TState, TOptions>(TvComponent<TState> componentToWrap, TOptions options)
+    public static TvControl<TState, TOptions> Wrap<TState, TOptions>(TvComponent<TState> componentToWrap, TOptions options) =>
+        new TvControl<TState, TOptions>(componentToWrap, options);
+
+    public static IControlFactory Factory { get; } = new TvControlFactory();
+    
+    public static TOptions RunOptionsAction<TOptions>(TOptions options, Action<TOptions>? optionsAction )
     {
-        componentToWrap.Metadata.TagWith(CONTROL_TAG, new TvControlMetadata());
+        if (optionsAction is not null)
+        {
+            optionsAction.Invoke(options);
+        }
+        return options;
     }
+}
+
+
+public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
+{
+    
+    protected readonly TvComponent<TState> _component;
+    
+    public TvComponent AsComponent() => _component;
+    
+    protected TOptions Options { get; }
+    
+    protected internal TvControl(TvComponent<TState> component, TOptions options)
+    {
+        component.Metadata.TagWith(TvControl.CONTROL_TAG, new TvControlMetadata());
+        _component = component;
+        Options = options;
+    }
+
+    public bool Focus()
+    {
+        return true;
+    }
+}
+
+public interface ITvControl
+{
+    TvComponent AsComponent();
+    bool Focus();
+}
+
+public interface ITvControl<TState, TOptions> : ITvControl
+{
 }
