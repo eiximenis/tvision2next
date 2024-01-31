@@ -47,4 +47,12 @@ public readonly struct TvBounds : IEquatable<TvBounds>
     public override int GetHashCode() => HashCode.Combine(Height, Width);
 
     public override string ToString() => $"<{Height}h,{Width}w>";
+
+    public TvBounds WithColumns(int columns)
+    {
+        return TvBounds.FromRowsAndCols(Height, columns);
+    }
+    
+    
+    public TvBounds Reduced(TvBounds reduction) => TvBounds.FromRowsAndCols(Height - reduction.Height, Width - reduction.Width);
 }

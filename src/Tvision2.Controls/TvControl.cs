@@ -1,3 +1,4 @@
+using Tvision2.Core;
 using Tvision2.Engine.Components;
 
 namespace Tvision2.Controls;
@@ -29,7 +30,8 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
     protected readonly TvComponent<TState> _component;
     
     public TvComponent AsComponent() => _component;
-    
+
+    public void MoveTo(TvPoint newPos) => _component.Viewport.MoveTo(newPos);
     protected TOptions Options { get; }
     
     protected internal TvControl(TvComponent<TState> component, TOptions options)

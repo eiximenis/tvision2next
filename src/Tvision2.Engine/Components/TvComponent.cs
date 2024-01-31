@@ -188,7 +188,11 @@ public sealed class TvComponent<T> : TvComponent
 
         foreach (var drawer in _drawers)
         {
-            drawer.Draw(context, State);
+            var drawResult = drawer.Draw(context, State);
+            if (drawResult != DrawResult.Done)
+            {
+                context = context.WithDrawResultsApplied(drawResult);
+            }
         }
     }
     

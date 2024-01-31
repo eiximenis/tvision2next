@@ -13,12 +13,15 @@ public static class TvControlFactoryExtensions_Controls
        optionsAction?.Invoke(options);
        return new TvLabel(component, optionsAction);
     }
-    
-    public static TvLabel CreateLabel(this IControlFactory factory, TvComponent<string> component, Action<TvLabelOptions>? optionsAction = null)
+
+    public static TvButton CreateButton(this IControlFactory factory, string text,
+        Action<TvButtonOptions>? optionsAction = null, Viewport? viewport = null)
     {
-        var options = new TvLabelOptions();
+        viewport ??= new Viewport(TvPoint.Zero, TvBounds.FromRowsAndCols(1, text.Length));
+        var component = TvComponent.Create(text, viewport);
+        var options = new TvButtonOptions();
         optionsAction?.Invoke(options);
-        return new TvLabel(component, optionsAction);
+        return new TvButton(component, optionsAction);
     }
-    
+
 }

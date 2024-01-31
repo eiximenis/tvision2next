@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Tvision2.Console.Events;
 using Tvision2.Core;
 
@@ -20,10 +21,12 @@ public class BehaviorContext<T>
     }
     
     public ITvConsoleEventsSequences Events { get; private set; }
-
+    
     public T  State => _owner.State;
 
     internal void SetEvents(ITvConsoleEventsSequences events) => Events = events;
+
+    public TvBounds Bounds => _owner.Viewport.Bounds;
     
     public void ReplaceState(T newState) 
     {

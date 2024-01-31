@@ -10,7 +10,12 @@ class StatelessFuncDrawer<T> : ITvDrawer<T>
     {
         _renderAction = renderAction;
     }
-    public void Draw(in ConsoleContext context, T _) => _renderAction(context);
+
+    public DrawResult Draw(in ConsoleContext context, T _)
+    {
+        _renderAction(context);
+        return DrawResult.Done;
+    }
 
 }
 
@@ -22,5 +27,9 @@ class FuncDrawer<T> : ITvDrawer<T>
         _renderAction = renderAction;
     }
 
-    public void Draw(in ConsoleContext context, T state) => _renderAction(context, state);
+    public DrawResult Draw(in ConsoleContext context, T state)
+    {
+        _renderAction(context, state);
+        return DrawResult.Done;
+    }
 }

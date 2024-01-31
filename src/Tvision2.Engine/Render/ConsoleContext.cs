@@ -34,4 +34,10 @@ public readonly struct ConsoleContext
         var consoleLocation = ViewPointToConsolePoint(TvPoint.Zero, _viewport.Position);
         _console.FillRect(consoleLocation, attr, _viewport.Viewzone);
     }
+
+    internal ConsoleContext WithDrawResultsApplied(DrawResult drawResult)
+    {
+        var newViewport = new Viewport(_viewport.Position + drawResult.Displacement, _viewport.Bounds.Reduced(drawResult.BoundsAdjustment));
+        return new ConsoleContext(_console, newViewport);
+    }
 }
