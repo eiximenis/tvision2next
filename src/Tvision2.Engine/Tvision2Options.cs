@@ -10,7 +10,8 @@ public interface ITvision2Options
 {
     ITvision2Options AddConsoleOptions(Action<IConsoleOptions>? optionsAction = null);
     ITvision2Options WithBackground(BackgroundDefinition background);
-    
+    ITvision2Options AddHook<T>() where T : IHook;
+
 }
 
 public class Tvision2Options : ITvision2Options
@@ -32,6 +33,10 @@ public class Tvision2Options : ITvision2Options
         _backgroundDefinition = definition;
         return this;
     }
-    
+
+    ITvision2Options ITvision2Options.AddHook<T>()
+    {
+        return this;
+    }
 
 }

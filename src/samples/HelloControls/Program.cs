@@ -1,10 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Tvision2.Controls;
 using Tvision2.Controls.Extensions;
 using Tvision2.Core;
 using Tvision2.Engine;
+using Tvision2.Engine.Extensions;
 
-var host = Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()));
+
+var host = Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()), hb=>hb.AddTvControls());
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 
 var label = TvControl.Factory.CreateLabel("Hello World!");

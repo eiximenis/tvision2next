@@ -40,6 +40,7 @@ public class Tvision2Engine : ITvision2Engine
     public async Task Initialize()
     {
         Running = true;
+        ResolveHooks();
         await InvokeStartup();
     }
 
@@ -48,10 +49,20 @@ public class Tvision2Engine : ITvision2Engine
         
     }
 
+    private void ResolveHooks()
+    {
+        var hooks = _serviceProvider.GetServices<IHook>();
+        foreach (var hook in hooks)
+        {
+            UI.AddHook(hook);
+        }
+    }
+
     internal async Task NextCycle()
     {
         _consoleEvents.Clear();
         _eventsReader.ReadEvents(_consoleEvents);
+        await UI.BeforeUpdate(_consoleEvents);
         await UI.Update(_consoleEvents);
         await UI.CalculateLayout();
         UI.Draw();

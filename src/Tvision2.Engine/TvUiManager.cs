@@ -12,6 +12,7 @@ public class TvUiManager
     private readonly VirtualConsole _console;
     private readonly IConsoleDriver _consoleDriver;
     private readonly List<TvComponent> _componentsToDraw;
+    private readonly List<IHook> _hooks;
 
     public TvUiManager(VirtualConsole console, IConsoleDriver consoleDriver)
     {
@@ -19,7 +20,18 @@ public class TvUiManager
         _console = console;
         _consoleDriver = consoleDriver;
         _componentsToDraw = new List<TvComponent>();
+        _hooks = new List<IHook>();
     }
+
+
+    internal async Task BeforeUpdate(TvConsoleEvents events)
+    {
+        foreach (var hook in _hooks)
+        {
+            await hook.BeforeUpdate(events);
+        }
+    } 
+    
     internal async Task<bool> Update(TvConsoleEvents events)
     {
         await _tree.NewCycle();
@@ -62,5 +74,10 @@ public class TvUiManager
         }
 
         _console.Flush(_consoleDriver);
+    }
+
+    public void AddHook(IHook hook)
+    {
+        _hooks.Add(hook);
     }
 }
