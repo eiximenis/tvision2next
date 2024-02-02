@@ -40,8 +40,4 @@ public class Given_ComponentTreeNode
         var node = root.Metadata.Node;
         node.SubTree().Should().ContainSingle(item => item == node);
     }
-    
-    
-
-
 }

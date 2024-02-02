@@ -7,13 +7,14 @@ namespace Tvision2.Controls;
 public class TvControlsEventsHook : IHook
 {
     private readonly TvControlsOptions _options;
-    public TvControlsEventsHook(TvControlsOptions options)
+    public TvControlsEventsHook(TvControlsOptions options, TvControlsTree controlsTree)
     {
         _options = options;
     }
 
     public async Task BeforeUpdate(TvConsoleEvents events)
     {
+        
     }
 }
 

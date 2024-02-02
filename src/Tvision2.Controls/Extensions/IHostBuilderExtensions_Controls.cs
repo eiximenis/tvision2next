@@ -13,6 +13,7 @@ public static class IHostBuilderExtensions_Controls
         builder.ConfigureServices(s =>
         {
             s.AddSingleton<TvControlsOptions>(options);
+            s.AddSingleton<TvControlsTree>();
             s.AddTvisionHook<TvControlsEventsHook>();
         });
         return builder;

@@ -8,6 +8,9 @@ public class TvComponentTreeNode
     public bool IsRoot => Parent is null;
     private TvComponentTreeNode[] _flattened;
     private Dictionary<string, object> _tags;
+
+    private readonly List<TvComponentTreeNode> _postOrder;
+    private readonly List<TvComponentTreeNode> _preOrder;
     
     internal TvComponentTreeNode(TvComponentMetadata metadata)
     {
@@ -15,6 +18,8 @@ public class TvComponentTreeNode
         _flattened = new[] { this };
         Metadata = metadata;
         _tags = new Dictionary<string, object>();
+        _postOrder = new List<TvComponentTreeNode>() { this };
+        _preOrder = new List<TvComponentTreeNode>() { this };
     }
 
     public TvComponentTreeNode Root()
@@ -44,9 +49,41 @@ public class TvComponentTreeNode
         }
     }
 
+
+    private void StartPostOrder()
+    {
+        _postOrder.Clear();
+        TraversePostorder(_postOrder);
+    }
+    private void TraversePostorder(ICollection<TvComponentTreeNode> nodes)
+    {
+        foreach (var child in _childs)
+        {
+            child.TraversePostorder(nodes);
+        }
+        nodes.Add(this);
+    }
+
+    private void StartPreOrder()
+    {
+        _preOrder.Clear();
+        TraversePreorder(_preOrder);
+    }
+
+    private void TraversePreorder(ICollection<TvComponentTreeNode> nodes)
+    {
+        nodes.Add(this);
+        foreach (var child in _childs)
+        {
+            child.TraversePreorder(nodes);
+        }
+    }
+
     private void Flatten()
     {
         _flattened = SubTree().ToArray();
+        StartPreOrder();
+        StartPostOrder();
     }
 
     public IEnumerable<TvComponentTreeNode> Descendants() =>
@@ -54,6 +91,9 @@ public class TvComponentTreeNode
 
     public IEnumerable<TvComponentTreeNode> SubTree() =>
         _childs.SelectMany(c => c.SubTree()).Union(new[] { this });
+
+    public IEnumerable<TvComponentTreeNode> PreOrder => _preOrder;
+    public IEnumerable<TvComponentTreeNode> PostOrder => _postOrder;
 
     public IEnumerable<TvComponentTreeNode> FlattenedTree => _flattened;
 

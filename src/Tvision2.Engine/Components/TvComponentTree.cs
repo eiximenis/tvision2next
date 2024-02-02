@@ -28,7 +28,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private readonly ActionsChain<Unit> _onTreeUpdated;
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
-    private readonly List<TvComponentTreeNode> _sortedNodes;
+    private readonly List<TvComponentTreeNode> _sortedNodesByLayerBottomFirst;
 
     public IEnumerable<TvComponentTreeNode> Roots => _roots;
 
@@ -37,14 +37,14 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.NodeAdded => _onNodeAdded;
     IActionsChain<Unit> ITvComponentTreeActions.TreeUpdated => _onTreeUpdated;
 
-    public IEnumerable<TvComponentTreeNode> ByLayerBottomFirst => _sortedNodes;
+    public IEnumerable<TvComponentTreeNode> ByLayerBottomFirst => _sortedNodesByLayerBottomFirst;
 
     
     public TvComponentTree()
     {
         _dirty = false;
         _sharedTags = new Dictionary<Type, object>();
-        _sortedNodes = new List<TvComponentTreeNode>();
+        _sortedNodesByLayerBottomFirst = new List<TvComponentTreeNode>();
         _roots = new List<TvComponentTreeNode>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
         _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
@@ -87,7 +87,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
                 component.UseLayer(layer);
             }
 
-            _sortedNodes.Add(node);
+            _sortedNodesByLayerBottomFirst.Add(node);
             metadata.AttachToTree(this);
             if (!node.IsRoot)
             {
@@ -95,7 +95,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
             }
         }
 
-        _sortedNodes.Sort(NodeWithBottomComponentFirst);
+        _sortedNodesByLayerBottomFirst.Sort(NodeWithBottomComponentFirst);
     }
 
 
