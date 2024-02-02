@@ -30,7 +30,7 @@ public class TvUiManager
         {
             await hook.BeforeUpdate(events);
         }
-    } 
+    }
     
     internal async Task<bool> Update(TvConsoleEvents events)
     {

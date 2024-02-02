@@ -17,7 +17,7 @@ public class TvComponentMetadata
     
     public void TagWith<T>(string tag, T data) where T : class => _node.SetTag(tag, data);
     public bool HasTag(string tag) => _node.HasTag(tag);
-    
+    public T? GetTag<T>(string tag) where T : class => _node.GetTag<T>(tag); 
     internal TvComponentMetadata(TvComponent owner)
     {
         _owner = owner;

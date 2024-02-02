@@ -4,10 +4,10 @@ using Tvision2.Engine;
 
 namespace Tvision2.Controls;
 
-public class TvControlsEventsHook : IHook
+public class TvControlsTabKeyHook : IHook
 {
     private readonly TvControlsOptions _options;
-    public TvControlsEventsHook(TvControlsOptions options, TvControlsTree controlsTree)
+    public TvControlsTabKeyHook(TvControlsOptions options, TvControlsTree controlsTree)
     {
         _options = options;
     }

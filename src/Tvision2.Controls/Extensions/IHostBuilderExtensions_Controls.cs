@@ -14,7 +14,8 @@ public static class IHostBuilderExtensions_Controls
         {
             s.AddSingleton<TvControlsOptions>(options);
             s.AddSingleton<TvControlsTree>();
-            s.AddTvisionHook<TvControlsEventsHook>();
+            s.AddTvisionHook<TvControlsTabKeyHook>();
+            s.AddTvisionHook<TvControlsEventsRouting>();
         });
         return builder;
     } 

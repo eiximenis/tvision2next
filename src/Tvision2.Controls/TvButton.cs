@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using Tvision2.Console.Events;
 using Tvision2.Core;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
@@ -27,6 +29,12 @@ public class TvButton : TvControl<string, TvButtonOptions>
     {
         _component.AddDrawer(ButtonDrawer);
         _component.AddBehavior(AutoUpdateViewport);
+    }
+    
+    public Task PreviewEvents(TvConsoleEvents events) 
+    {
+        Debug.Write("Preview event in Button :)");
+        return Task.CompletedTask;
     }
 
     private void AutoUpdateViewport(BehaviorContext<string> ctx)
