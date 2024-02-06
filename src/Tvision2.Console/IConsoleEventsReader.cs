@@ -24,4 +24,6 @@ public interface IConsoleEventsReader
 
         throw new NotSupportedException("Only Windows and Linux are supported right now");
     }
+
+    void Init();
 }

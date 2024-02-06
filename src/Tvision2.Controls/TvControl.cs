@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Tvision2.Console.Events;
 using Tvision2.Core;
 using Tvision2.Engine.Components;
@@ -53,6 +54,20 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
         _component = component;
         Options = options;
     }
+
+    public Task PreviewEvents(TvConsoleEvents events)
+    {
+        Debug.WriteLine($"Preview events {events.Count}");
+        return Task.CompletedTask;
+    }
+
+    public Task HandleEvents(TvConsoleEvents events)
+    {
+        Debug.WriteLine($"Handle events {events.Count}");
+        return Task.CompletedTask;
+    }
+    
+    
 
     public bool Focus()
     {

@@ -35,6 +35,7 @@ public class Tvision2Engine : ITvision2Engine
         UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(crows,ccols), TvColor.Black), _consoleDriver);
         UI.ComponentTree.Add(_options.BackgroundDefinition.CreateBackgroundComponent(), LayerSelector.Background);
         _eventsReader = IConsoleEventsReader.GetByOs();
+        _eventsReader.Init();
     }
     
     public async Task Initialize()

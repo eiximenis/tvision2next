@@ -1,7 +1,7 @@
 using Tvision2.Console.Events;
 using Tvision2.Engine;
 
-namespace Tvision2.Controls.Extensions;
+namespace Tvision2.Controls;
 
 /// <summary>
 /// This class "routes" events to focused controls.
@@ -23,14 +23,17 @@ public class TvControlsEventsRouting : IHook
     
     public async Task BeforeUpdate(TvConsoleEvents events)
     {
-        foreach (var cmetadata in _tree.TunnelingControls)
+        if (events.Count > 0)
         {
-            await cmetadata.Control.PreviewEvents(events);
-        }
-        
-        foreach (var cmetadata in _tree.BubblingControls)
-        {
-            await cmetadata.Control.HandleEvents(events);
+            foreach (var cmetadata in _tree.TunnelingControls)
+            {
+                await cmetadata.Control.PreviewEvents(events);
+            }
+
+            foreach (var cmetadata in _tree.BubblingControls)
+            {
+                await cmetadata.Control.HandleEvents(events);
+            }
         }
     }
     

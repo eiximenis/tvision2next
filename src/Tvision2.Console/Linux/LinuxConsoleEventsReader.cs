@@ -15,11 +15,26 @@ namespace Tvision2.Console.Linux
             _sequenceReader = sequenceReader;
             _sequenceReader.AddSequences(inputSequences.GetSequences());
         }
+        
+        public void Init()
+        {
+            // Set RAW mode
+            var termios = new Types.termios();
+            var retval = Libc.tcgetattr(1, ref termios);
+            if (retval != 0)
+            {
+                throw new InvalidOperationException("tcgetattr returned error. Ensure app terminal is not redirected");
+            }
+            Libc.cfmakeraw(ref termios);
+            retval = Libc.tcsetattr(1, Constants.TCSANOW, ref termios);
+        }
+        
         public void ReadEvents(TvConsoleEvents events)
         {
             var data = Libc.read();
             if (data == -1)
             {
+                Debug.WriteLine("NO DATA");
                 return;
             }
 

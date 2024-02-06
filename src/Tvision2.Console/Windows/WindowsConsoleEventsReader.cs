@@ -20,6 +20,12 @@ public class WindowsConsoleEventsReader : IConsoleEventsReader
     {
         _hstdin = WindowsNative.GetStdHandle(WindowsNative.STDIN);
     }
+    
+    public void Init()
+    {
+    }
+
+    
     public void ReadEvents(TvConsoleEvents events)
     {
         WindowsNative.GetNumberOfConsoleInputEvents(_hstdin, out var numEvents);

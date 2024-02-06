@@ -16,6 +16,11 @@ class TvConsoleEventsEmpty : ITvConsoleEventsSequences
 
     public Span<TvConsoleKeyboardEvent> KeyboardEvents => Span<TvConsoleKeyboardEvent>.Empty;
     public Span<TvConsoleMouseEvent> MouseEvents => Span<TvConsoleMouseEvent>.Empty;
+    
+    bool HasEvents {get;}
+    bool HasKeyboardEvent {get;}
+    private int Count { get; }
+    
 }
 
 public class TvConsoleEvents : ITvConsoleEventsSequences
@@ -53,4 +58,5 @@ public class TvConsoleEvents : ITvConsoleEventsSequences
 
     Span<TvConsoleKeyboardEvent> ITvConsoleEventsSequences.KeyboardEvents => CollectionsMarshal.AsSpan(_keyboardEvents);
     Span<TvConsoleMouseEvent> ITvConsoleEventsSequences.MouseEvents => CollectionsMarshal.AsSpan(_mouseEvents);
+    public int Count => _keyboardEvents.Count + _mouseEvents.Count;
 }
