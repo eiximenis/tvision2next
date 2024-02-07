@@ -9,8 +9,8 @@ public interface ITvControl
 {
     TvComponent AsComponent();
     bool Focus();
-    Task PreviewEvents(TvConsoleEvents events) => Task.CompletedTask;
-    Task HandleEvents(TvConsoleEvents events) => Task.CompletedTask;
+    Task PreviewEvents(TvConsoleEvents events);
+    Task HandleEvents(TvConsoleEvents events);
 }
 
 public interface ITvControl<TState, TOptions> : ITvControl
@@ -57,18 +57,9 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
         Options = options;
     }
 
-    public Task PreviewEvents(TvConsoleEvents events)
-    {
-        Debug.WriteLine($"Preview events {events.Count} for {GetType().Name}");
-        return Task.CompletedTask;
-    }
+    public virtual Task PreviewEvents(TvConsoleEvents events) => Task.CompletedTask;
 
-    public Task HandleEvents(TvConsoleEvents events)
-    {
-        Debug.WriteLine($"Handle events {events.Count} for {GetType().Name}");
-        return Task.CompletedTask;
-    }
-    
+    public virtual Task HandleEvents(TvConsoleEvents events) => Task.CompletedTask;
     
 
     public bool Focus()
