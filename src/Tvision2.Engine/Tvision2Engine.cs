@@ -37,11 +37,15 @@ public class Tvision2Engine : ITvision2Engine
         _eventsReader = IConsoleEventsReader.GetByOs();
         _eventsReader.Init();
     }
+
+    internal void PostCreate()  // Called by Tv2App to ensure hooks are resolved just after Tvision2Engine is created
+    {
+        ResolveHooks();   
+    }
     
     public async Task Initialize()
     {
         Running = true;
-        ResolveHooks();
         await InvokeStartup();
     }
 

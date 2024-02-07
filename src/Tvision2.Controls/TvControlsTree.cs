@@ -1,4 +1,5 @@
 using System.Collections;
+using Tvision2.Controls.Extensions;
 using Tvision2.Core;
 using Tvision2.Engine;
 using Tvision2.Engine.Components;
@@ -8,48 +9,48 @@ namespace Tvision2.Controls;
 public class TvControlsTree
 {
     private readonly ITvComponentTree _componentTree;
-
-    private readonly List<TvControlMetadata> _tunnelingControls;
-    private readonly List<TvControlMetadata> _bubblingControls;
     
     public TvControlsTree(Tvision2Engine engine)
     {
-        _tunnelingControls = new List<TvControlMetadata>();
-        _bubblingControls = new List<TvControlMetadata>();
         _componentTree = engine.UI.ComponentTree;
-        _componentTree.On().TreeUpdated.Do(OnComponentTreeUpdated);
+        _componentTree.On().NodeAdded.Do(OnComponentAdded);
+        _componentTree.On().RootAdded.Do(OnComponentAdded);
+    }
+
+    private void OnComponentAdded(TvComponentTreeNode node)
+    {
+        var metadata = node.Metadata;
+        var controlMetadata = metadata.GetControlMetadata();
+        if (controlMetadata is not null)
+        {
+            controlMetadata.AttachControl(this);
+        }
     }
 
     public ITvControl? FocusedControl { get; private set; }
-    public IEnumerable<TvControlMetadata> TunnelingControls => _tunnelingControls;
-    public IEnumerable<TvControlMetadata> BubblingControls => _bubblingControls;
+    
+    internal void SetFocusedControl(ITvControl focused) => FocusedControl = focused;
 
-    private void OnComponentTreeUpdated(Unit _)
+    public IEnumerable<TvControlMetadata> TunnelingControls()
     {
-        _tunnelingControls.Clear();
-        foreach (var root in _componentTree.Roots)
+        if (FocusedControl is null) yield break;
+        var nodes = FocusedControl.AsComponent().Metadata.Node.PreOrder;
+        foreach (var node in nodes)
         {
-            foreach (var node in root.PreOrder)
-            {
-                var controlMetadata = node.Metadata.GetTag<TvControlMetadata>(TvControl.CONTROL_TAG);
-                if (controlMetadata is not null)
-                {
-                    _tunnelingControls.Add(controlMetadata!);
-                }
-            }
-        }
-
-        _bubblingControls.Clear();
-        foreach (var root in _componentTree.Roots)
-        {
-            foreach (var node in root.PostOrder)
-            {
-                var controlMetadata = node.Metadata.GetTag<TvControlMetadata>(TvControl.CONTROL_TAG);
-                if (controlMetadata is not null)
-                {
-                    _bubblingControls.Add(controlMetadata!);
-                }
-            }
+            var ctlMetadata = node.Metadata.GetControlMetadata();
+            if (ctlMetadata is not null) yield return ctlMetadata;
         }
     }
+    
+    public IEnumerable<TvControlMetadata> BubblingControls()
+    {
+        if (FocusedControl is null) yield break;
+        var nodes = FocusedControl.AsComponent().Metadata.Node.PostOrder;
+        foreach (var node in nodes)
+        {
+            var ctlMetadata = node.Metadata.GetControlMetadata();
+            if (ctlMetadata is not null) yield return ctlMetadata;
+        }
+    }
+
 }

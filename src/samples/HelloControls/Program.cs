@@ -16,4 +16,5 @@ var button = TvControl.Factory.CreateButton("Click Me!");
 button.MoveTo(TvPoint.FromXY(0, 1));
 await app.UI.ComponentTree.Add(label.AsComponent());
 await app.UI.ComponentTree.Add(button.AsComponent());
+button.Focus();
 await Tv2App.Run(); 

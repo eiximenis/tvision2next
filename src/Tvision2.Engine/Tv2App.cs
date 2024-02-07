@@ -21,6 +21,8 @@ public static class Tv2App
         var engine = host.Services.GetService<Tvision2Engine>() ??
                      throw new InvalidOperationException(
                          "HostBuilder does not have Tvision2 enabled. Please call UseTvision2");
+        engine.PostCreate();
+        
         _host = host;
     }
     
@@ -28,18 +30,7 @@ public static class Tv2App
     {   
         var builder = new HostBuilder().UseTvision2(optionsAction);
         additionalConfig?.Invoke(builder);
-        _host = builder.Build();
-        return _host;
-    }
-
-    public static void Configure(Action<ITvision2Options> optionsAction)
-    {
-        if (_host is null)
-        {
-            throw new InvalidOperationException("Setup must be called before configure the application");
-        }
-        var currentOptions = _host!.Services.GetRequiredService<Tvision2Options>();
-        optionsAction.Invoke(currentOptions);
+        return Setup(builder);
     }
     
     public static async Task Run()

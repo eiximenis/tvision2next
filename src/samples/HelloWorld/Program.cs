@@ -24,7 +24,6 @@ var background = new BackgroundDefinition().UseDrawer(ctx =>
         }
     }
 });
-Tv2App.Configure(opt => opt.WithBackground(background));
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 var component = TvComponent.CreateStatelessComponent();
 var container =  TvComponent.CreateStatelessComponent(new Viewport(TvPoint.FromXY(3, 4), TvBounds.FromRowsAndCols(10, 40)));

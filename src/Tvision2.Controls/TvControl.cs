@@ -42,6 +42,7 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
 {
     
     protected readonly TvComponent<TState> _component;
+    private readonly TvControlMetadata _metadata;
     
     public TvComponent AsComponent() => _component;
 
@@ -50,20 +51,21 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
     
     protected internal TvControl(TvComponent<TState> component, TOptions options)
     {
-        component.Metadata.TagWith(TvControl.CONTROL_TAG, new TvControlMetadata(this));
-        _component = component;
+        _metadata = new TvControlMetadata(this);
+        component.Metadata.TagWith(TvControl.CONTROL_TAG, _metadata);
+        _component = component; 
         Options = options;
     }
 
     public Task PreviewEvents(TvConsoleEvents events)
     {
-        Debug.WriteLine($"Preview events {events.Count}");
+        Debug.WriteLine($"Preview events {events.Count} for {GetType().Name}");
         return Task.CompletedTask;
     }
 
     public Task HandleEvents(TvConsoleEvents events)
     {
-        Debug.WriteLine($"Handle events {events.Count}");
+        Debug.WriteLine($"Handle events {events.Count} for {GetType().Name}");
         return Task.CompletedTask;
     }
     
@@ -71,7 +73,7 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
 
     public bool Focus()
     {
-        return true;
+        return _metadata.Focus();
     }
 }
 
