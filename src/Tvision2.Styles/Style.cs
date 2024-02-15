@@ -4,7 +4,7 @@ public class Style
 {
     private readonly Dictionary<string, StyleState> _states;
     
-    public const string DefaultStateName = "default";
+    public const string DefaultStateName = "";
     public string Name { get; }
     public IEnumerable<StyleState> States => _states.Values;
     public StyleState DefaultState { get; private set; }

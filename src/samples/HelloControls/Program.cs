@@ -5,9 +5,16 @@ using Tvision2.Controls.Extensions;
 using Tvision2.Core;
 using Tvision2.Engine;
 using Tvision2.Engine.Extensions;
+using Tvision2.Styles.Extensions;
 
 
-var host = Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()), hb=>hb.AddTvControls());
+var host = Tv2App.Setup(
+    o => o.AddConsoleOptions(c => c.UseAlternateBuffer()),
+    hb=>
+    {
+        hb.AddTvControls();
+        hb.AddStyles(s => s.WithControlStyles(cs => cs.All());
+    });
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;
 var label = TvControl.Factory.CreateLabel("Hello World!");

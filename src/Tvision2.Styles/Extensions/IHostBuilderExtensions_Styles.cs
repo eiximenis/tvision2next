@@ -6,7 +6,7 @@ namespace Tvision2.Styles.Extensions;
 public static class IHostBuilderExtensions_Styles
 {
 
-    public static IHostBuilder AddTvControls(this IHostBuilder builder, Action<ITvStylesBuilder>? builderConf = null)
+    public static IHostBuilder AddStyles(this IHostBuilder builder, Action<ITvStylesBuilder>? builderConf = null)
     {
         var stylesBuilder = new StylesBuilder();
         builderConf?.Invoke(stylesBuilder);
