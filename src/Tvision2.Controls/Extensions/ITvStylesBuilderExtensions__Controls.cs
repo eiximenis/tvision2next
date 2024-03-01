@@ -1,5 +1,5 @@
+using Tvision2.Controls.Extensions.Styles;
 using Tvision2.Styles;
-using Tvision2.Styles.Builder;
 
 namespace Tvision2.Controls.Extensions;
 
@@ -11,15 +11,4 @@ public static class ITvStylesBuilderExtensions__Controls
         return new TvControlStylesBuilder(controlsSet);
     }
 
-}
-
-public class TvControlStylesBuilder
-{
-    private readonly StyleSetDefinition _controlsSetDefinition;
-    public TvControlStylesBuilder(StyleSetDefinition controlsSetDefinition)
-    {
-        _controlsSetDefinition = controlsSetDefinition;
-    }
-    
-    
 }

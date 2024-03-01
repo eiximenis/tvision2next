@@ -13,7 +13,12 @@ var host = Tv2App.Setup(
     hb=>
     {
         hb.AddTvControls();
-        hb.AddStyles(s => s.WithControlStyles(cs => cs.All());
+        hb.AddStyles(s =>
+        {
+            s.Default().UseColors(TvColor.Yellow, TvColor.Blue);
+            s.WithControlStyles();
+            s.WithStyleSet("Alternate").Default().UseColors(TvColor.Red, TvColor.Black);
+        });
     });
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;

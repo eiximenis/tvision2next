@@ -13,9 +13,10 @@ sealed class SolidDynamicColor : IDynamicColor
     private readonly TvColor _color;
     public static IDynamicColor White { get; } = new SolidDynamicColor(TvColor.White);
     public static IDynamicColor Black { get; } = new SolidDynamicColor(TvColor.Black);
+    public static IDynamicColor FromColor (TvColor color) =>  new SolidDynamicColor(color);
     public bool IsFixedColor => true;
     
-    public SolidDynamicColor(TvColor color)
+    private SolidDynamicColor(TvColor color)
     {
         _color = color;
     }

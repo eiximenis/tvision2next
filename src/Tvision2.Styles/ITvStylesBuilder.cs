@@ -4,6 +4,13 @@ namespace Tvision2.Styles;
 
 public interface ITvStylesBuilder
 {
-    StyleSetDefinition Default();
+    StyleSetDefinition DefaultStyleSet();
     StyleSetDefinition WithStyleSet(string name);
+
+
+    StyleStateDefinition Default();
+
+    StyleDefinition WithStyle(string name);
+    StyleDefinition WithDefaultStyle();
+
 }

@@ -1,3 +1,5 @@
+using Tvision2.Core;
+
 namespace Tvision2.Styles.Builder;
 
 public class StyleSetDefinition
@@ -10,7 +12,12 @@ public class StyleSetDefinition
         _styles.Add("", new StyleDefinition());
     }
     
-    public StyleDefinition WithStyleSet(string name)
+
+    public StyleDefinition WithDefaultStyle() => _styles[""];
+
+    public StyleStateDefinition Default() => WithDefaultStyle().WithDefaultState();
+
+    public StyleDefinition WithStyle(string name)
     {
         if (!_styles.ContainsKey(name))
         {

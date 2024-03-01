@@ -13,13 +13,22 @@ public  readonly ref  struct StyledConsoleContext
         _consoleContext = consoleContext;
         _style = style;
     }
-    
-    public void DrawStringAt(string text, TvPoint location) =>
-        _consoleContext.DrawStringAt(text, location, _style.DefaultState.ColorsPairAt(location));
 
-    public void Fill()
+
+    public void DrawStringAt(string text, TvPoint location) => DrawStringAt(text, location, _style.DefaultState);
+
+    public void DrawStringAt(string text, TvPoint location, string stateName) => DrawStringAt(text, location, _style.GetStyleOrDefault(stateName));
+
+    public void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
+
+
+    public void Fill() => Fill(_style.DefaultState);
+
+    public void Fill(string stateName) => Fill(_style.GetStyleOrDefault(stateName));
+
+    public void Fill(StyleState state)
     {
-        var state = _style.DefaultState;
+        
         if (state.BackgroundFixed)
         {
             _consoleContext.Fill(state.BackgroundAt(TvPoint.Zero));
@@ -36,8 +45,5 @@ public  readonly ref  struct StyledConsoleContext
             }
         }
     }
-
-    public void DrawString(string text, TvPoint location, string stateName) =>
-        _consoleContext.DrawStringAt(text, location, _style[stateName].ColorsPairAt(location));
 
 }
