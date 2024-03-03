@@ -7,12 +7,10 @@ class StylesBuilder : ITvStylesBuilder
 {
     private readonly Dictionary<string, StyleSetDefinition> _styleSets;
     
-    public ApplicationStyleSets Build() => new ApplicationStyleSets();
-
     public StylesBuilder()
     {
         _styleSets = new();
-        _styleSets.Add("", new StyleSetDefinition());
+        _styleSets.Add("", new StyleSetDefinition(""));
 
     }
 
@@ -29,9 +27,24 @@ class StylesBuilder : ITvStylesBuilder
     {
         if (!_styleSets.ContainsKey(name))
         {
-            _styleSets.Add(name, new StyleSetDefinition());
+            _styleSets.Add(name, new StyleSetDefinition(name));
         }
 
         return _styleSets[name];
     }
+
+
+    public ApplicationStyleSets Build()
+    {
+        var appStyles = new ApplicationStyleSets();
+
+        foreach (var styleSetDefinition in _styleSets.Values) 
+        {
+            var styleSet = styleSetDefinition.ToStyleSet();
+            appStyles.AddStyleSet(styleSet);
+        }
+
+        return appStyles;
+    }
+
 }

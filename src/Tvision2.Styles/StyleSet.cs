@@ -4,7 +4,7 @@ public class StyleSet
 {
     private readonly Dictionary<string, Style> _styles;
     private Style? _defaultStyle;
-    public const string DefaultStyleName = "default";
+    public const string DefaultStyleName = "";
     public string Name { get; }
     public IEnumerable<Style> OwnedStyles => _styles.Values;
     public IEnumerable<Style> AllStyles => _styles.Values.Union(_parent?.AllStyles ?? Enumerable.Empty<Style>());

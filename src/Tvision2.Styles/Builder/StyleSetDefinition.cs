@@ -5,11 +5,13 @@ namespace Tvision2.Styles.Builder;
 public class StyleSetDefinition
 {
     private Dictionary<string, StyleDefinition> _styles;
+    private readonly string _name;
 
-    public StyleSetDefinition()
+    public StyleSetDefinition(string name)
     {
+        _name = name;
         _styles = new();
-        _styles.Add("", new StyleDefinition());
+        _styles.Add("", new StyleDefinition(""));
     }
     
 
@@ -21,10 +23,27 @@ public class StyleSetDefinition
     {
         if (!_styles.ContainsKey(name))
         {
-            _styles.Add(name, new StyleDefinition());
+            _styles.Add(name, new StyleDefinition(name));
         }
         return _styles[name];
     } 
+
+    
+    internal StyleSet ToStyleSet()
+    {
+        var styleDefs = _styles.Values;
+
+        var set = new StyleSet(_name, null);
+
+        foreach (var styleDef in styleDefs)
+        {
+            set.Add(styleDef.ToStyle());
+        }
+
+        return set;
+    }
+    
+    
     
     
 }

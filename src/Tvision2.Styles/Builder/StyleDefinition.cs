@@ -8,12 +8,16 @@ public class StyleDefinition
 
     private Dictionary<string, StyleStateDefinition> _states = new();
 
-    public StyleDefinition()
+    private readonly string _name;
+
+    public StyleDefinition(string name)
     {
+        _name = name;
         var defaultStateDef = new StyleStateDefinition("");
         defaultStateDef.UseColors(TvColor.White, TvColor.Black);
         _states.Add("", defaultStateDef);
     }
+
 
     public StyleStateDefinition WithState(string stateName)
     {
@@ -26,5 +30,17 @@ public class StyleDefinition
     }
 
     public StyleStateDefinition WithDefaultState() => _states[""];
+
+    internal Style ToStyle()
+    {
+        var style = new Style(_name);
+
+        foreach (var stateDef in _states.Values)
+        {
+            style.Add(stateDef.BuiltState);
+        }
+
+        return style;
+    }
     
 }
