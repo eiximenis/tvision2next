@@ -12,6 +12,8 @@ public class TvComponentMetadata
     public TvComponentTreeNode Node { get => _node; }
     public TvComponent Component => _owner;
     private readonly ActionsChain<ViewportUpdateReason> _viewportUpdated;
+
+    public ITvComponentTree? OwnerTree => _ownerTree;
     
     public IActionsChain<ViewportUpdateReason> ViewportUpdated => _viewportUpdated;
     

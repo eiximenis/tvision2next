@@ -7,8 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Extensions\cqsd0imw.kbm~" />
+      <None Remove="sodh1sbx.qbt~" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\Tvision2.Core\Tvision2.Core.csproj" />
       <ProjectReference Include="..\Tvision2.Engine\Tvision2.Engine.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.AutoActivation" Version="8.2.0" />
     </ItemGroup>
 
 </Project>

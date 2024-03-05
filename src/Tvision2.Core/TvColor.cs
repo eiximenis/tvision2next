@@ -169,16 +169,17 @@ public static class TvColorNames
                 return $"RGB({r},{g},{b}) ({Value})";
             }
 
+            if (IsBasic)
+            {
+
+                return $"STD({TvColorNames.NameOf(Value)}) ({Value})";
+            }
+
             if (IsPalettized)
             {
                 return $"PAL({PaletteIndex}) ({Value})";
             }
 
-            if (Value < TvColorNames.StandardColorsCount)
-            {
-
-                return $"STD({TvColorNames.NameOf(Value)}) ({Value})";
-            }
 
             return $"???({Value})";
 

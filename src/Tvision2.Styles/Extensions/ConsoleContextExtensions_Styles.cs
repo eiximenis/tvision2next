@@ -10,10 +10,15 @@ namespace Tvision2.Styles.Extensions
 {
     public static class ConsoleContextExtensions_Styles
     {
-        public static StyledConsoleContext Styled(this ConsoleContext ctx, StylesManager stylesManager)
+        public static StyledConsoleContext StyledDefault(this ConsoleContext ctx, StylesManager stylesManager)
         {
-            // TODO: Get style from StylesManager
-            return new StyledConsoleContext(ctx, null);
+            return new StyledConsoleContext(ctx, stylesManager.GetDefaultStyleSet());
         }
+
+        public static StyledConsoleContext Styled(this ConsoleContext ctx, StylesManager stylesManager, string styleSetName)
+        {
+            return new StyledConsoleContext(ctx, stylesManager.GetStyleSet(styleSetName));
+        }
+
     }
 }

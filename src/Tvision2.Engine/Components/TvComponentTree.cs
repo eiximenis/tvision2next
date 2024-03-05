@@ -17,7 +17,11 @@ public interface ITvComponentTree
     Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer);
     Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent);
     IEnumerable<TvComponentTreeNode> Roots { get; }
-    IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; } 
+    IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; }
+    void AddSharedTag<TTag>(TTag tag) where TTag : class;
+    TTag? GetSharedTag<TTag>();
+    bool HasTag<TTag>();
+
 }
 
 class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tvision2.Engine;
 
 namespace Tvision2.Styles.Extensions;
 
@@ -11,8 +12,12 @@ public static class IHostBuilderExtensions_Styles
         var stylesBuilder = new StylesBuilder();
         builderConf?.Invoke(stylesBuilder);
         var styles = stylesBuilder.Build();
-        var manager = new StylesManager(styles);
-        builder.ConfigureServices(s => s.AddSingleton(manager));
+        builder.ConfigureServices(s =>
+        {
+            s.AddSingleton(sp => new StylesManager(styles, sp.GetRequiredService<Tvision2Engine>()));
+            s.ActivateSingleton<StylesManager>();
+        });
+       
         return builder;
     }
     

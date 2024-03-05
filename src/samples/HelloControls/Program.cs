@@ -10,7 +10,7 @@ using Tvision2.Styles.Extensions;
 
 var host = Tv2App.Setup(
     o => o.AddConsoleOptions(c => c.UseAlternateBuffer()),
-    hb=>
+    hb =>
     {
         hb.AddTvControls();
         hb.AddStyles(s =>
@@ -20,6 +20,8 @@ var host = Tv2App.Setup(
             s.WithStyleSet("Alternate").Default().UseColors(TvColor.Red, TvColor.Black);
         });
     });
+
+
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;
 var label = TvControl.Factory.CreateLabel("Hello World!");

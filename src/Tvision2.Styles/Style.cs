@@ -14,7 +14,7 @@ public class Style
         ? state 
         : throw new InvalidOperationException($"Style {Name} does not contain state {stateName}" );
 
-    public StyleState GetStyleOrDefault(string stateName) => _states.TryGetValue(stateName, out var state)
+    public StyleState GetStateOrDefault(string stateName) => _states.TryGetValue(stateName, out var state)
         ? state
         : DefaultState;
     

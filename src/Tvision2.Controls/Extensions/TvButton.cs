@@ -4,6 +4,8 @@ using Tvision2.Core;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Events;
 using Tvision2.Engine.Render;
+using Tvision2.Styles;
+using Tvision2.Styles.Extensions;
 
 namespace Tvision2.Controls.Extensions;
 
@@ -39,10 +41,11 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
     }
     public TvButton(TvComponent<string> component, TvButtonOptions options) : base(component, options)
     {
-        _component.AddDrawer(ButtonDrawer);
+        _component.AddStyledDrawer(ButtonDrawer, "TvControls");
         _component.AddBehavior(AutoUpdateViewport);
         _tapped = new();
     }
+
 
     public override Task PreviewEvents(TvConsoleEvents events)
     {
@@ -67,8 +70,9 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
         ctx.Resize(bounds.WithColumns(text.Length));
     }
 
-    private static void ButtonDrawer(ConsoleContext ctx, string text)
+    private static DrawResult ButtonDrawer(StyledConsoleContext ctx, string text)
     {
-        ctx.DrawStringAt(text, TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.White, TvColor.Yellow));
+        ctx.DrawStringAt(text, TvPoint.Zero, "Normal");
+        return DrawResult.Done;
     }
 }

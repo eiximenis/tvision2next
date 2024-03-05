@@ -1,32 +1,34 @@
+using System.Runtime.InteropServices.JavaScript;
 using Tvision2.Core;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Styles;
 
-public  readonly ref  struct StyledConsoleContext
+public readonly struct StyledConsoleContext
 {
     private readonly ConsoleContext _consoleContext;
-    private  readonly  Style _style;
+    private readonly StyleSet _styleSet;
 
-    internal StyledConsoleContext(ConsoleContext consoleContext, Style style)
+    internal StyledConsoleContext(ConsoleContext consoleContext, StyleSet styleSet)
     {
         _consoleContext = consoleContext;
-        _style = style;
+        _styleSet = styleSet;
     }
 
 
-    public void DrawStringAt(string text, TvPoint location) => DrawStringAt(text, location, _style.DefaultState);
+    public void DrawStringAt(string text, TvPoint location) => DrawStringAt(text, location, _styleSet.DefaultStyle.DefaultState);
+    public void DrawStringAt(string text, TvPoint location, string stateName) => DrawStringAt(text, location, _styleSet.DefaultStyle.GetStateOrDefault(stateName));
 
-    public void DrawStringAt(string text, TvPoint location, string stateName) => DrawStringAt(text, location, _style.GetStyleOrDefault(stateName));
+    public void DrawStringAt(string text, TvPoint location, string styleName, string stateName) => DrawStringAt(text, location, _styleSet[styleName].GetStateOrDefault(stateName));
 
-    public void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
+    private void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
 
 
-    public void Fill() => Fill(_style.DefaultState);
+    public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);
+    public void Fill(string stateName) => Fill(_styleSet.DefaultStyle.GetStateOrDefault(stateName));
+    public void Fill(string styleName, string stateName) => Fill(_styleSet[styleName].GetStateOrDefault(stateName));
 
-    public void Fill(string stateName) => Fill(_style.GetStyleOrDefault(stateName));
-
-    public void Fill(StyleState state)
+    private void Fill(StyleState state)
     {
         
         if (state.BackgroundFixed)
