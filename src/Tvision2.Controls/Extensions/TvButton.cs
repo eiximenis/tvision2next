@@ -27,8 +27,8 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
 
     public string Text
     {
-        get => _component.State;
-        set => _component.SetState(value);
+        get => Component.State;
+        set => Component.SetState(value);
     }
 
     public IButtonActions On() => this;
@@ -41,8 +41,8 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
     }
     public TvButton(TvComponent<string> component, TvButtonOptions options) : base(component, options)
     {
-        _component.AddStyledDrawer(ButtonDrawer, "TvControls");
-        _component.AddBehavior(AutoUpdateViewport);
+        Component.AddStyledDrawer(ButtonDrawer, "TvControls");
+        Component.AddBehavior(AutoUpdateViewport);
         _tapped = new();
     }
 

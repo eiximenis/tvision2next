@@ -5,17 +5,7 @@ using Tvision2.Engine.Components;
 
 namespace Tvision2.Controls;
 
-public interface ITvControl
-{
-    TvComponent AsComponent();
-    bool Focus();
-    Task PreviewEvents(TvConsoleEvents events);
-    Task HandleEvents(TvConsoleEvents events);
-}
 
-public interface ITvControl<TState, TOptions> : ITvControl
-{
-}
 
 public static class TvControl
 {
@@ -41,8 +31,12 @@ public static class TvControl
 public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
 {
     
-    protected readonly TvComponent<TState> _component;
+    private readonly TvComponent<TState> _component;
     private readonly TvControlMetadata _metadata;
+
+    protected TvComponent<TState> Component => _component;
+
+    public TvControlMetadata Metadata => _metadata;
     
     public TvComponent AsComponent() => _component;
 

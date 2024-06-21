@@ -26,10 +26,21 @@ var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;
 var label = TvControl.Factory.CreateLabel("Hello World!");
 label.Text = "Hello World! 2";
-var button = TvControl.Factory.CreateButton("Click Me!");
-button.MoveTo(TvPoint.FromXY(0, 1));
+var button = CreateButton("Click Me!", TvPoint.FromXY(1,0));
 button.On().Tapped.Do(b => b.Text = $"Tapped {counter++}!");
+var button2 = CreateButton("Second", TvPoint.FromXY(1,1));
+var button3 = CreateButton("Third", TvPoint.FromXY(1,2));
 await app.UI.ComponentTree.Add(label.AsComponent());
 await app.UI.ComponentTree.Add(button.AsComponent());
+await app.UI.ComponentTree.Add(button2.AsComponent());
+await app.UI.ComponentTree.Add(button3.AsComponent());
 button.Focus();
-await Tv2App.Run(); 
+await Tv2App.Run();
+
+TvButton CreateButton(string text, TvPoint location)
+{
+    var button = TvControl.Factory.CreateButton(text);
+    button.MoveTo(location);
+    return button;
+
+}

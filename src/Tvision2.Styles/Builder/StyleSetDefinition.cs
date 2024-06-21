@@ -40,6 +40,15 @@ public class StyleSetDefinition
             set.Add(styleDef.ToStyle());
         }
 
+        // Need to set the parents accordingly
+        foreach (var styleDef in styleDefs)
+        {
+            if (styleDef.ParentName is not null)
+            {
+                set[styleDef.Name].SetParent(set[styleDef.ParentName]);
+            }
+        }
+
         return set;
     }
     

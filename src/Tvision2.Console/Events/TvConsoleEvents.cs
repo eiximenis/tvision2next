@@ -37,7 +37,7 @@ public class TvConsoleEvents : ITvConsoleEventsSequences
     public bool HasEvents => _keyboardEvents.Any(e => !e.IsHandled) || _mouseEvents.Any();
     public bool HasKeyboardEvents => _keyboardEvents.Any(e => !e.IsHandled);
 
-    public TvConsoleKeyboardEvent AcquireFirstKeyboard(Func<TvConsoleKeyboardEvent, bool> filter, bool autoHandle)
+    public TvConsoleKeyboardEvent? AcquireFirstKeyboard(Func<TvConsoleKeyboardEvent, bool> filter, bool autoHandle)
     {
         var evt = _keyboardEvents.Where(x => !x.IsHandled).FirstOrDefault(filter);
         if (autoHandle)

@@ -7,6 +7,10 @@ public class StyleDefinition
 {
 
     private Dictionary<string, StyleStateDefinition> _states = new();
+    internal string? ParentName { get; set; }
+
+    internal string Name => _name;
+
 
     private readonly string _name;
 
@@ -16,6 +20,7 @@ public class StyleDefinition
         var defaultStateDef = new StyleStateDefinition("");
         defaultStateDef.UseColors(TvColor.White, TvColor.Black);
         _states.Add("", defaultStateDef);
+        ParentName = null;
     }
 
 
@@ -31,6 +36,18 @@ public class StyleDefinition
 
     public StyleStateDefinition WithDefaultState() => _states[""];
 
+    public StyleDefinition ChildOf(string parentName)
+    {
+        if (parentName == _name)
+        {
+            throw new InvalidOperationException("State can't be child of itself!");
+        }
+        ParentName = parentName;
+        return this;
+    }
+
+    public StyleDefinition ChildOfDefault() => ChildOf("");
+
     internal Style ToStyle()
     {
         var style = new Style(_name);
@@ -42,5 +59,5 @@ public class StyleDefinition
 
         return style;
     }
-    
+
 }

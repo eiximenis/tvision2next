@@ -10,6 +10,5 @@ public static class Tvision2OptionsExtensions
     {
         var backgroundDefinition = DefaultBackgroundDefinitionsProvider.SolidColorBackground(bgColor);
         return options.WithBackground(backgroundDefinition);
-        return options;
     }
 }

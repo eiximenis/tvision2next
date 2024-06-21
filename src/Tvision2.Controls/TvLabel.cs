@@ -15,8 +15,8 @@ public class TvLabel : TvControl<string, TvLabelOptions>
 {
     public string Text
     {
-        get => _component.State;
-        set => _component.SetState(value);
+        get => Component.State;
+        set => Component.SetState(value);
     }
 
     public TvLabel(TvComponent<string> existingComponent, Action<TvLabelOptions>? optionsAction = null) :
@@ -26,8 +26,8 @@ public class TvLabel : TvControl<string, TvLabelOptions>
     
     public TvLabel(TvComponent<string> existingComponent, TvLabelOptions options) : base(existingComponent, options) 
     {
-        _component.AddDrawer(LabelDrawer);
-        _component.AddBehavior(AutoUpdateViewport);
+        Component.AddDrawer(LabelDrawer);
+        Component.AddBehavior(AutoUpdateViewport);
     }
 
     private void AutoUpdateViewport(BehaviorContext<string> ctx)
