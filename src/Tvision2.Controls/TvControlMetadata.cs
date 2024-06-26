@@ -6,10 +6,14 @@ namespace Tvision2.Controls;
 public class TvControlMetadata
 {
     private int _tabOrder;
+    private TvControlsTree? _tree;
     public bool IsAttached => _tree is not null;
-
-    public TvComponentTreeNode Node => Control.AsComponent().Metadata.Node;
     public ITvControl Control { get; }
+    public TvComponentTreeNode Node => Control.AsComponent().Metadata.Node;
+    public bool IsFocused => IsAttached && _tree!.FocusedControl == Control;
+
+    private FocusPolicy _focusPolicy = FocusPolicy.DirectFocusable;
+
 
     public int TabOrder
     {
@@ -23,11 +27,10 @@ public class TvControlMetadata
         }
     }
 
-    private TvControlsTree? _tree;
-
-    public TvControlMetadata(ITvControl owner)
+    public TvControlMetadata(ITvControl owner, FocusPolicy focusPolicy = FocusPolicy.DirectFocusable)
     {
         Control = owner;
+        _focusPolicy = focusPolicy;
         _tree = null;
     }
 
@@ -40,10 +43,16 @@ public class TvControlMetadata
         _tree = tvControlsTree;
     }
 
-    internal bool Focus()
+    internal bool TryFocus()
     {
-        if (_tree is null) return false;
+        if (_focusPolicy == FocusPolicy.NotFocusable || _tree is null) return false;
         _tree.SetFocusedControl(Control);
         return true;
     }
+}
+
+public enum FocusPolicy
+{
+    DirectFocusable,
+    NotFocusable
 }

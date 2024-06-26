@@ -13,6 +13,6 @@ public interface ITvControl
     TvControlMetadata Metadata { get; }
 }
 
-public interface ITvControl<TState, TOptions> : ITvControl
+public interface ITvControl<TState, TOptions>  : ITvControl
 {
 }

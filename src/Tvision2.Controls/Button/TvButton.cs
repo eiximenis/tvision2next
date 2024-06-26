@@ -7,7 +7,7 @@ using Tvision2.Engine.Render;
 using Tvision2.Styles;
 using Tvision2.Styles.Extensions;
 
-namespace Tvision2.Controls.Extensions;
+namespace Tvision2.Controls.Button;
 
 
 public class TvButtonOptions
@@ -23,7 +23,7 @@ public interface IButtonActions
 public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
 {
 
-    private readonly ActionsChain<TvButton> _tapped;
+    private readonly ActionsChain<TvButton> _tapped = new();
 
     public string Text
     {
@@ -39,11 +39,11 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
         this(existingComponent, TvControl.RunOptionsAction(new TvButtonOptions(), optionsAction))
     {
     }
-    public TvButton(TvComponent<string> component, TvButtonOptions options) : base(component, options)
+    public TvButton(TvComponent<string> component, TvButtonOptions options) : base(component, options, FocusPolicy.DirectFocusable)
     {
         Component.AddStyledDrawer(ButtonDrawer, "TvControls");
         Component.AddBehavior(AutoUpdateViewport);
-        _tapped = new();
+
     }
 
 
@@ -70,9 +70,11 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
         ctx.Resize(bounds.WithColumns(text.Length));
     }
 
-    private static DrawResult ButtonDrawer(StyledConsoleContext ctx, string text)
+    private DrawResult ButtonDrawer(StyledConsoleContext ctx, string text)
     {
-        ctx.DrawStringAt(text, TvPoint.Zero, "Normal");
+        var state = Metadata.IsFocused ? "Focused" : "Normal"; 
+
+        ctx.DrawStringAt(text, TvPoint.Zero, state);
         return DrawResult.Done;
     }
 }

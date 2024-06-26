@@ -8,7 +8,6 @@ public readonly struct StyledConsoleContext
 {
     private readonly ConsoleContext _consoleContext;
     private readonly StyleSet _styleSet;
-
     internal StyledConsoleContext(ConsoleContext consoleContext, StyleSet styleSet)
     {
         _consoleContext = consoleContext;

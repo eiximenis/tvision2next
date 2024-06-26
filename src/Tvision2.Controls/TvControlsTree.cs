@@ -16,7 +16,7 @@ public class TvControlsTree
     private LinkedListNode<TvControlMetadata>? _focusedRootNode = null;
     private ITvControl? _focusedControl = null;
 
-    
+
     public TvControlsTree(Tvision2Engine engine)
     {
         _componentTree = engine.UI.ComponentTree;
@@ -59,37 +59,7 @@ public class TvControlsTree
         }
     }
 
-    public ITvControl? FocusedControl
-    {
-        get => _focusedControl;
-        set
-        {
-            if (value is null)
-            {
-                _focusedRootNode = null;
-                return;
-            }
-
-            var rootValue = value.Metadata.Node.Root();
-            var rootMetadata = rootValue.Metadata.GetControlMetadata();
-
-            if (rootMetadata is null)
-            {
-                throw new InvalidOperationException("[FATAL] Control is not root nor control of child???");
-            }
-
-            var rootNode = _rootsByTabOrder.Find(rootMetadata);
-            if (rootNode is not null)
-            {
-                _focusedControl = value;
-                _focusedRootNode = rootNode;
-            }
-            else
-            {
-                throw new InvalidOperationException("Control is not contained in this tree");
-            }
-        }
-    }
+    public ITvControl? FocusedControl => _focusedControl;
 
     // This is the same as setting FocusedControl but with no checks.
     // It's private so caller ensure checks are performed and ok.
@@ -100,7 +70,36 @@ public class TvControlsTree
         _focusedControl = focused.Control;
     }
 
-    internal void SetFocusedControl(ITvControl focused) => FocusedControl = focused;
+    // Focus the specified control. This method makes checks that:
+    //  1. Control is child of any root of the tree
+    //  2. Control is contained in this controltree
+    internal void SetFocusedControl(ITvControl? focused)
+    {
+        if (focused is null)
+        {
+            _focusedRootNode = null;
+            return;
+        }
+
+        var rootValue = focused.Metadata.Node.Root();
+        var rootMetadata = rootValue.Metadata.GetControlMetadata();
+
+        if (rootMetadata is null)
+        {
+            throw new InvalidOperationException("[FATAL] Control is not root nor control of child???");
+        }
+
+        var rootNode = _rootsByTabOrder.Find(rootMetadata);
+        if (rootNode is not null)
+        {
+            _focusedControl = focused;
+            _focusedRootNode = rootNode;
+        }
+        else
+        {
+            throw new InvalidOperationException("Control is not contained in this tree");
+        }
+    }
 
 
     public IEnumerable<TvControlMetadata> TunnelingControls()
@@ -113,7 +112,7 @@ public class TvControlsTree
             if (ctlMetadata is not null) yield return ctlMetadata;
         }
     }
-    
+
     public IEnumerable<TvControlMetadata> BubblingControls()
     {
         if (FocusedControl is null) yield break;

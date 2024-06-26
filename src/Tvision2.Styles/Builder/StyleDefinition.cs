@@ -60,4 +60,5 @@ public class StyleDefinition
         return style;
     }
 
+    public bool ContainsState(string state) => _states.ContainsKey(state);
 }

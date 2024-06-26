@@ -12,8 +12,8 @@ public static class TvControl
     internal const string CONTROL_TAG = "Tvision2::Control";
      
 
-    public static TvControl<TState, TOptions> Wrap<TState, TOptions>(TvComponent<TState> componentToWrap, TOptions options) =>
-        new TvControl<TState, TOptions>(componentToWrap, options);
+    public static TvControl<TState, TOptions> Wrap<TState, TOptions>(TvComponent<TState> componentToWrap, TOptions options, FocusPolicy focusPolicy) =>
+        new TvControl<TState, TOptions>(componentToWrap, options, focusPolicy);
 
     public static IControlFactory Factory { get; } = new TvControlFactory();
     
@@ -28,7 +28,7 @@ public static class TvControl
 }
 
 
-public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
+public class TvControl<TState, TOptions> : ITvControl<TState, TOptions> 
 {
     
     private readonly TvComponent<TState> _component;
@@ -43,9 +43,9 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
     public void MoveTo(TvPoint newPos) => _component.Viewport.MoveTo(newPos);
     protected TOptions Options { get; }
     
-    protected internal TvControl(TvComponent<TState> component, TOptions options)
+    protected internal TvControl(TvComponent<TState> component, TOptions options, FocusPolicy focusPolicy)
     {
-        _metadata = new TvControlMetadata(this);
+        _metadata = new TvControlMetadata(this, focusPolicy);
         component.Metadata.TagWith(TvControl.CONTROL_TAG, _metadata);
         _component = component; 
         Options = options;
@@ -58,7 +58,7 @@ public class TvControl<TState, TOptions> : ITvControl<TState, TOptions>
 
     public bool Focus()
     {
-        return _metadata.Focus();
+        return _metadata.TryFocus();
     }
 }
 

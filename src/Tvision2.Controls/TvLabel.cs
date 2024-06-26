@@ -24,7 +24,7 @@ public class TvLabel : TvControl<string, TvLabelOptions>
     {
     }
     
-    public TvLabel(TvComponent<string> existingComponent, TvLabelOptions options) : base(existingComponent, options) 
+    public TvLabel(TvComponent<string> existingComponent, TvLabelOptions options) : base(existingComponent, options, FocusPolicy.NotFocusable) 
     {
         Component.AddDrawer(LabelDrawer);
         Component.AddBehavior(AutoUpdateViewport);

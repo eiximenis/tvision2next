@@ -11,9 +11,18 @@ public class TvControlStylesBuilder
         _controlsSetDefinition = controlsSetDefinition;
         var csdef = _controlsSetDefinition.WithDefaultStyle();
 
-        csdef.WithControlState(ControlStyleState.Normal).UseColors(TvColor.Yellow, TvColor.Blue);
-        csdef.WithControlState(ControlStyleState.Focused).UseColors(TvColor.LightWhite, TvColor.Blue);
+        if (!csdef.ContainsState("Normal"))
+        {
+            csdef.WithControlState(ControlStyleState.Normal).UseColors(TvColor.Yellow, TvColor.Blue);
+        }
+
+        if (!csdef.ContainsState("Focused"))
+        {
+            csdef.WithControlState(ControlStyleState.Focused).UseColors(TvColor.LightWhite, TvColor.Blue);
+        }
     }
+
+    public StyleDefinition Default() => _controlsSetDefinition.WithDefaultStyle();
 
     public StyleDefinition AddStyleFor<T>() where T : ITvControl
     {
