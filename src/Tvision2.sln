@@ -1,35 +1,37 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TvConsole", "TvConsole\TvConsole.csproj", "{9E4E4EFD-0FB1-499A-9F2D-1AA5C7D31829}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35004.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TvConsole", "TvConsole\TvConsole.csproj", "{9E4E4EFD-0FB1-499A-9F2D-1AA5C7D31829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Console", "Tvision2.Console\Tvision2.Console.csproj", "{BBFD81C8-FE8D-45F9-9231-99E6816F7F9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Console", "Tvision2.Console\Tvision2.Console.csproj", "{BBFD81C8-FE8D-45F9-9231-99E6816F7F9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Core", "Tvision2.Core\Tvision2.Core.csproj", "{0B37ECAB-A263-4DEA-9B3E-FCD328409490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Core", "Tvision2.Core\Tvision2.Core.csproj", "{0B37ECAB-A263-4DEA-9B3E-FCD328409490}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C1858D2B-AE30-426E-BED6-ACBB960D1C50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloTvConsole", "samples\HelloTvConsole\HelloTvConsole.csproj", "{3DF345B4-76C8-430D-9E31-E92A40FBB452}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloTvConsole", "samples\HelloTvConsole\HelloTvConsole.csproj", "{3DF345B4-76C8-430D-9E31-E92A40FBB452}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Engine", "Tvision2.Engine\Tvision2.Engine.csproj", "{1EE90EFF-F0E3-4F93-BD70-77197EFC68DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Engine", "Tvision2.Engine\Tvision2.Engine.csproj", "{1EE90EFF-F0E3-4F93-BD70-77197EFC68DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "samples\HelloWorld\HelloWorld.csproj", "{2618D732-4E93-4B47-8484-4D7034E49873}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "samples\HelloWorld\HelloWorld.csproj", "{2618D732-4E93-4B47-8484-4D7034E49873}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Layouts", "Tvision2.Layouts\Tvision2.Layouts.csproj", "{D7C3648A-913E-4798-941F-32B409A91469}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Layouts", "Tvision2.Layouts\Tvision2.Layouts.csproj", "{D7C3648A-913E-4798-941F-32B409A91469}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{137669A3-5199-4538-9455-10F121536BB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Core.Tests", "tests\Tvision2.Core.Tests\Tvision2.Core.Tests.csproj", "{ABE5BA7D-1CC5-44CA-9CCC-60612D7599DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Core.Tests", "tests\Tvision2.Core.Tests\Tvision2.Core.Tests.csproj", "{ABE5BA7D-1CC5-44CA-9CCC-60612D7599DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Engine.Tests", "tests\Tvision2.Engine.Tests\Tvision2.Engine.Tests.csproj", "{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Engine.Tests", "tests\Tvision2.Engine.Tests\Tvision2.Engine.Tests.csproj", "{B9A3B455-1868-4DC4-ACE0-4458BE3B3722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Controls", "Tvision2.Controls\Tvision2.Controls.csproj", "{ABE04AD5-DFA0-464D-A86D-58527124B880}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Controls", "Tvision2.Controls\Tvision2.Controls.csproj", "{ABE04AD5-DFA0-464D-A86D-58527124B880}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Messaging", "Tvision2.Messaging\Tvision2.Messaging.csproj", "{3F11C54F-6272-4B50-9729-A5DB4D346800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Messaging", "Tvision2.Messaging\Tvision2.Messaging.csproj", "{3F11C54F-6272-4B50-9729-A5DB4D346800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloControls", "samples\HelloControls\HelloControls.csproj", "{F97CA808-AAF7-4134-84EA-E67D81FA76A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloControls", "samples\HelloControls\HelloControls.csproj", "{F97CA808-AAF7-4134-84EA-E67D81FA76A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Styles", "Tvision2.Styles\Tvision2.Styles.csproj", "{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Styles", "Tvision2.Styles\Tvision2.Styles.csproj", "{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,11 +92,17 @@ Global
 		{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DF345B4-76C8-430D-9E31-E92A40FBB452} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}
 		{2618D732-4E93-4B47-8484-4D7034E49873} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}
 		{ABE5BA7D-1CC5-44CA-9CCC-60612D7599DC} = {137669A3-5199-4538-9455-10F121536BB5}
 		{B9A3B455-1868-4DC4-ACE0-4458BE3B3722} = {137669A3-5199-4538-9455-10F121536BB5}
 		{F97CA808-AAF7-4134-84EA-E67D81FA76A5} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {474FAD60-DCF5-4451-94C7-9C0DC3A6EF65}
 	EndGlobalSection
 EndGlobal

@@ -12,9 +12,6 @@ public class TvControlMetadata
     public TvComponentTreeNode Node => Control.AsComponent().Metadata.Node;
     public bool IsFocused => IsAttached && _tree!.FocusedControl == Control;
 
-    private FocusPolicy _focusPolicy = FocusPolicy.DirectFocusable;
-
-
     public int TabOrder
     {
         get => _tabOrder;
@@ -27,12 +24,12 @@ public class TvControlMetadata
         }
     }
 
-    public TvControlMetadata(ITvControl owner, FocusPolicy focusPolicy = FocusPolicy.DirectFocusable)
+    internal TvControlMetadata(ITvControl owner)
     {
         Control = owner;
-        _focusPolicy = focusPolicy;
         _tree = null;
     }
+
 
     internal void AttachControl(TvControlsTree tvControlsTree)
     {
@@ -45,7 +42,9 @@ public class TvControlMetadata
 
     internal bool TryFocus()
     {
-        if (_focusPolicy == FocusPolicy.NotFocusable || _tree is null) return false;
+        var focusPolicy = Control.ControlOptions.FocusPolicy;
+
+        if (focusPolicy == FocusPolicy.NotFocusable || _tree is null) return false;
         _tree.SetFocusedControl(Control);
         return true;
     }

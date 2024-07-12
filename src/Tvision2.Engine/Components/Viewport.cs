@@ -8,7 +8,7 @@ public enum ViewportUpdateReason
     None = 0x0,
     Moved = 0x1,
     Resized = 0x2,
-    MovedAndResizes = Moved | Resized,
+    MovedAndResized = Moved | Resized,
     All = Moved | Resized
 }
 
@@ -67,6 +67,13 @@ public class Viewport
         Bounds = newBounds;
         HasLayoutPending = true;
         return ViewportUpdateReason.Resized;
+    }
+
+    public ViewportUpdateReason MoveAndResize(TvPoint newPos, TvBounds newBounds)
+    {
+        var moved = MoveTo(newPos);
+        var resized = Resize(newBounds);
+        return moved | resized;
     }
 
     internal void LayoutUpdated()

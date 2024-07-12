@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using Tvision2.Console.Events;
 using Tvision2.Core;
 using Tvision2.Engine.Components;
@@ -9,18 +10,12 @@ using Tvision2.Styles.Extensions;
 
 namespace Tvision2.Controls.Button;
 
-
-public class TvButtonOptions
-{
-    public bool AutoSize { get; set; } = false;
-}
-
-public interface IButtonActions
+public interface IButtonActions : ITvControlActions
 {
     IActionsChain<TvButton> Tapped { get; }
 }
 
-public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
+public class TvButton : TvControl<string>, IButtonActions
 {
 
     private readonly ActionsChain<TvButton> _tapped = new();
@@ -31,29 +26,34 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
         set => Component.SetState(value);
     }
 
-    public IButtonActions On() => this;
+    
+    public new IButtonActions On() => this;
 
     IActionsChain<TvButton> IButtonActions.Tapped => _tapped;
 
-    public TvButton(TvComponent<string> existingComponent, Action<TvButtonOptions>? optionsAction = null) :
-        this(existingComponent, TvControl.RunOptionsAction(new TvButtonOptions(), optionsAction))
+    public TvButton(string text) : base(text)
     {
-    }
-    public TvButton(TvComponent<string> component, TvButtonOptions options) : base(component, options, FocusPolicy.DirectFocusable)
-    {
-        Component.AddStyledDrawer(ButtonDrawer, "TvControls");
-        Component.AddBehavior(AutoUpdateViewport);
-
+        ControlOptions.AutoSize = true;
+        ControlOptions.FocusPolicy = FocusPolicy.DirectFocusable;
+        ControlOptions.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Component.AddStyledDrawer(ButtonDrawer);
     }
 
+    public TvButton(TvComponent<string> component) : base(component)
+    {
+        ControlOptions.AutoSize = true;
+        ControlOptions.FocusPolicy = FocusPolicy.DirectFocusable;
+        ControlOptions.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Component.AddStyledDrawer(ButtonDrawer);
+    }
 
-    public override Task PreviewEvents(TvConsoleEvents events)
+    public Task PreviewEvents(TvConsoleEvents events)
     {
         Debug.Write("Preview event in Button :)");
         return Task.CompletedTask;
     }
 
-    public override async Task HandleEvents(TvConsoleEvents events)
+    public async Task HandleEvents(TvConsoleEvents events)
     {
         if (events.HasKeyboardEvents)
         {
@@ -63,17 +63,15 @@ public class TvButton : TvControl<string, TvButtonOptions>, IButtonActions
 
     private void AutoUpdateViewport(BehaviorContext<string> ctx)
     {
-        if (!Options.AutoSize) return;
-
         var text = ctx.State;
         var bounds = ctx.Bounds;
-        ctx.Resize(bounds.WithColumns(text.Length));
+        ctx.Resize(TvBounds.FromRowsAndCols(1, text.Length + 2));
     }
 
     private DrawResult ButtonDrawer(StyledConsoleContext ctx, string text)
     {
-        var state = Metadata.IsFocused ? "Focused" : "Normal"; 
-
+        var state = Metadata.IsFocused ? "Focused" : "Normal";
+        ctx.Fill(state);
         ctx.DrawStringAt(text, TvPoint.Zero, state);
         return DrawResult.Done;
     }

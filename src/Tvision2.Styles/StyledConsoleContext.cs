@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.JavaScript;
 using Tvision2.Core;
+using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Styles;
@@ -8,6 +9,9 @@ public readonly struct StyledConsoleContext
 {
     private readonly ConsoleContext _consoleContext;
     private readonly StyleSet _styleSet;
+
+    public Viewzone Viewzone => _consoleContext.Viewzone;
+
     internal StyledConsoleContext(ConsoleContext consoleContext, StyleSet styleSet)
     {
         _consoleContext = consoleContext;

@@ -4,6 +4,7 @@ using Tvision2.Controls;
 using Tvision2.Controls.Button;
 using Tvision2.Controls.Extensions;
 using Tvision2.Controls.Extensions.Styles;
+using Tvision2.Controls.Label;
 using Tvision2.Core;
 using Tvision2.Engine;
 using Tvision2.Engine.Extensions;
@@ -26,7 +27,7 @@ var host = Tv2App.Setup(
 
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;
-var label = TvControl.Factory.CreateLabel("Hello World!");
+var label = new TvLabel("Hello World!");
 label.Text = "Hello World! 2";
 var button = CreateButton("Click Me!", TvPoint.FromXY(1,1));
 button.On().Tapped.Do(b => b.Text = $"Tapped {counter++}!");
@@ -41,7 +42,8 @@ await Tv2App.Run();
 
 TvButton CreateButton(string text, TvPoint location)
 {
-    var button = TvControl.Factory.CreateButton(text);
+    var button = new TvButton(text);
+
     button.MoveTo(location);
     return button;
 
