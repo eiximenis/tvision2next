@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Tvision2.Engine;
 using Tvision2.Engine.Components;
@@ -5,23 +6,30 @@ using Tvision2.Engine.Components;
 namespace Tvision2.Messaging.Extensions;
 
 
-public class MessageOptions
+public class MessageHandlersOptions
 {
+    private readonly Dictionary<string, Delegate> _handlers = new ();
+
+    public void AddMessageHandler<TM>(Func<TvMessage<TM>, Task> message)
+    {
+        var key = nameof(TM);
+        _handlers[key] = message;
+    }
+
+    public void Invoke(TvMessage message)
+    {
+        var key = message.Name;
+        var handler = _handlers.GetValueOrDefault(key);
+        handler?.DynamicInvoke(message);
+    }
 }
 
 public static class TvComponentExtensions_Messaging
 {
-    private const string MESSAGE_TAG_LABEL="Tvision2.Messaging";
-    public static void AddMessageHandler<T>(this TvComponent<T> component, Func<Task> messageProc)
+    internal const string MESSAGES_HANDLERS_TAG="Tvision2.Messaging";
+    public static void AddMessageHandler<T, TM>(this TvComponent<T> component, Func<TvMessage<TM>, Task> messageProc)
     {
-        if (component.Metadata.HasTag(MESSAGE_TAG_LABEL))
-        {
-            throw new InvalidOperationException("Component already has Messaging enabled!");
-        }
-        
-        component.Metadata.TagWith(MESSAGE_TAG_LABEL, new MessageOptions());
-        var messageBus = Tv2App.GetEngine().GetRegisteredComponent<MessageBus>();
-        var behavior = new MessageProcBehavior<T>(messageProc, messageBus);
-        component.AddBehavior(behavior);
+        var options = component.Metadata.GetOrCreateTag(MESSAGES_HANDLERS_TAG, () => new MessageHandlersOptions());
+        options.AddMessageHandler(messageProc);
     }
 }

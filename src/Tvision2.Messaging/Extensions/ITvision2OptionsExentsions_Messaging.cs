@@ -8,12 +8,12 @@ public static class ITvision2OptionsExentsions_Messaging
 {
     public static IHostBuilder AddMessaging(this IHostBuilder builder)
     {
-        builder.ConfigureServices(sp => sp.AddSingleton<MessageBus>());
+        builder.ConfigureServices(sp => sp.AddSingleton<TvMessageBus>());
         return builder;
     }
 }
 
 static class Tvision2EngineExtensions_Messaging
 {
-    public static MessageBus GetMessageBus() => Tv2App.GetEngine().GetRegisteredComponent<MessageBus>();
+    public static TvMessageBus GetMessageBus() => Tv2App.GetEngine().GetRegisteredComponent<TvMessageBus>();
 }

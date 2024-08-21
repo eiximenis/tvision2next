@@ -61,15 +61,6 @@ public class TvControlsTree
 
     public ITvControl? FocusedControl => _focusedControl;
 
-    // This is the same as setting FocusedControl but with no checks.
-    // It's private so caller ensure checks are performed and ok.
-    private void SetFocusedControl(TvControlMetadata focused)
-    {
-        var rootNode = focused.Node.Root();
-        _focusedRootNode = _rootsByTabOrder.Find(rootNode.Metadata.GetControlMetadata()!)!;
-        _focusedControl = focused.Control;
-    }
-
     // Focus the specified control. This method makes checks that:
     //  1. Control is child of any root of the tree
     //  2. Control is contained in this controltree
@@ -92,12 +83,37 @@ public class TvControlsTree
         var rootNode = _rootsByTabOrder.Find(rootMetadata);
         if (rootNode is not null)
         {
-            _focusedControl = focused;
-            _focusedRootNode = rootNode;
+            ChangeFocusedControlTo(rootNode, focused);
         }
         else
         {
             throw new InvalidOperationException("Control is not contained in this tree");
+        }
+    }
+
+    // This is the same as setting FocusedControl but with no checks.
+    // It's private so caller ensure checks are performed and ok.
+    private void SetFocusedControl(TvControlMetadata focused)
+    {
+        var rootNode = focused.Node.Root();
+        var focusedRootNode = _rootsByTabOrder.Find(rootNode.Metadata.GetControlMetadata()!)!;
+        ChangeFocusedControlTo(focusedRootNode, focused.Control);
+    }
+
+    private void ChangeFocusedControlTo(LinkedListNode<TvControlMetadata> rootNode, ITvControl focused)
+    {
+        var oldFocused = _focusedControl;
+        _focusedControl = focused;
+        _focusedRootNode = rootNode;
+        // Launch the lostfocus and gainedfocus events if possible
+        if (oldFocused is ITvEventedControl evtControlPrevious)
+        {
+            evtControlPrevious.Raise().LostFocus();
+        }
+
+        if (_focusedControl is ITvEventedControl evtControlCurrent)
+        {
+            evtControlCurrent.Raise().GainedFocus();
         }
     }
 
@@ -126,8 +142,22 @@ public class TvControlsTree
 
     internal void FocusNext()
     {
-        var next = _focusedRootNode?.Next ?? _rootsByTabOrder.First;
-        if (next is not null)
+        var current = _focusedRootNode;
+        var next = current;
+
+        do
+        {
+            next = next?.Next ?? _rootsByTabOrder.First;
+            if (next is null) return;
+
+            var nextOptions = next.Value.ControlSetup;
+            if (nextOptions.FocusPolicy == FocusPolicy.DirectFocusable)
+            {
+                break;
+            }
+        } while (next != current);
+
+        if (next != current)
         {
             SetFocusedControl(next.Value);
         }

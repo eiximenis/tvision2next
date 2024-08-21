@@ -23,22 +23,20 @@ public class Tvision2EngineController : BackgroundService
         var running = _engine.Running;
         var stopwatch = new Stopwatch();
         var frametimeMs = 1000 / 30;
+        var elapsed = 0L;
 
         while (!stoppingToken.IsCancellationRequested && running)
         {
             stopwatch.Start();
-            await _engine.NextCycle();
+            await _engine.NextCycle(elapsed);
             stopwatch.Stop();
-            var ellapsed = stopwatch.ElapsedMilliseconds;
+            elapsed = stopwatch.ElapsedMilliseconds;
             stopwatch.Reset();
-            // Debug.WriteLine("Frame ms: " + ellapsed);
-            if (ellapsed < frametimeMs)
+            if (elapsed < frametimeMs)
             {
-                await Task.Delay((int)(frametimeMs - ellapsed));
+                await Task.Delay((int)(frametimeMs - elapsed));
             }
-                
         }
-
         await _engine.Teardown();
 
     }

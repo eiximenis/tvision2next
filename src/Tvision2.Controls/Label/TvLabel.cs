@@ -8,7 +8,7 @@ using Tvision2.Styles.Extensions;
 
 namespace Tvision2.Controls.Label;
 
-public class TvLabel : TvControl<string>
+public class TvLabel : TvEventedControl<string>
 {
     public string Text
     {
@@ -17,7 +17,7 @@ public class TvLabel : TvControl<string>
     }
 
 
-    public TvLabel(string initialText) : base(initialText)
+    public TvLabel(string initialText = "") : base(initialText)
     {
         SetupComponent();
     }
@@ -29,14 +29,14 @@ public class TvLabel : TvControl<string>
 
     private void SetupComponent()
     {
-        ControlOptions.AutoSize = true;
-        Component.AddStyledDrawer(LabelDrawer);
+        Options.AutoSize = true;
+        Component.AddStyledDrawer(LabelDrawer, "TvControls");
         Component.AddBehavior(AutoUpdateViewport);
     }
 
     private void AutoUpdateViewport(BehaviorContext<string> ctx)
     {
-        if (!ControlOptions.AutoSize) return;
+        if (!Options.AutoSize) return;
 
         var text = ctx.State;
         var bounds = ctx.Bounds;

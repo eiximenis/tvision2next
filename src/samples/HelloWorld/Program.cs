@@ -11,7 +11,7 @@ using Tvision2.Layouts;
 
 string _text = "Hello World!";
 
-var host = Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()));
+var host = await Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()));
 var background = new BackgroundDefinition().UseDrawer(ctx =>
 {
     var bounds = ctx.Viewzone.Bounds;
@@ -34,12 +34,13 @@ container.AddBehavior(ctx =>
     var row = new Random().Next(0, 20);
     ctx.Move(TvPoint.FromXY(col, row));
 });
-await app.UI.ComponentTree.Add(container);
+app.UI.ComponentTree.Add(container);
 
 var component2 = TvComponent.CreateStatelessComponent(new Viewport(TvPoint.Zero, TvBounds.FromRowsAndCols(1, 14)));
 component2.AddDrawer(ctx => ctx.DrawStringAt("Hello World!", TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.LightBlack)));
 component2.DockTo(container, Dock.Top);
-await app.UI.ComponentTree.Add(component2);
+
+app.UI.ComponentTree.Add(component2);
 
 System.Console.WriteLine("Doing things");
 

@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloControls", "samples\He
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Styles", "Tvision2.Styles\Tvision2.Styles.csproj", "{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceInvaders", "samples\SpaceInvaders\SpaceInvaders.csproj", "{7F33FA0F-249A-46FA-90F9-A283B6062673}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9624C8A7-7CCB-4D97-A98B-79F6643CA74A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F33FA0F-249A-46FA-90F9-A283B6062673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F33FA0F-249A-46FA-90F9-A283B6062673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F33FA0F-249A-46FA-90F9-A283B6062673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F33FA0F-249A-46FA-90F9-A283B6062673}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{ABE5BA7D-1CC5-44CA-9CCC-60612D7599DC} = {137669A3-5199-4538-9455-10F121536BB5}
 		{B9A3B455-1868-4DC4-ACE0-4458BE3B3722} = {137669A3-5199-4538-9455-10F121536BB5}
 		{F97CA808-AAF7-4134-84EA-E67D81FA76A5} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}
+		{7F33FA0F-249A-46FA-90F9-A283B6062673} = {C1858D2B-AE30-426E-BED6-ACBB960D1C50}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {474FAD60-DCF5-4451-94C7-9C0DC3A6EF65}

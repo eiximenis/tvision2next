@@ -10,12 +10,12 @@ using Tvision2.Styles.Extensions;
 
 namespace Tvision2.Controls.Button;
 
-public interface IButtonActions : ITvControlActions
+public interface IButtonActions : ITvEventedControlActions
 {
     IActionsChain<TvButton> Tapped { get; }
 }
 
-public class TvButton : TvControl<string>, IButtonActions
+public class TvButton : TvEventedControl<string>, IButtonActions
 {
 
     private readonly ActionsChain<TvButton> _tapped = new();
@@ -33,23 +33,23 @@ public class TvButton : TvControl<string>, IButtonActions
 
     public TvButton(string text) : base(text)
     {
-        ControlOptions.AutoSize = true;
-        ControlOptions.FocusPolicy = FocusPolicy.DirectFocusable;
-        ControlOptions.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
-        Component.AddStyledDrawer(ButtonDrawer);
+        Options.AutoSize = true;
+        Options.FocusPolicy = FocusPolicy.DirectFocusable;
+        Options.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Component.AddStyledDrawer(ButtonDrawer, "TvControls");
     }
 
     public TvButton(TvComponent<string> component) : base(component)
     {
-        ControlOptions.AutoSize = true;
-        ControlOptions.FocusPolicy = FocusPolicy.DirectFocusable;
-        ControlOptions.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
-        Component.AddStyledDrawer(ButtonDrawer);
+        Options.AutoSize = true;
+        Options.FocusPolicy = FocusPolicy.DirectFocusable;
+        Options.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Component.AddStyledDrawer(ButtonDrawer, "TvControls");
     }
 
     public Task PreviewEvents(TvConsoleEvents events)
     {
-        Debug.Write("Preview event in Button :)");
+        Debug.Write($"Preview {events.Count} events in Button :)");
         return Task.CompletedTask;
     }
 

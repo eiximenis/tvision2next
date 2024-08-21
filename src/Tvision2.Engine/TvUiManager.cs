@@ -11,7 +11,6 @@ public class TvUiManager
     public ITvComponentTree ComponentTree => _tree;
     private readonly VirtualConsole _console;
     private readonly IConsoleDriver _consoleDriver;
-    private readonly List<TvComponent> _componentsToDraw;
     private readonly List<IHook> _hooks;
 
     public TvUiManager(VirtualConsole console, IConsoleDriver consoleDriver)
@@ -19,20 +18,20 @@ public class TvUiManager
         _tree = new TvComponentTree();
         _console = console;
         _consoleDriver = consoleDriver;
-        _componentsToDraw = new List<TvComponent>();
         _hooks = new List<IHook>();
     }
 
 
-    internal async Task BeforeUpdate(TvConsoleEvents events)
+    internal async Task BeforeUpdate(UpdateContext ctx)
     {
+        var events = ctx.ConsoleEvents;
         foreach (var hook in _hooks)
         {
             await hook.BeforeUpdate(events);
         }
     }
     
-    internal async Task<bool> Update(TvConsoleEvents events)
+    internal async Task<bool> Update(UpdateContext ctx)
     {
         await _tree.NewCycle();
         var someDrawPending = false;
@@ -40,7 +39,7 @@ public class TvUiManager
         {
             var metadata = cmpNode.Metadata;
             var component = metadata.Component;
-            var result = component.Update(events);
+            var result = component.Update(ctx);
             someDrawPending = result != DirtyStatus.Clean;
             // TODO: We could calculate pending draws to call only Draw() on components that are needed.
         }
@@ -79,5 +78,21 @@ public class TvUiManager
     public void AddHook(IHook hook)
     {
         _hooks.Add(hook);
+    }
+
+    internal async Task Teardown()
+    {
+        foreach (var hook in _hooks)
+        {
+            await hook.Teardown();
+        }
+    }
+
+    internal async  Task Init()
+    {
+        foreach (var hook in _hooks)
+        {
+            await hook.Init();
+        }
     }
 }

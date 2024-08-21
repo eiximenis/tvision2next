@@ -1,4 +1,6 @@
+using System.Reflection;
 using System.Runtime.CompilerServices;
+using Tvision2.Controls.Extensions;
 using Tvision2.Engine.Components;
 
 namespace Tvision2.Controls;
@@ -11,6 +13,7 @@ public class TvControlMetadata
     public ITvControl Control { get; }
     public TvComponentTreeNode Node => Control.AsComponent().Metadata.Node;
     public bool IsFocused => IsAttached && _tree!.FocusedControl == Control;
+    internal TvControlSetup ControlSetup { get; }
 
     public int TabOrder
     {
@@ -24,10 +27,11 @@ public class TvControlMetadata
         }
     }
 
-    internal TvControlMetadata(ITvControl owner)
+    internal TvControlMetadata(ITvControl owner, TvControlSetup controlOptions)
     {
         Control = owner;
         _tree = null;
+        ControlSetup = controlOptions;
     }
 
 
@@ -42,7 +46,7 @@ public class TvControlMetadata
 
     internal bool TryFocus()
     {
-        var focusPolicy = Control.ControlOptions.FocusPolicy;
+        var focusPolicy = Control.Metadata.ControlSetup.FocusPolicy;
 
         if (focusPolicy == FocusPolicy.NotFocusable || _tree is null) return false;
         _tree.SetFocusedControl(Control);

@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 using Tvision2.Console.Events;
 using Tvision2.Core;
@@ -23,8 +24,14 @@ public class BehaviorContext<T>
     public ITvConsoleEventsSequences Events { get; private set; }
     
     public T  State => _owner.State;
+    public long LastElapsed { get; private set; }
+    public ITvComponentTree ComponentTree => _owner.Metadata.OwnerTree!;
 
-    internal void SetEvents(ITvConsoleEventsSequences events) => Events = events;
+    internal void SetData(ITvConsoleEventsSequences events, long lastElapsed)
+    {
+        Events = events;
+        LastElapsed = lastElapsed;
+    }
 
     public TvBounds Bounds => _owner.Viewport.Bounds;
     
@@ -37,7 +44,7 @@ public class BehaviorContext<T>
         });
     }
 
-    public void StatusUpdated()
+    public void StateChanged()
     {
         _resultActions.Add(_ => DirtyStatus.StateChanged);
     }

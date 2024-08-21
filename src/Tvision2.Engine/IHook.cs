@@ -5,5 +5,7 @@ namespace Tvision2.Engine;
 
 public interface IHook
 {
+    Task Init() => Task.CompletedTask;
     Task BeforeUpdate(TvConsoleEvents events);
+    Task Teardown() => Task.CompletedTask;
 }

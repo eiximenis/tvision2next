@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Tvision2.Core;
 using Tvision2.Engine.Events;
 
@@ -13,9 +14,12 @@ public interface ITvComponentTreeActions
 public interface ITvComponentTree
 {
     ITvComponentTreeActions On();
-    Task<TvComponentTreeNode> Add(TvComponent component);
-    Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer);
+    void Add(TvComponent component);
+    void Add(TvComponent component, LayerSelector layer);
     Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent);
+
+    void Remove(TvComponent component);
+
     IEnumerable<TvComponentTreeNode> Roots { get; }
     IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; }
     void AddSharedTag<TTag>(TTag tag) where TTag : class;
@@ -26,6 +30,8 @@ public interface ITvComponentTree
 
 class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 {
+
+    record AddParams(TvComponent component, LayerSelector layer);
     private readonly List<TvComponentTreeNode> _roots;
     private readonly ActionsChain<TvComponentTreeNode> _onRootAdded;
     private readonly ActionsChain<TvComponentTreeNode> _onNodeAdded;
@@ -33,6 +39,9 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
     private readonly List<TvComponentTreeNode> _sortedNodesByLayerBottomFirst;
+
+    private readonly List<AddParams> _pendingAdds;
+    private readonly List<TvComponent> _pendingRemoves;
 
     public IEnumerable<TvComponentTreeNode> Roots => _roots;
 
@@ -50,6 +59,8 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         _sharedTags = new Dictionary<Type, object>();
         _sortedNodesByLayerBottomFirst = new List<TvComponentTreeNode>();
         _roots = new List<TvComponentTreeNode>();
+        _pendingAdds = new List<AddParams>();
+        _pendingRemoves = new List<TvComponent>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
         _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
         _onTreeUpdated = new ActionsChain<Unit>();
@@ -58,24 +69,56 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 
     internal async Task NewCycle()
     {
+        await DoPengingAdds();
+        await DoPendingRemoves();
         if (_dirty)
         {
             _dirty = false;
             await _onTreeUpdated.Invoke(Unit.Value);
         }
     }
-    
-    public Task<TvComponentTreeNode> Add(TvComponent component) => Add(component, LayerSelector.Standard);
-    public async Task<TvComponentTreeNode> Add(TvComponent component, LayerSelector layer)
+
+    private async Task DoPendingRemoves()
     {
-        component.UseLayer(layer);
-        var rootMetadata = component.Metadata;
-        var rootNode = rootMetadata.Node;
-        _roots.Add(rootNode);
-        await DoAddSubtree(rootNode, layer);
-        await _onRootAdded.Invoke(rootMetadata.Node);
-        _dirty = true;
-        return rootMetadata.Node;
+        if (_pendingRemoves.Count == 0) return;
+
+        foreach (var cmpToRemove in _pendingRemoves)
+        {
+            var node = cmpToRemove.Metadata.Node;
+            if (node.IsRoot)
+            {
+                _roots.Remove(node);
+            }
+
+            if (_sortedNodesByLayerBottomFirst.Contains(node))
+            {
+                _sortedNodesByLayerBottomFirst.Remove(node);
+                await node.Metadata.DettachFromTree(this);
+            }
+        }
+    }
+
+    private async Task DoPengingAdds()
+    {
+        if (_pendingAdds.Count == 0) return;
+        foreach (var (component, layer) in _pendingAdds)
+        {
+            component.UseLayer(layer);
+            var rootMetadata = component.Metadata;
+            var rootNode = rootMetadata.Node;
+            _roots.Add(rootNode);
+            await DoAddSubtree(rootNode, layer);
+            await _onRootAdded.Invoke(rootMetadata.Node);
+            _dirty = true;
+        }
+
+        _pendingAdds.Clear();
+    }
+
+    public void Add(TvComponent component) => Add(component, LayerSelector.Standard);
+    public void Add(TvComponent component, LayerSelector layer)
+    {
+        _pendingAdds.Add(new AddParams(component, layer));
     }
 
     private async Task DoAddSubtree(TvComponentTreeNode stRoot, LayerSelector layer)
@@ -100,6 +143,14 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         }
 
         _sortedNodesByLayerBottomFirst.Sort(NodeWithBottomComponentFirst);
+    }
+
+    public void Remove(TvComponent component)
+    {
+        if (component.Metadata.OwnerTree == this)
+        {
+            _pendingRemoves.Add(component);
+        }
     }
 
 

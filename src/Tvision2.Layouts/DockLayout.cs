@@ -42,7 +42,7 @@ class DockLayout : ILayoutManager
     public DockLayout(TvComponentMetadata container, Dock dock)
     {
         _container = container;
-        _container.ViewportUpdated.Do(OnContainerUpdated);
+        _container.On().ViewportUpdated.Do(OnContainerUpdated);
 
         (_horizontalAlignment, _verticalAlignment) = dock switch
         {
@@ -54,7 +54,7 @@ class DockLayout : ILayoutManager
         };
     }
 
-    private void OnContainerUpdated(ViewportUpdateReason obj)
+    private void OnContainerUpdated(ViewportUpdateReason reason)
     {
         HasLayoutPending = true;
     }

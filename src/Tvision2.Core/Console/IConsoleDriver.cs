@@ -8,8 +8,8 @@ public interface IConsoleDriver
     void WriteCharactersAt(int x, int y, int count, Rune character, CharacterAttribute attribute);
     void SetCursorAt(int x, int y);
     void Init() { }
+    void Teardown()  { }
     void SetCursorVisibility(bool isVisible);
-    void End() { }
     void ClearScreen(TvColor fore, TvColor back);
     void SetWindowsSize(TvBounds value);
     bool CanChangeWindowsSize { get; }

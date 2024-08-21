@@ -11,7 +11,7 @@ using Tvision2.Engine.Extensions;
 using Tvision2.Styles.Extensions;
 
 
-var host = Tv2App.Setup(
+var host = await Tv2App.Setup(
     o => o.AddConsoleOptions(c => c.UseAlternateBuffer()),
     hb =>
     {
@@ -33,10 +33,11 @@ var button = CreateButton("Click Me!", TvPoint.FromXY(1,1));
 button.On().Tapped.Do(b => b.Text = $"Tapped {counter++}!");
 var button2 = CreateButton("Second", TvPoint.FromXY(1,2));
 var button3 = CreateButton("Third", TvPoint.FromXY(1,3));
-await app.UI.ComponentTree.Add(label.AsComponent());
-await app.UI.ComponentTree.Add(button.AsComponent());
-await app.UI.ComponentTree.Add(button2.AsComponent());
-await app.UI.ComponentTree.Add(button3.AsComponent());
+app.UI.ComponentTree.Add(label);
+app.UI.ComponentTree.Add(button);
+app.UI.ComponentTree.Add(button2);
+app.UI.ComponentTree.Add(button3);
+
 button.Focus();
 await Tv2App.Run();
 

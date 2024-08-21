@@ -3,7 +3,15 @@ using Tvision2.Engine.Events;
 
 namespace Tvision2.Engine.Components;
 
-public class TvComponentMetadata
+
+public interface ITvComponentMetadataActions
+{
+    IActionsChain<ViewportUpdateReason> ViewportUpdated { get; }
+    IActionsChain<Unit> ComponentRemoved { get; }
+ 
+}
+
+public class TvComponentMetadata : ITvComponentMetadataActions
 {
     private readonly TvComponent _owner;
     private readonly TvComponentTreeNode _node;
@@ -12,14 +20,32 @@ public class TvComponentMetadata
     public TvComponentTreeNode Node { get => _node; }
     public TvComponent Component => _owner;
     private readonly ActionsChain<ViewportUpdateReason> _viewportUpdated;
+    private readonly ActionsChain<Unit> _componentRemoved;
 
     public ITvComponentTree? OwnerTree => _ownerTree;
-    
-    public IActionsChain<ViewportUpdateReason> ViewportUpdated => _viewportUpdated;
-    
+
+    public ITvComponentMetadataActions On() => this;
+
+    IActionsChain<ViewportUpdateReason> ITvComponentMetadataActions.ViewportUpdated => _viewportUpdated;
+    IActionsChain<Unit> ITvComponentMetadataActions.ComponentRemoved => _componentRemoved;
+
     public void TagWith<T>(string tag, T data) where T : class => _node.SetTag(tag, data);
     public bool HasTag(string tag) => _node.HasTag(tag);
-    public T? GetTag<T>(string tag) where T : class => _node.GetTag<T>(tag); 
+    public T? GetTag<T>(string tag) where T : class => _node.GetTag<T>(tag);
+
+    public T GetOrCreateTag<T>(string tag, Func<T> dataCreator) where T : class
+    {
+        if (HasTag(tag))
+        {
+            return GetTag<T>(tag)!;
+        }
+
+        var data = dataCreator();
+        TagWith(tag, data);
+        return data;
+    }
+
+
     internal TvComponentMetadata(TvComponent owner)
     {
         _owner = owner;
@@ -27,6 +53,7 @@ public class TvComponentMetadata
         IsAttached = false;
         _ownerTree = null;
         _viewportUpdated = new ActionsChain<ViewportUpdateReason>();
+        _componentRemoved = new ActionsChain<Unit>();
     }
     internal void AddChild(TvComponent child)
     {
@@ -47,13 +74,14 @@ public class TvComponentMetadata
         IsAttached = true;
     }
     
-    internal void DettachFromTree(TvComponentTree owner)
+    internal async Task DettachFromTree(TvComponentTree owner)
     {
         if (!IsAttached) return;
         
         if (owner != _ownerTree) throw new InvalidOperationException("Component is attached to a different tree");
         IsAttached = false;
         _ownerTree = null;
+        await _componentRemoved.Invoke(Unit.Value);
     }
 
     internal async Task RaiseViewportUpdated(ViewportUpdateReason reason)

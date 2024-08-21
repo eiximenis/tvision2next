@@ -18,9 +18,16 @@ public class AnsiConsoleDriver : IConsoleDriver
 
     public void Init()
     {
+        System.Console.OutputEncoding = System.Text.Encoding.Unicode;
+
         if (_options.UseAlternateBuffer)
         {
             System.Console.Write(AnsiEscapeSequences.SMCUP);
+        }
+
+        if (_options.CursorVisibility == CursorVisibility.Hidden)
+        {
+            SetCursorVisibility(false);
         }
     }
 
@@ -29,6 +36,11 @@ public class AnsiConsoleDriver : IConsoleDriver
         if (_options.UseAlternateBuffer)
         {
             System.Console.Write(AnsiEscapeSequences.RMCUP);
+        }
+
+        if (_options.CursorVisibility == CursorVisibility.Hidden)
+        {
+            SetCursorVisibility(true);
         }
     }
     

@@ -6,6 +6,8 @@ public readonly struct TvBounds : IEquatable<TvBounds>
 {
     
     public static TvBounds ConsoleBounds => new TvBounds(System.Console.WindowHeight, System.Console.WindowWidth);
+
+    public static TvBounds SingleCharacter => new TvBounds(1, 1);
     public int Width { get; }
     public int Height { get; }
         

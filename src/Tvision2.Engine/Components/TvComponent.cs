@@ -54,9 +54,9 @@ public abstract class TvComponent
     
     public abstract void Draw(VirtualConsole console);
 
-    public DirtyStatus Update(ITvConsoleEventsSequences events)
+    public DirtyStatus Update(UpdateContext context)
     {
-        var status = DoUpdate(events);
+        var status = DoUpdate(context);
         if (_invalidated)
         {
             _invalidated = false;
@@ -71,7 +71,7 @@ public abstract class TvComponent
 
         return status;
     }
-    public abstract DirtyStatus DoUpdate(ITvConsoleEventsSequences events);
+    public abstract DirtyStatus DoUpdate(UpdateContext ctx);
     
     
 
@@ -165,9 +165,10 @@ public sealed class TvComponent<T> : TvComponent
         _behaviors.Add(behavior);
     }
 
-    public override DirtyStatus DoUpdate(ITvConsoleEventsSequences events)
+    public override DirtyStatus DoUpdate(UpdateContext ctx)
     {
-        _behaviorContext.SetEvents(events);
+        var events = ctx.ConsoleEvents;
+        _behaviorContext.SetData(events, ctx.LastElapsed);
         foreach (var behavior in _behaviors)
         {
             behavior.Do(_behaviorContext);

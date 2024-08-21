@@ -5,24 +5,46 @@ namespace Tvision2.Engine.Components.Backgrounds;
 
 public class BackgroundDefinition
 {
-    internal ITvDrawer<Unit> Drawer { get; private set; }
+    private ITvDrawer<Unit>? _drawer;
+    private ITvBehavior<Unit>? _behavior;
 
     public BackgroundDefinition UseDrawer(ITvDrawer<Unit> drawer)
     {
-        Drawer = drawer;
+        _drawer = drawer;
         return this;
     }
 
     public BackgroundDefinition UseDrawer(Action<ConsoleContext> drawerAction)
     {
-        Drawer = new StatelessFuncDrawer<Unit>(drawerAction);
+        _drawer = new StatelessFuncDrawer<Unit>(drawerAction);
         return this;
     }
-    
+
+    public BackgroundDefinition UseBehavior(ITvBehavior<Unit> behavior)
+    {
+        _behavior = behavior;
+        return this;
+    }
+
+    public BackgroundDefinition UseBehavior(Action<BehaviorContext<Unit>> behaviorFunc)
+    {
+        _behavior = new ActionBehavior<Unit>(behaviorFunc);
+        return this;
+    }
+
     internal TvComponent<Unit> CreateBackgroundComponent()
     {
         var bgComponent = TvComponent.CreateStatelessComponent(Viewports.FullViewport);
-        bgComponent.AddDrawer(Drawer);
+        if (_drawer is not null)
+        {
+            bgComponent.AddDrawer(_drawer);
+        }
+
+        if (_behavior is not null)
+        {
+            bgComponent.AddBehavior(_behavior);
+        }
+
         return bgComponent;
     }
 }

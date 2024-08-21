@@ -30,6 +30,7 @@ public class Tvision2Engine : ITvision2Engine
         _serviceProvider = sp;
         _consoleDriver = new AnsiConsoleDriver(_options.ConsoleOptions);
         _consoleEvents = new TvConsoleEvents();
+        _consoleDriver.Init();
         var crows = System.Console.WindowHeight;
         var ccols = System.Console.WindowWidth;
         UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(crows,ccols), TvColor.Black), _consoleDriver);
@@ -38,15 +39,17 @@ public class Tvision2Engine : ITvision2Engine
         _eventsReader.Init();
     }
 
-    internal void PostCreate()  // Called by Tv2App to ensure hooks are resolved just after Tvision2Engine is created
+    internal async Task PostCreate()  // Called by Tv2App to ensure hooks are resolved just after Tvision2Engine is created
     {
-        ResolveHooks();   
+        
     }
     
     public async Task Initialize()
     {
+        await ResolveHooks();
         Running = true;
         await InvokeStartup();
+        await UI.Init();
     }
 
     private async Task InvokeStartup()
@@ -54,27 +57,31 @@ public class Tvision2Engine : ITvision2Engine
         
     }
 
-    private void ResolveHooks()
+    private async Task ResolveHooks()
     {
         var hooks = _serviceProvider.GetServices<IHook>();
         foreach (var hook in hooks)
         {
             UI.AddHook(hook);
         }
+
     }
 
-    internal async Task NextCycle()
+    internal async Task NextCycle(long lastElapsedMs)
     {
+        var updateContext = new UpdateContext(_consoleEvents, lastElapsedMs);
         _consoleEvents.Clear();
         _eventsReader.ReadEvents(_consoleEvents);
-        await UI.BeforeUpdate(_consoleEvents);
-        await UI.Update(_consoleEvents);
+        await UI.BeforeUpdate(updateContext);
+        await UI.Update(updateContext);
         await UI.CalculateLayout();
         UI.Draw();
     }
 
     internal async Task Teardown()
     {
+        _consoleDriver.Teardown();
+        await UI.Teardown();
     }
 
     public T GetRegisteredComponent<T>() where T: notnull => _serviceProvider.GetRequiredService<T>();
