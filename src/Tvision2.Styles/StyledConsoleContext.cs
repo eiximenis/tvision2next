@@ -18,7 +18,6 @@ public readonly struct StyledConsoleContext
         _styleSet = styleSet;
     }
 
-
     public void DrawStringAt(string text, TvPoint location) => DrawStringAt(text, location, _styleSet.DefaultStyle.DefaultState);
     public void DrawStringAt(string text, TvPoint location, string stateName) => DrawStringAt(text, location, _styleSet.DefaultStyle.GetStateOrDefault(stateName));
 
@@ -26,6 +25,25 @@ public readonly struct StyledConsoleContext
 
     private void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
 
+
+    public void DrawStringAt<TPR>(string text, TPR locationResolver)
+        where TPR : IPositionResolver =>
+        DrawStringAt(text, locationResolver, _styleSet.DefaultStyle.DefaultState);
+
+    public void DrawStringAt<TPR>(string text, TPR locationResolver, string stateName)
+        where TPR : IPositionResolver =>
+        DrawStringAt(text, locationResolver, _styleSet.DefaultStyle.GetStateOrDefault(stateName));
+
+    public void DrawStringAt<TPR>(string text, TPR locationResolver, string styleName, string stateName)
+        where TPR : IPositionResolver =>
+        DrawStringAt(text, locationResolver, _styleSet[styleName].GetStateOrDefault(stateName));
+
+    private void DrawStringAt<TPR>(string text, TPR locationResolver, StyleState state)
+        where TPR : IPositionResolver
+    {
+        var location = _consoleContext.GetPositionForString(text, locationResolver);
+        _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
+    }
 
     public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);
     public void Fill(string stateName) => Fill(_styleSet.DefaultStyle.GetStateOrDefault(stateName));

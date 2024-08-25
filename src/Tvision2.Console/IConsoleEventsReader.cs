@@ -10,11 +10,19 @@ public interface IConsoleEventsReader
 {
     void ReadEvents(TvConsoleEvents events);
 
-    static IConsoleEventsReader GetByOs()
+    static IConsoleEventsReader GetByOs(ConsoleOptions options)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            return new WindowsConsoleEventsReader();
+            if (options.Windows.UseSequences)
+            {
+                var seqReader = new EscapeSequenceReader();
+                return new WindowsConsoleSequenceEventsReader(seqReader, new XtermSequences());
+            }
+            else
+            {
+                return new WindowsConsoleEventsReader();
+            }
         }
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

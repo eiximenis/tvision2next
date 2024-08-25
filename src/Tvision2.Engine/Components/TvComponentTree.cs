@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Reflection.Emit;
 using Tvision2.Core;
 using Tvision2.Engine.Events;
 
@@ -16,10 +17,9 @@ public interface ITvComponentTree
     ITvComponentTreeActions On();
     void Add(TvComponent component);
     void Add(TvComponent component, LayerSelector layer);
-    Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent);
-
+    void AddChild(TvComponent child, TvComponent parent);
+    void AddChild(TvComponent child, TvComponent parent, LayerSelector layer);
     void Remove(TvComponent component);
-
     IEnumerable<TvComponentTreeNode> Roots { get; }
     IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; }
     void AddSharedTag<TTag>(TTag tag) where TTag : class;
@@ -32,6 +32,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 {
 
     record AddParams(TvComponent component, LayerSelector layer);
+    record ChildAddParams(TvComponent child, TvComponent parent, LayerSelector layer);
     private readonly List<TvComponentTreeNode> _roots;
     private readonly ActionsChain<TvComponentTreeNode> _onRootAdded;
     private readonly ActionsChain<TvComponentTreeNode> _onNodeAdded;
@@ -41,6 +42,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private readonly List<TvComponentTreeNode> _sortedNodesByLayerBottomFirst;
 
     private readonly List<AddParams> _pendingAdds;
+    private readonly List<ChildAddParams> _pendingChildAdds;
     private readonly List<TvComponent> _pendingRemoves;
 
     public IEnumerable<TvComponentTreeNode> Roots => _roots;
@@ -60,6 +62,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         _sortedNodesByLayerBottomFirst = new List<TvComponentTreeNode>();
         _roots = new List<TvComponentTreeNode>();
         _pendingAdds = new List<AddParams>();
+        _pendingChildAdds = new List<ChildAddParams>();
         _pendingRemoves = new List<TvComponent>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
         _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
@@ -70,6 +73,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     internal async Task NewCycle()
     {
         await DoPengingAdds();
+        await DoPendingChildAdds();
         await DoPendingRemoves();
         if (_dirty)
         {
@@ -113,6 +117,22 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         }
 
         _pendingAdds.Clear();
+    }
+
+    private async Task DoPendingChildAdds()
+    {
+        if (_pendingChildAdds.Count == 0) return;
+        foreach (var (child, parent, layer) in _pendingChildAdds)
+        {
+            var childMetadata = child.Metadata;
+            var parentMetadata = parent.Metadata;
+            parentMetadata.AddChild(child);
+            var childNode = childMetadata.Node;
+            if (parentMetadata.IsAttached)
+            {
+                await DoAddSubtree(childNode, layer);
+            }
+        }
     }
 
     public void Add(TvComponent component) => Add(component, LayerSelector.Standard);
@@ -159,26 +179,21 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         return LayerSelector.CompareBottomFirst(n1.Metadata.Component.Layer, n2.Metadata.Component.Layer);
     }
 
-    public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent) =>
-        await AddChild(child, parent, LayerSelector.Standard);
+    public void AddChild(TvComponent child, TvComponent parent) => AddChild(child, parent, LayerSelector.Standard);
     
     /// <summary>
     /// Adds a component as a child of another component. This **does not** add the parent component to the tree.
     /// </summary>
-    public async Task<TvComponentTreeNode> AddChild(TvComponent child, TvComponent parent, LayerSelector layer)
+    public void AddChild(TvComponent child, TvComponent parent, LayerSelector layer)
     {
         if (child == parent) throw new ArgumentException("Cannot add a component as a child of itself");
         var childMetadata = child.Metadata;
         if (childMetadata.IsAttached) throw new InvalidOperationException("Cannot add a component that is already attached to a tree");
-        var parentMetadata = parent.Metadata;
-        parentMetadata.AddChild(child);
-        var childNode = childMetadata.Node;
-        if (parentMetadata.IsAttached)
-        {
-            await DoAddSubtree(childNode, layer);
-        }
-        return childNode;
+
+        _pendingChildAdds.Add(new ChildAddParams(child, parent, layer));
+
     }
+
 
     public IEnumerable<TvComponentTreeNode> Nodes() => _roots.SelectMany(r => r.SubTree());
 

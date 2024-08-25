@@ -19,8 +19,8 @@ public class Given_ComponentTreeNode
         var child = TvComponent.CreateStatelessComponent();
         var child2 = TvComponent.CreateStatelessComponent();
 
-        await ui.ComponentTree.AddChild(child, root);
-        await ui.ComponentTree.AddChild(child2, root);
+        ui.ComponentTree.AddChild(child, root);
+        ui.ComponentTree.AddChild(child2, root);
 
         var rootNode = root.Metadata.Node;
         rootNode.Descendants().Should().HaveCount(2);

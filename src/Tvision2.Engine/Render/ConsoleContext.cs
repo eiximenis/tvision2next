@@ -28,6 +28,17 @@ public readonly struct ConsoleContext
         _console.DrawAt(text,consoleLocation, attr, _viewport.Viewzone);
     }
 
+    public void DrawStringAt<TPR>(string text, TPR locationResolver, TvColorsPair colors) where TPR : IPositionResolver
+    {
+        var location = GetPositionForString(text, locationResolver);
+        DrawStringAt(text, location, colors);
+    }
+
+    public TvPoint GetPositionForString<TPR>(string text, TPR locationResolver) where TPR : IPositionResolver
+    {
+        return locationResolver.Resolve(_viewport.Bounds, TvBounds.FromRowsAndCols(1, text.Length));
+    }
+
     public void Fill(TvColor bgColor)
     {
         var attr = new CharacterAttribute(bgColor, bgColor, CharacterAttributeModifiers.Normal);

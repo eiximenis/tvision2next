@@ -9,9 +9,6 @@ using Tvision2.Engine.Extensions;
 using Tvision2.Engine.Layouts;
 using Tvision2.Layouts;
 
-string _text = "Hello World!";
-
-var host = await Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()));
 var background = new BackgroundDefinition().UseDrawer(ctx =>
 {
     var bounds = ctx.Viewzone.Bounds;
@@ -24,6 +21,8 @@ var background = new BackgroundDefinition().UseDrawer(ctx =>
         }
     }
 });
+
+var host = await Tv2App.Setup(o => o.AddConsoleOptions(c => c.UseAlternateBuffer()).WithBackground(background));
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 var component = TvComponent.CreateStatelessComponent();
 var container =  TvComponent.CreateStatelessComponent(new Viewport(TvPoint.FromXY(3, 4), TvBounds.FromRowsAndCols(10, 40)));

@@ -13,6 +13,6 @@ public static class ITvComponentTreeExtensions_Controls
     public static void Add(this ITvComponentTree tree, ITvControl control, LayerSelector layer) =>
         tree.Add(control.AsComponent(), layer);
 
-    public static Task<TvComponentTreeNode> AddChild(this ITvComponentTree tree, ITvControl child, ITvControl parent) =>
+    public static void AddChild(this ITvComponentTree tree, ITvControl child, ITvControl parent) =>
         tree.AddChild(child.AsComponent(), parent.AsComponent());
 }

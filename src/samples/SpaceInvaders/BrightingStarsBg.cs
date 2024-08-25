@@ -32,7 +32,7 @@ class FallingStar
         _initialG = (byte)random.Next(0x1, 0xCC);
         _initialB = (byte)random.Next(0x1, 0xCC);
         _color = TvColor.FromRgb(_initialR, _initialG, _initialB);
-        
+
         Position = TvPoint.FromXY(random.Next(80), random.Next(25));
     }
 

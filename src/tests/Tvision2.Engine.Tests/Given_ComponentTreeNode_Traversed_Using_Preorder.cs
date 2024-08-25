@@ -26,8 +26,8 @@ public class Given_ComponentTreeNode_Traversed_Using_Preorder
         var root = TvComponent.CreateStatelessComponent();
         var child = TvComponent.CreateStatelessComponent();
         var child2 = TvComponent.CreateStatelessComponent();
-        await ui.ComponentTree.AddChild(child, root);
-        await ui.ComponentTree.AddChild(child2, root);
+        ui.ComponentTree.AddChild(child, root);
+        ui.ComponentTree.AddChild(child2, root);
         
         var rootNode = root.Metadata.Node;
         rootNode.PreOrder.Should().HaveCount(3);
@@ -54,18 +54,18 @@ public class Given_ComponentTreeNode_Traversed_Using_Preorder
         var root = TvComponent.Create("ROOT");
         var nodeA = TvComponent.Create("A");
         var nodeB = TvComponent.Create("B");
-        await ui.ComponentTree.AddChild(nodeA, root);
-        await ui.ComponentTree.AddChild(nodeB, root);
+        ui.ComponentTree.AddChild(nodeA, root);
+        ui.ComponentTree.AddChild(nodeB, root);
 
         var nodeAA = TvComponent.Create("AA");
         var nodeAB = TvComponent.Create("AB");
         var nodeBA = TvComponent.Create("BA");
-        await ui.ComponentTree.AddChild(nodeAA, nodeA);
-        await ui.ComponentTree.AddChild(nodeAB, nodeA);
-        await ui.ComponentTree.AddChild(nodeBA, nodeB);
+        ui.ComponentTree.AddChild(nodeAA, nodeA);
+        ui.ComponentTree.AddChild(nodeAB, nodeA);
+        ui.ComponentTree.AddChild(nodeBA, nodeB);
 
         var nodeABA = TvComponent.Create("ABA");
-        await ui.ComponentTree.AddChild(nodeABA, nodeAB);
+        ui.ComponentTree.AddChild(nodeABA, nodeAB);
         // PreOrder is: root, A, AA, AB, ABA, B, BA
 
         TvComponentTreeNode[] expected = [root.Metadata.Node, nodeA.Metadata.Node, nodeAA.Metadata.Node, nodeAB.Metadata.Node, nodeABA.Metadata.Node, nodeB.Metadata.Node, nodeBA.Metadata.Node];

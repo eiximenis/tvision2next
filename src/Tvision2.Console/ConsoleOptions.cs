@@ -1,3 +1,5 @@
+using Tvision2.Console.Windows;
+
 namespace Tvision2.Console;
 
 public interface IConsoleOptions
@@ -11,6 +13,14 @@ public class ConsoleOptions : IConsoleOptions
     public bool UseAlternateBuffer { get; private set; } = false;
 
     public CursorVisibility CursorVisibility { get; private set; }  = CursorVisibility.Hidden;
+    public WindowsConsoleOptions Windows { get; }
+
+    public ConsoleOptions()
+    {
+        Windows = new WindowsConsoleOptions();
+    }
+
+    
 
     IConsoleOptions IConsoleOptions.ShowCursor()
     {

@@ -35,13 +35,8 @@ public class Tvision2Engine : ITvision2Engine
         var ccols = System.Console.WindowWidth;
         UI = new TvUiManager(new VirtualConsole(TvBounds.FromRowsAndCols(crows,ccols), TvColor.Black), _consoleDriver);
         UI.ComponentTree.Add(_options.BackgroundDefinition.CreateBackgroundComponent(), LayerSelector.Background);
-        _eventsReader = IConsoleEventsReader.GetByOs();
+        _eventsReader = IConsoleEventsReader.GetByOs(options.ConsoleOptions);
         _eventsReader.Init();
-    }
-
-    internal async Task PostCreate()  // Called by Tv2App to ensure hooks are resolved just after Tvision2Engine is created
-    {
-        
     }
     
     public async Task Initialize()

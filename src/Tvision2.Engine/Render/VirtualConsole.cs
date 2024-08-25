@@ -108,7 +108,6 @@ public class VirtualConsole
     public void Flush(IConsoleDriver consoleDriver)
     {
         if (!IsDirty) { return; }
-        
         var height = Bounds.Height;
         var width = Bounds.Width;
         var idx = 0;
