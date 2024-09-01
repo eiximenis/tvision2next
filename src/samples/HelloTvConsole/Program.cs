@@ -15,5 +15,9 @@ for (int col = 0; col < 64; col++)
     TvConsole.WriteLine("");
 }
 
+TvConsole.Foreground = TvColor.FromHexString("#33AAFF");
+TvConsole.Background = TvColor.FromHexString("#444444");
+TvConsole.DrawBox(left: 10, top: 2, rows: 4, columns: 19);
+TvConsole.Write("Boxes made easy",left: 11, top: 3);
 
 Console.ReadLine();

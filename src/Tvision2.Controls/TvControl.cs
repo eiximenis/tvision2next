@@ -19,6 +19,11 @@ public static class TvControl
     internal const string CONTROL_TAG = "Tvision2::Control";
 }
 
+/// <summary>
+/// (Possible non-mandatory) base class for controls.
+/// This class contains basic implementation of ITvControl[T] interface and ensures
+/// the control is correctly tagged with the TvControl.CONTROL_TAG tag.
+/// </summary>
 public class TvControl<TState> : ITvControl<TState>
 {
     public TvControlMetadata Metadata { get; }
@@ -69,11 +74,17 @@ public class TvControl<TState> : ITvControl<TState>
     public Task HandleEvents(TvConsoleEvents events) => Options.HandleEvents?.Invoke(events) ?? Task.CompletedTask;
 
     public bool Focus()
-    {
+    {   
         return Metadata.TryFocus();
     }
 }
 
+/// <summary>
+/// (Possible non-mandatory) base class for controls that raise the basic events GainedFocus and LostFocus
+/// It offers a basic implementation to subscribe to these events (through ITvEventedControlActions) and to raise them (through ITvEventedControlEventRaiser)
+/// However, framework never assumes a control is instance of this class, so it is not mandatory to use it.
+/// </summary>
+/// <typeparam name="TState"></typeparam>
 public class TvEventedControl<TState> : TvControl<TState>, ITvEventedControl, ITvEventedControlActions, ITvEventedControlEventRaiser
 {
 

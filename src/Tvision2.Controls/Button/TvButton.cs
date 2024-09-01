@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using Tvision2.Console.Events;
+using Tvision2.Controls.Checkbox;
 using Tvision2.Core;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Events;
@@ -28,6 +29,7 @@ public class TvButton : TvEventedControl<string>, IButtonActions
 
     
     public new IButtonActions On() => this;
+    public void On(Action<IButtonActions> onAction) => onAction.Invoke(this);
 
     IActionsChain<TvButton> IButtonActions.Tapped => _tapped;
 
@@ -35,7 +37,7 @@ public class TvButton : TvEventedControl<string>, IButtonActions
     {
         Options.AutoSize = true;
         Options.FocusPolicy = FocusPolicy.DirectFocusable;
-        Options.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Options.WhenPreviewEventsDo(OnPreviewEvents).WhenHandleEventsDo(OnHandleEvents).WithAutoSize(AutoUpdateViewport);
         Component.AddStyledDrawer(ButtonDrawer, "TvControls");
     }
 
@@ -43,17 +45,17 @@ public class TvButton : TvEventedControl<string>, IButtonActions
     {
         Options.AutoSize = true;
         Options.FocusPolicy = FocusPolicy.DirectFocusable;
-        Options.WhenPreviewEventsDo(PreviewEvents).WhenHandleEventsDo(HandleEvents).WithAutoSize(AutoUpdateViewport);
+        Options.WhenPreviewEventsDo(OnPreviewEvents).WhenHandleEventsDo(OnHandleEvents).WithAutoSize(AutoUpdateViewport);
         Component.AddStyledDrawer(ButtonDrawer, "TvControls");
     }
 
-    public Task PreviewEvents(TvConsoleEvents events)
+    public Task OnPreviewEvents(TvConsoleEvents events)
     {
         Debug.Write($"Preview {events.Count} events in Button :)");
         return Task.CompletedTask;
     }
 
-    public async Task HandleEvents(TvConsoleEvents events)
+    public async Task OnHandleEvents(TvConsoleEvents events)
     {
         if (events.HasKeyboardEvents)
         {

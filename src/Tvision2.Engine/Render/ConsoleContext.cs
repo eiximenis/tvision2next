@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Text;
 using Tvision2.Core;
 using Tvision2.Core.Console;
 using Tvision2.Engine.Components;
@@ -21,6 +24,17 @@ public readonly struct ConsoleContext
     private static TvPoint ViewPointToConsolePoint(TvPoint viewPoint, TvPoint viewportPosition) => viewPoint + viewportPosition;
     private static TvPoint ConsolePointToViewport(TvPoint consolePoint, TvPoint viewportPosition) => consolePoint - viewportPosition;
 
+    public void DrawCharsAt(char value, int count, TvPoint location, CharacterAttribute attribute)
+    {
+        var consoleLocation = ViewPointToConsolePoint(location, _viewport.Position);
+        _console.DrawCharactersAt(value,count, consoleLocation, attribute, _viewport.Viewzone);
+    }
+    public void DrawRunesAt(Rune rune, int count, TvPoint location, CharacterAttribute attribute)
+    {
+        var consoleLocation = ViewPointToConsolePoint(location, _viewport.Position);
+        _console.DrawRunesAt(rune, count, consoleLocation, attribute, _viewport.Viewzone);
+    }
+
     public void DrawStringAt(string text, TvPoint location, TvColorsPair colors)
     {
         var attr = new CharacterAttribute(colors.Foreground, colors.Background, CharacterAttributeModifiers.Normal);
@@ -28,15 +42,11 @@ public readonly struct ConsoleContext
         _console.DrawAt(text,consoleLocation, attr, _viewport.Viewzone);
     }
 
-    public void DrawStringAt<TPR>(string text, TPR locationResolver, TvColorsPair colors) where TPR : IPositionResolver
-    {
-        var location = GetPositionForString(text, locationResolver);
-        DrawStringAt(text, location, colors);
-    }
-
     public TvPoint GetPositionForString<TPR>(string text, TPR locationResolver) where TPR : IPositionResolver
     {
-        return locationResolver.Resolve(_viewport.Bounds, TvBounds.FromRowsAndCols(1, text.Length));
+        var info = new StringInfo(text);
+        var length = info.LengthInTextElements;
+        return locationResolver.Resolve(_viewport.Bounds, TvBounds.FromRowsAndCols(1, length));
     }
 
     public void Fill(TvColor bgColor)

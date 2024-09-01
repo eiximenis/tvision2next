@@ -28,18 +28,18 @@ var host = await Tv2App.Setup(
 
 var app = host.Services.GetRequiredService<Tvision2Engine>();
 int counter = 0;
-var label = new TvLabel("Hello World!");
-label.Text = "Hello World! 2";
 var button = CreateButton("Click Me!", TvPoint.FromXY(1,1));
 button.On().Tapped.Do(b => b.Text = $"Tapped {counter++}!");
-var button2 = CreateButton("Second", TvPoint.FromXY(1,2));
-var button3 = CreateButton("Third", TvPoint.FromXY(1,3));
-var check = CreateCheckbox("Check me!", TvPoint.FromXY(1, 4));
-app.UI.ComponentTree.Add(label);
+// Can also use the alternate syntax:
+// button.On(b => b.Tapped.Do(db => db.Text = $"Tapped {counter++}!"));
+var check = CreateCheckbox("Check me!", TvPoint.FromXY(1, 2));
+
+var label = new TvLabel("Check is unchecked");
 app.UI.ComponentTree.Add(button);
-app.UI.ComponentTree.Add(button2);
-app.UI.ComponentTree.Add(button3);
 app.UI.ComponentTree.Add(check);
+app.UI.ComponentTree.Add(label);
+
+check.On().CheckedChanged.Do(cb => label.Text = $"Checkbox is {cb.AsComponent().State.IsChecked}");
 
 button.Focus();
 await Tv2App.Run();

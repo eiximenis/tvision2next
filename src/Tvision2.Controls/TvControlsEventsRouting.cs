@@ -23,12 +23,11 @@ public class TvControlsEventsRouting : IHook
     
     public async Task BeforeUpdate(TvConsoleEvents events)
     {
-        if (events.Count > 0 && _tree.FocusedControl is not null)
+        if (events.HasEvents && _tree.FocusedControl is not null)
         {
-            var focused = _tree.FocusedControl!;
             foreach (var cmetadata in _tree.TunnelingControls())
             {
-                await cmetadata.Control.PreviewEvents(events);
+                    await cmetadata.Control.PreviewEvents(events);
             }
 
             foreach (var cmetadata in _tree.BubblingControls())
