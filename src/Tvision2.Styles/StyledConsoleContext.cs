@@ -1,5 +1,8 @@
+using System.Globalization;
 using System.Runtime.InteropServices.JavaScript;
 using Tvision2.Core;
+using Tvision2.Core.Console;
+using Tvision2.Drawing;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
 
@@ -25,25 +28,7 @@ public readonly struct StyledConsoleContext
 
     private void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
 
-
-    public void DrawStringAt<TPR>(string text, TPR locationResolver)
-        where TPR : IPositionResolver =>
-        DrawStringAt(text, locationResolver, _styleSet.DefaultStyle.DefaultState);
-
-    public void DrawStringAt<TPR>(string text, TPR locationResolver, string stateName)
-        where TPR : IPositionResolver =>
-        DrawStringAt(text, locationResolver, _styleSet.DefaultStyle.GetStateOrDefault(stateName));
-
-    public void DrawStringAt<TPR>(string text, TPR locationResolver, string styleName, string stateName)
-        where TPR : IPositionResolver =>
-        DrawStringAt(text, locationResolver, _styleSet[styleName].GetStateOrDefault(stateName));
-
-    private void DrawStringAt<TPR>(string text, TPR locationResolver, StyleState state)
-        where TPR : IPositionResolver
-    {
-        var location = _consoleContext.GetPositionForString(text, locationResolver);
-        _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
-    }
+    public void DrawCharsAt(char value, int count, TvPoint location, StyleState state) => _consoleContext.DrawCharsAt(value, count, location, state.ColorsPairAt(location));
 
     public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);
     public void Fill(string stateName) => Fill(_styleSet.DefaultStyle.GetStateOrDefault(stateName));
@@ -51,7 +36,7 @@ public readonly struct StyledConsoleContext
 
     private void Fill(StyleState state)
     {
-        
+
         if (state.BackgroundFixed)
         {
             _consoleContext.Fill(state.BackgroundAt(TvPoint.Zero));
@@ -69,4 +54,14 @@ public readonly struct StyledConsoleContext
         }
     }
 
+}
+
+public static class StyledContextExtensions_Drawing
+{
+    public static TvPoint GetPositionForString<TPR>(this StyledConsoleContext ctx, string text, TPR locationResolver) where TPR : IPositionResolver
+    {
+        var info = new StringInfo(text);
+        var length = info.LengthInTextElements;
+        return locationResolver.Resolve(ctx.Viewzone.Bounds, TvBounds.FromRowsAndCols(1, length), TvPoint.Zero);
+    }
 }

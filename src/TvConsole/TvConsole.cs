@@ -45,16 +45,18 @@ public static partial  class TvConsole
         UpdateTerminalColors();
         System.Console.Write(msg);
     }
-    public static void Write(string msg, int top, int left)
-    {
-        MoveCursorTo(left, top);
-        Write(msg);
-    }
+
     public static void Write(char character)
     {
         UpdateTerminalColors(); 
         System.Console.Write(character);
     }
+    public static void Write(string msg, int top, int left)
+    {
+        MoveCursorTo(left, top);
+        Write(msg);
+    }
+
     public static void Write(char character, int top, int left)
     {
         MoveCursorTo(left, top);

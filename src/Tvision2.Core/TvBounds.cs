@@ -55,6 +55,8 @@ public readonly struct TvBounds : IEquatable<TvBounds>
         return TvBounds.FromRowsAndCols(Height, columns);
     }
     
-    
     public TvBounds Reduced(TvBounds reduction) => TvBounds.FromRowsAndCols(Height - reduction.Height, Width - reduction.Width);
+
+    public static TvBounds operator +(TvBounds bounds, TvBounds other) => TvBounds.FromRowsAndCols(bounds.Height + other.Height, bounds.Width + other.Width);
+    public static TvBounds operator -(TvBounds bounds, TvBounds other) => TvBounds.FromRowsAndCols(bounds.Height - other.Height, bounds.Width - other.Width);
 }

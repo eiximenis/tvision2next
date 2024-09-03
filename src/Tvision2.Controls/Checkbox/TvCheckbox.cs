@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Tvision2.Console.Events;
 using Tvision2.Controls.Button;
 using Tvision2.Core;
+using Tvision2.Drawing;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Events;
 using Tvision2.Engine.Render;
@@ -84,7 +85,7 @@ public class TvCheckbox : TvEventedControl<TvCheckboxState>, ICheckboxActions
             _ => " "
         };
         ctx.DrawStringAt($"[{inner}]", TvPoint.Zero);
-        ctx.DrawStringAt(checkState.Text, TextPosition.CenterHorizontally(margin: Margin.LeftMargin(3)));
+        ctx.DrawStringAt(checkState.Text, TvPoint.FromXY(4, 0));
         return DrawResult.Done;
     }
 

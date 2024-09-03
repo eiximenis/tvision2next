@@ -3,6 +3,7 @@ using System.Globalization;
 using Tvision2.Console.Events;
 using Tvision2.Controls.Checkbox;
 using Tvision2.Core;
+using Tvision2.Drawing;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Events;
 using Tvision2.Engine.Render;
@@ -75,7 +76,7 @@ public class TvButton : TvEventedControl<string>, IButtonActions
         var state = Metadata.IsFocused ? "Focused" : "Normal";
         ctx.Fill(state);
         ctx.DrawStringAt("[", TvPoint.Zero, state);
-        ctx.DrawStringAt(text, TextPosition.CenterHorizontally(margin: 1), state);
+        // ctx.DrawStringAt(text, TextPosition.CenterHorizontally(margin: 1), state);
         ctx.DrawStringAt("]", TvPoint.FromXY(ctx.Viewzone.Bounds.Width-1, 0), state);
         return DrawResult.Done;
     }

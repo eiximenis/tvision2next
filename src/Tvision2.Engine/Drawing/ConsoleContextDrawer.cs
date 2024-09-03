@@ -34,6 +34,6 @@ public class ConsoleContextDrawer : IConsoleDrawer
 
     public void DrawChars(char character, int count, TvPoint location, TvColorsPair colors)
     {
-        _ctx.DrawCharsAt(character, count, location, new CharacterAttribute(colors.Foreground, colors.Background, CharacterAttributeModifiers.Normal));
+        _ctx.DrawCharsAt(character, count, location, colors);
     }
 }
