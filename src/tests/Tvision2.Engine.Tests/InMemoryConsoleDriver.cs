@@ -8,7 +8,9 @@ public class InMemoryConsoleDriver : IConsoleDriver
 {
     private Rune[,] _runes;
     private CharacterAttribute[,] _attributes;
-    
+    private int _cursorX = 0;
+    private int _cursorY = 0;
+
     private TvBounds Bounds { get; }
     
     public InMemoryConsoleDriver(TvBounds size)
@@ -17,10 +19,22 @@ public class InMemoryConsoleDriver : IConsoleDriver
         _runes = new Rune[Bounds.Width, Bounds.Height];
         _attributes = new CharacterAttribute[Bounds.Width, Bounds.Height];
     }
-    
-    
+
+
+    public void WriteCharacter(Rune character, int count = 1)
+    {
+        _cursorX++;
+        if (_cursorX >= Bounds.Width)
+        {
+            _cursorX = 0;
+            _cursorY++;
+        }
+        _runes[_cursorX, _cursorY] = character;
+    }
+
     public void WriteCharacterAt(int x, int y, Rune character, CharacterAttribute attribute)
     {
+        (_cursorX, _cursorY) = (x, y);
         _runes[x, y] = character;
         _attributes[x, y] = attribute;
     }
@@ -35,7 +49,7 @@ public class InMemoryConsoleDriver : IConsoleDriver
 
     public void SetCursorAt(int x, int y)
     {
-        
+        (_cursorX, _cursorY) = (x, y);
     }
 
     public void SetCursorVisibility(bool isVisible)

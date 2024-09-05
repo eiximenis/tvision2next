@@ -1,31 +1,30 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Tvision2.Console;
-using Tvision2.Console.Boxes;
+﻿using Tvision2.Console;
 using Tvision2.Core;
 using Tvision2.Drawing;
-
-// Draw a nice background :)
-for (int row = 0; row < Console.WindowHeight; row++)
-{
-    for (int col = 0; col < Console.WindowWidth; col++)
-    {
-        var color = TvColor.FromRgb((col +row) % 256, col % 256, (col * 2) % 256);
-        TvConsole.Background = color;
-        TvConsole.Write(" ");
-    }
-    TvConsole.WriteLine("");
-}
+using Tvision2.Drawing.Borders;
+using Tvision2.Drawing.Shapes;
 
 // Draw a box
 TvConsole.Foreground = TvColor.FromHexString("#33AAFF");
 TvConsole.Background = TvColor.FromHexString("#444444");
-var box = new Box(left: 5, top: 2, rows: 7, columns: 30);
+var box = new Box(left: 5, top: 2, rows: 7, columns: 40, 
+    BorderValue.HorizontalVertical(BorderType.Single, BorderType.Double));
 TvConsole.Draw(box);
 TvConsole.Fill(box, "#dd4444");
 // Center text on it
-TvConsole.Write("Boxes made easy", box , TextPosition.CenterHorizontally(row: 1));
-TvConsole.Write("Really easy!", box, TextPosition.Bottom().CenterHorizontally());
+TvConsole.Write("Welcome to Sheldon Cooper's", box , TextPosition.Top().CenterHorizontally(row: 1));
+TvConsole.Foreground = TvColor.LightRed;
+TvConsole.Write("Fun with boxes!", box, TextPosition.Bottom().CenterHorizontally());
 
+// Draw and gradient fill another box
+TvConsole.Foreground = TvColor.FromHexString("#FFFFFF");
+TvConsole.Background = TvColor.FromHexString("#666666");
+var box2 = new Box(TvPoint.FromXY(10, 12), TvBounds.FromRowsAndCols(10, 12), BorderValue.Double());
+TvConsole.Draw(box2);
+TvConsole.Fill(box2, p => TvColor.FromRgb(0x0, p.X * 10, p.Y * 10));
+
+var box3 = new Box(TvPoint.FromXY(30, 20), TvBounds.FromRowsAndCols(10, 20), BorderValue.Single());
+TvConsole.Draw(box3);
+TvConsole.Wrap("Yes! You can wrap text inside shapes! Yes it's really amazing!", box3);
 
 Console.ReadLine();

@@ -43,7 +43,15 @@ public class AnsiConsoleDriver : IConsoleDriver
             SetCursorVisibility(true);
         }
     }
-    
+
+
+    public void WriteCharacter(Rune character, int count = 1)
+    {
+        var sb = new StringBuilder();
+        FillCharacterSequence(character, count, sb);
+        System.Console.Write(sb.ToString());
+    }
+
     public void WriteCharacterAt(int x, int y, Rune character, CharacterAttribute attribute)
     {
         WriteCharactersAt(x, y, 1, character, attribute);
@@ -51,10 +59,15 @@ public class AnsiConsoleDriver : IConsoleDriver
 
     public void WriteCharactersAt(int x, int y, int count, Rune character, CharacterAttribute attribute)
     {
+
         var sb = new StringBuilder();
         sb.Append(_colorManager.GetCursorSequence(x, y));
         sb.Append(_colorManager.GetAttributeSequence(attribute));
-
+        FillCharacterSequence(character, 1, sb);
+        System.Console.Write(sb.ToString());
+    }
+    private void FillCharacterSequence(Rune character, int count, StringBuilder sb)
+    {
         Span<char> buf = stackalloc char[2];                // Assume a rune is at most 2 UTF16 codeunits length
         for (var idx = 0; idx < count; idx++)
         {
@@ -68,13 +81,11 @@ public class AnsiConsoleDriver : IConsoleDriver
                 sb.Append((char)character.Value);
             }
         }
-
-        System.Console.Write(sb.ToString());
     }
 
     public void SetCursorAt(int x, int y)
     {
-        throw new NotImplementedException();
+        System.Console.Write(_colorManager.GetCursorSequence(x, y));
     }
     
     public void SetCursorVisibility(bool isVisible)

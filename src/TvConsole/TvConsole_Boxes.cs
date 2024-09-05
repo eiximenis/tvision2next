@@ -1,26 +1,26 @@
 using System.Globalization;
 using System.Net.Mime;
-using Tvision2.Console.Boxes;
 using Tvision2.Core;
 using Tvision2.Drawing;
 using Tvision2.Drawing.Borders;
+using Tvision2.Drawing.Shapes;
 
 namespace Tvision2.Console;
 
 partial class TvConsole
 {
-    public static void DrawBox(int left, int top, int rows, int columns)
+    public static void DrawBox(int left, int top, int rows, int columns, BorderValue? value  = null)
     {
         var topLeft = TvPoint.FromXY(left, top);
         var bounds = TvBounds.FromRowsAndCols(rows, columns);
         var colors = TvColorsPair.FromForegroundAndBackground(Foreground, Background);
-        Border.Draw(ConsoleDrawer, BorderValue.Double(), topLeft, bounds, colors);
+        Border.Draw(ConsoleDrawer, value ?? BorderValue.Double(),  topLeft, bounds, colors);
     }
 
     public static void Draw(Box box)
     {
         var colors = TvColorsPair.FromForegroundAndBackground(Foreground, Background);
-        Border.Draw(ConsoleDrawer, BorderValue.Double(), box.TopLeft, box.Bounds, colors);
+        Border.Draw(ConsoleDrawer, box.Border, box.TopLeft, box.Bounds, colors);
     }
 
     public static void Write<TShape>(string msg, TShape shape, IPositionResolver positionResolver) where TShape : IShape

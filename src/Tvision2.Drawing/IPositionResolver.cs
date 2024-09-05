@@ -23,10 +23,16 @@ public readonly record struct Margin(int Left = 0, int Right = 0, int Top = 0, i
 public static class TextPosition
 {
     private static readonly BottomTextPosition _bottom = new BottomTextPosition();
-    public static TopCenteredTextResolver CenterHorizontally(int margin = 0, int row = 0) => new TopCenteredTextResolver(row, Margin.FromValue(margin));
-    public static TopCenteredTextResolver CenterHorizontally(Margin margin, int row = 0) => new TopCenteredTextResolver(row, margin);
+    private static readonly TopTextPosition _top = new TopTextPosition();   
 
+    public static TopTextPosition Top() => _top;
     public static BottomTextPosition Bottom() => _bottom;
+}
+
+public class TopTextPosition
+{
+    public TopCenteredTextResolver CenterHorizontally(int margin = 0, int row = 0) => new TopCenteredTextResolver(row, Margin.FromValue(margin));
+    public TopCenteredTextResolver CenterHorizontally(Margin margin, int row = 0) => new TopCenteredTextResolver(row, margin);
 }
 
 public class BottomTextPosition

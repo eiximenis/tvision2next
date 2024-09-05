@@ -4,6 +4,7 @@ namespace Tvision2.Core.Console;
 
 public interface IConsoleDriver
 {
+    void WriteCharacter(Rune character, int count = 1);
     void WriteCharacterAt(int x, int y, Rune character, CharacterAttribute attribute);
     void WriteCharactersAt(int x, int y, int count, Rune character, CharacterAttribute attribute);
     void SetCursorAt(int x, int y);
