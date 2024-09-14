@@ -2,32 +2,55 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using Tvision2.Drawing.Shapes;
 using Wcwidth;
 
 namespace Tvision2.Drawing.Text;
 
 
-public readonly struct WrapInfo
+public struct WordLineInfo
 {
-    private readonly List<List<int>> _wordsPerLine;
-    public WrapInfo()
-    {
-        _wordsPerLine = [];
-    }
-    internal void NewLine() => _wordsPerLine.Add([]);
-    internal void AddWord(int wordIdx) => _wordsPerLine[^1].Add(wordIdx);
 
-    public int UsedLines => _wordsPerLine.Count;
-    public IEnumerable<int> GetWordsForLine(int lineIdx) => _wordsPerLine[lineIdx];
+    public int Width; 
+    public int SeparatorsBefore;
+    public int SeparatorsAfter;
+    
+    public WordLineInfo(int width, int separatorsBefore, int separatorsAfter)
+    {
+        Width = width;
+        SeparatorsBefore = separatorsBefore;
+        SeparatorsAfter = separatorsAfter;
+    }
+
+    public int WidthWithSeparators => Width + SeparatorsBefore + SeparatorsAfter;
+}
+
+public enum Justification
+{
+    None,
+    Left,
+    Right,
+    Full,
+    Center
+}
+
+
+public enum WordSeparator
+{
+    None,
+    Space,
+    Line,
+    Paragraph
 }
 
 public class Wrapper
 {
-    readonly record struct WordIndex(int Start, int End)
+    readonly record struct WordIndex(int Start, int End, WordSeparator Separator)
     {
         public int Length => End - Start + 1;
     }
@@ -44,10 +67,12 @@ public class Wrapper
         _runes = text.EnumerateRunes().ToArray();
     }
 
-    public WrapInfo Wrap<TShape>(string text, TShape shape) where TShape : IShape
+    public WrapInfo Wrap<TShape>(string text, TShape shape, 
+        Justification justification = Justification.None) 
+        where TShape : IShape
     {
         SeparateWords();
-        var linesLen = shape.GetLinesLengths().ToArray();                // Space per each line
+        var linesLen = shape.GetLinesLengths().ToArray();                // Space per each line. Note that an Rune can occupy 0,1 or 2 spaces
         var lines = shape.HeightInside;
         var wrapInfo = new WrapInfo();
         var currentWordIdx = 0;
@@ -55,25 +80,39 @@ public class Wrapper
 
         for (var lineIdx = 0; lineIdx < lines; lineIdx++)
         {
-            wrapInfo.NewLine();
-            var remainingLen = linesLen[lineIdx];
-            var currentWordLen = 0;
-            while (remainingLen >= currentWordLen)
+            var remainingWidth = linesLen[lineIdx];
+            wrapInfo.NewLine(remainingWidth);
+            var currentWord = GetWordRunes(currentWordIdx);
+            var currentWordWidth = Length.WidthFromRunes(currentWord);
+            if (currentWordWidth >= remainingWidth)
             {
-                var currentWord = GetWordRunes(currentWordIdx);
-                Debug.WriteLine(currentWord.ToString());
-                currentWordLen = Wrapper.GetWordLen(currentWord);
-                wrapInfo.AddWord(currentWordIdx);
+                // First word is too large for line, we simply "cut it"
+                var wli = new WordLineInfo(remainingWidth, 0, 0);
+                wrapInfo.AddWord(wli);
                 currentWordIdx++;
-                remainingLen -= currentWordLen + 1;     // +1 for the space
+                continue;
+            }
+
+            while (remainingWidth >= currentWordWidth)
+            {
+                var wli = remainingWidth > currentWordWidth
+                    ? new WordLineInfo(currentWordWidth, 0, 1)
+                    : new WordLineInfo(currentWordWidth, 0, 0);
+                wrapInfo.AddWord(wli);
+                currentWordIdx++;
+                remainingWidth -= wli.WidthWithSeparators;    
+
                 if (currentWordIdx == numWords)
                 {
-                    return wrapInfo;
+                    return wrapInfo.Justify(justification);
                 }
+
+                currentWord = GetWordRunes(currentWordIdx);
+                currentWordWidth = Length.WidthFromRunes(currentWord);
             }
         }
 
-        return wrapInfo;
+        return wrapInfo.Justify(justification);
     }
 
     private void SeparateWords()
@@ -82,16 +121,24 @@ public class Wrapper
         for (var idx = 0; idx < _runes.Length; idx++)
         {
             var rune = _runes[idx];
-            if (Rune.IsWhiteSpace(rune) && idx > 0)
+            var runeCategory = Rune.GetUnicodeCategory(rune);
+            var (isSeparator, separator) = runeCategory switch
             {
-                _words.Add(new WordIndex(lastWordIdx, idx));
+                UnicodeCategory.ParagraphSeparator => (true, WordSeparator.Paragraph),
+                UnicodeCategory.LineSeparator => (true, WordSeparator.Line),
+                UnicodeCategory.SpaceSeparator => (true, WordSeparator.Space),
+                _ => (false, WordSeparator.None)
+            };
+            if (isSeparator && idx > 0)
+            {
+                _words.Add(new WordIndex(lastWordIdx, idx - 1, separator));  // Separator Rune not included (use WordSeparator instead)
                 lastWordIdx = idx + 1;
             }
         }
 
-        if (lastWordIdx != _runes.Length - 1)
+        if (lastWordIdx < _runes.Length)
         {
-            _words.Add(new WordIndex(lastWordIdx, _runes.Length - 1));
+            _words.Add(new WordIndex(lastWordIdx, _runes.Length - 1, WordSeparator.None));
         }
     }
 
@@ -99,15 +146,5 @@ public class Wrapper
     {
         var word = _words[idx];
         return _runes.AsSpan(word.Start, word.Length);
-    }
-    private static int GetWordLen(ReadOnlySpan<Rune> word)
-    {
-        var len = 0;
-        for (var idx = 0; idx < word.Length; idx++)
-        {
-            len += UnicodeCalculator.GetWidth(word[idx]);
-        }
-
-        return len;
     }
 }

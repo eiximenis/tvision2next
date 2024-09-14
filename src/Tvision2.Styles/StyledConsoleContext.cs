@@ -62,6 +62,6 @@ public static class StyledContextExtensions_Drawing
     {
         var info = new StringInfo(text);
         var length = info.LengthInTextElements;
-        return locationResolver.Resolve(ctx.Viewzone.Bounds, TvBounds.FromRowsAndCols(1, length), TvPoint.Zero);
+        return locationResolver.Resolve(ctx.Viewzone.Bounds, TvBounds.FromRowsAndCols(1, length));
     }
 }

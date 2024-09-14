@@ -58,12 +58,12 @@ public readonly struct ConsoleContext
     }
 }
 
-public static class ConsoelContextExtensions_Drawing
+public static class ConsoleContextExtensions_Drawing
 {
     public static TvPoint GetPositionForString<TPR>(this ConsoleContext ctx, string text, TPR locationResolver) where TPR : IPositionResolver
     {
         var info = new StringInfo(text);
         var length = info.LengthInTextElements;
-        return locationResolver.Resolve(ctx.Viewzone.Bounds, TvBounds.FromRowsAndCols(1, length), TvPoint.Zero);
+        return locationResolver.Resolve(ctx.Viewzone.Bounds, TvBounds.FromRowsAndCols(1, length));
     }
 }

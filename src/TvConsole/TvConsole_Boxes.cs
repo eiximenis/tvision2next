@@ -26,7 +26,7 @@ partial class TvConsole
     public static void Write<TShape>(string msg, TShape shape, IPositionResolver positionResolver) where TShape : IShape
     {
         var len = new StringInfo(msg).LengthInTextElements;
-        var pos = positionResolver.Resolve(shape.Bounds, TvBounds.FromRowsAndCols(1, len), shape.TopLeft);
-        Write(msg, pos.Y, pos.X);
+        var pos = positionResolver.Resolve(shape.BoundsInside, TvBounds.FromRowsAndCols(1, len));
+        Write(msg, shape.TopLeftInside.Y +  pos.Y, shape.TopLeftInside.X +  pos.X);
     }
 }

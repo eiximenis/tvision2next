@@ -37,7 +37,7 @@ public static class ShapeExtensions
     public static int GetLineLength<TShape>(this TShape shape, int row) where TShape : IShape
     {
         var len = 0;
-        for (var col = shape.TopLeft.X; col <= shape.BottomRight.X; col++)
+        for (var col = shape.TopLeftInside.X; col <= shape.BottomRightInside.X; col++)
         {
             if (shape.PointIsInside(TvPoint.FromXY(col, row)))
             {

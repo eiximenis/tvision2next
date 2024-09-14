@@ -13,35 +13,58 @@ using System.Xml;
 using Tvision2.Core;
 using Tvision2.Drawing.Shapes;
 using Tvision2.Drawing.Text;
+using Wcwidth;
 
 namespace Tvision2.Console;
 
 partial class TvConsole
 {
-    public static void Wrap<TShape>(string text, TShape shape) where TShape : IShape
+    public static void Wrap<TShape>(string text, TShape shape, Justification justification = Justification.None) where TShape : IShape
     {
         var wrapper = new Wrapper(text);
-        var wrapInfo = wrapper.Wrap(text, shape);
+        var wrapInfo = wrapper.Wrap(text, shape, justification);
+        var wordIndex = 0;
         for (var idx = 0; idx < wrapInfo.UsedLines; idx++)
         {
             var wordsInLine = wrapInfo.GetWordsForLine(idx);
             var displacement = 0;
-            foreach (var wordIdx in wordsInLine)
+            foreach (var wordInLine in wordsInLine)
             {
-                var wordRunes = wrapper.GetWordRunes(wordIdx);
+                var wordRunes = wrapper.GetWordRunes(wordIndex++);
                 var py = shape.TopLeftInside.Y + idx;
-                
-                for (var runeIdx = 0; runeIdx < wordRunes.Length; )
+
+                MoveCursorTo(shape.TopLeftInside.X, py);
+                for (var before = 0; before < wordInLine.SeparatorsBefore; before++)
                 {
-                    var px = shape.TopLeftInside.X + displacement;
+                    Write(' ');
+                }
+
+                displacement += wordInLine.SeparatorsBefore;
+                var writtenWidth = 0;
+                var deltaX = 0;
+                for (var runeIdx = 0; runeIdx < wordRunes.Length && writtenWidth < wordInLine.Width;)
+                {
+                    var px = shape.TopLeftInside.X + displacement + deltaX;
                     if (shape.PointIsInside(TvPoint.FromXY(px, py)))
                     {
                         MoveCursorTo(px, py);
                         Write(wordRunes[runeIdx]);
-                        displacement++;
+                        var runeWidth = UnicodeCalculator.GetWidth(wordRunes[runeIdx]);
+                        writtenWidth += runeWidth;
+                        displacement += runeWidth;
                         runeIdx++;
                     }
+                    else
+                    {
+                        deltaX++;
+                    }
                 }
+                for (var after = 0; after < wordInLine.SeparatorsAfter; after++)
+                {
+                    Write(' ');
+                }
+
+                displacement += wordInLine.SeparatorsAfter;
             }
         }
 

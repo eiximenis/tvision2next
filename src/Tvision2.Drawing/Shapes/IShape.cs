@@ -10,6 +10,7 @@ public interface IShape
     TvPoint BottomRight => TopLeft + Bounds;
     public int HeightInside => BottomRightInside.Y - TopLeftInside.Y + 1;
     public int WidthInside => BottomRightInside.X - TopLeftInside.X + 1;
+    public TvBounds BoundsInside => TvPoint.CalculateBounds(TopLeftInside, BottomRightInside);
     TvPoint TopLeftInside { get; }
     TvPoint BottomRightInside { get; }
 }
