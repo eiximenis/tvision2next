@@ -36,4 +36,10 @@ public class ConsoleContextDrawer : IConsoleDrawer
     {
         _ctx.DrawCharsAt(character, count, location, colors);
     }
+
+    public void DrawRunes(Rune rune, int count, TvPoint location, TvColorsPair colors)
+    {
+        var attr = new CharacterAttribute(colors.Foreground, colors.Background, CharacterAttributeModifiers.Normal);
+        _ctx.DrawRunesAt(rune, count, location, attr);
+    }
 }

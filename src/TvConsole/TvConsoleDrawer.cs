@@ -31,4 +31,25 @@ class TvConsoleDrawer : IConsoleDrawer
             TvConsole.Write(new string(character, count));
         }
     }
+
+    public void DrawRunes(Rune rune, int count, TvPoint location, TvColorsPair colors)
+    {
+        TvConsole.Foreground = colors.Foreground;
+        TvConsole.Background = colors.Background;
+        TvConsole.MoveCursorTo(location.X, location.Y);
+        if (count == 1)
+        {
+            TvConsole.Write(rune);
+        }
+        else
+        {
+            var sb = new StringBuilder();
+            for (var i = 0; i < count; i++)
+            {
+                sb.Append(rune);
+            }
+
+            TvConsole.Write(sb.ToString());
+        }
+    }
 }
