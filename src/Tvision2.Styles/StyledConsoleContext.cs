@@ -4,6 +4,7 @@ using Tvision2.Core;
 using Tvision2.Core.Console;
 using Tvision2.Drawing;
 using Tvision2.Engine.Components;
+using Tvision2.Engine.Drawing;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Styles;
@@ -33,6 +34,8 @@ public readonly struct StyledConsoleContext
     public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);
     public void Fill(string stateName) => Fill(_styleSet.DefaultStyle.GetStateOrDefault(stateName));
     public void Fill(string styleName, string stateName) => Fill(_styleSet[styleName].GetStateOrDefault(stateName));
+
+    public ConsoleContextDrawer GetConsoleDrawer() => _consoleContext.GetConsoleDrawer();
 
     private void Fill(StyleState state)
     {

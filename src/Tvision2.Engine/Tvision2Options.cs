@@ -10,6 +10,7 @@ public interface ITvision2Options
 {
     ITvision2Options AddConsoleOptions(Action<IConsoleOptions>? optionsAction = null);
     ITvision2Options WithBackground(BackgroundDefinition background);
+    ITvision2Options WithBackgroundColor(TvColor color);
     ITvision2Options AddHook<T>() where T : IHook;
 
 }
@@ -31,6 +32,12 @@ public class Tvision2Options : ITvision2Options
     ITvision2Options ITvision2Options.WithBackground(BackgroundDefinition definition)
     {
         _backgroundDefinition = definition;
+        return this;
+    }
+
+    ITvision2Options ITvision2Options.WithBackgroundColor(TvColor color)
+    {
+        _backgroundDefinition = DefaultBackgroundDefinitionsProvider.SolidColorBackground(color);
         return this;
     }
 

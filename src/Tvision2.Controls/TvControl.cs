@@ -33,6 +33,8 @@ public class TvControl<TState> : ITvControl<TState>
 
     public void MoveTo(TvPoint newPos) => Component.Viewport.MoveTo(newPos);
 
+    public void Resize(TvBounds newBounds) => Component.Viewport.Resize(newBounds);
+
     public TvControlSetup<TState> Options { get; }
 
     public TvControl(TState initialState, Action<TvComponent<TState>>? config = null)
