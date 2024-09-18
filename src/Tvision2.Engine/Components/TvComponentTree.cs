@@ -21,7 +21,7 @@ public interface ITvComponentTree
     void AddChild(TvComponent child, TvComponent parent, LayerSelector layer);
     void Remove(TvComponent component);
     IEnumerable<TvComponentTreeNode> Roots { get; }
-    IEnumerable<TvComponentTreeNode> ByLayerBottomFirst { get; }
+    IEnumerable<TvComponentTreeNode> ByLayerTopFirst { get; }
     void AddSharedTag<TTag>(TTag tag) where TTag : class;
     TTag? GetSharedTag<TTag>();
     bool HasTag<TTag>();
@@ -39,7 +39,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     private readonly ActionsChain<Unit> _onTreeUpdated;
     private bool _dirty;
     private readonly Dictionary<Type, object> _sharedTags;
-    private readonly List<TvComponentTreeNode> _sortedNodesByLayerBottomFirst;
+    private readonly List<TvComponentTreeNode> _sortedNodesByLayerTopFirst;
 
     private readonly List<AddParams> _pendingAdds;
     private readonly List<ChildAddParams> _pendingChildAdds;
@@ -52,14 +52,14 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     IActionsChain<TvComponentTreeNode> ITvComponentTreeActions.NodeAdded => _onNodeAdded;
     IActionsChain<Unit> ITvComponentTreeActions.TreeUpdated => _onTreeUpdated;
 
-    public IEnumerable<TvComponentTreeNode> ByLayerBottomFirst => _sortedNodesByLayerBottomFirst;
+    public IEnumerable<TvComponentTreeNode> ByLayerTopFirst => _sortedNodesByLayerTopFirst;
 
     
     public TvComponentTree()
     {
         _dirty = false;
         _sharedTags = new Dictionary<Type, object>();
-        _sortedNodesByLayerBottomFirst = new List<TvComponentTreeNode>();
+        _sortedNodesByLayerTopFirst = new List<TvComponentTreeNode>();
         _roots = new List<TvComponentTreeNode>();
         _pendingAdds = new List<AddParams>();
         _pendingChildAdds = new List<ChildAddParams>();
@@ -94,9 +94,9 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
                 _roots.Remove(node);
             }
 
-            if (_sortedNodesByLayerBottomFirst.Contains(node))
+            if (_sortedNodesByLayerTopFirst.Contains(node))
             {
-                _sortedNodesByLayerBottomFirst.Remove(node);
+                _sortedNodesByLayerTopFirst.Remove(node);
                 await node.Metadata.DettachFromTree(this);
             }
         }
@@ -107,7 +107,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         if (_pendingAdds.Count == 0) return;
         foreach (var (component, layer) in _pendingAdds)
         {
-            component.UseLayer(layer);
+            component.MoveToLayer(layer);
             var rootMetadata = component.Metadata;
             var rootNode = rootMetadata.Node;
             _roots.Add(rootNode);
@@ -151,10 +151,10 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
             var component = metadata.Component;
             if (component.Layer.IsNone)
             {
-                component.UseLayer(layer);
+                component.MoveToLayer(layer);
             }
 
-            _sortedNodesByLayerBottomFirst.Add(node);
+            _sortedNodesByLayerTopFirst.Add(node);
             metadata.AttachToTree(this);
             if (!node.IsRoot)
             {
@@ -162,7 +162,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
             }
         }
 
-        _sortedNodesByLayerBottomFirst.Sort(NodeWithBottomComponentFirst);
+        _sortedNodesByLayerTopFirst.Sort(NodeWithTopComponentFirst);
     }
 
     public void Remove(TvComponent component)
@@ -174,9 +174,9 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     }
 
 
-    private static int NodeWithBottomComponentFirst(TvComponentTreeNode n1, TvComponentTreeNode n2)
+    private static int NodeWithTopComponentFirst(TvComponentTreeNode n1, TvComponentTreeNode n2)
     {
-        return LayerSelector.CompareBottomFirst(n1.Metadata.Component.Layer, n2.Metadata.Component.Layer);
+        return LayerSelector.CompareTopFirst(n1.Metadata.Component.Layer, n2.Metadata.Component.Layer);
     }
 
     public void AddChild(TvComponent child, TvComponent parent) => AddChild(child, parent, LayerSelector.Standard);

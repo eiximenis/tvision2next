@@ -15,7 +15,7 @@ public static class Border
     /// 1. When called from TvConsole project, the location is relative to the console itself.
     /// 2. When called from a Tvision2 drawer, the location is relative to the ConsoleContext location (use TvPoint.Zero as topLeft)
     /// </summary>
-    public static void Draw(IConsoleDrawer drawer, BorderValue border, TvPoint topLeft, TvBounds bounds, TvColorsPair colors)
+    public static void Draw<TD>(TD drawer, BorderValue border, TvPoint topLeft, TvBounds bounds, TvColorsPair colors) where TD : IConsoleDrawer
     {
         var columns = bounds.Width;
         var rows = bounds.Height;

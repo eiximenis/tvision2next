@@ -1,4 +1,5 @@
-﻿using Tvision2.Engine.Components;
+﻿using System.Diagnostics;
+using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
 
 namespace Tvision2.Styles.Extensions

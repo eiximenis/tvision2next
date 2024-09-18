@@ -34,7 +34,7 @@ public class BackgroundDefinition
 
     internal TvComponent<Unit> CreateBackgroundComponent()
     {
-        var bgComponent = TvComponent.CreateStatelessComponent(Viewports.FullViewport);
+        var bgComponent = TvComponent.CreateStatelessComponent(LayerSelector.Background, Viewports.FullViewport);
         if (_drawer is not null)
         {
             bgComponent.AddDrawer(_drawer);

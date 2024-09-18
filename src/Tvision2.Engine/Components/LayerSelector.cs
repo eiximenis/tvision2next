@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic.CompilerServices;
+
 namespace Tvision2.Engine.Components;
 
 public readonly struct LayerSelector
@@ -38,5 +40,11 @@ public readonly struct LayerSelector
     {
         return LayerIndex - layer.LayerIndex;
     }
-    
+
+    public static bool operator== (LayerSelector l1, LayerSelector l2) => l1.LayerIndex == l2.LayerIndex;
+    public static bool operator !=(LayerSelector l1, LayerSelector l2) => l1.LayerIndex != l2.LayerIndex;
+    public static bool operator <(LayerSelector l1, LayerSelector l2) => l1.LayerIndex < l2.LayerIndex;
+    public static bool operator >(LayerSelector l1, LayerSelector l2) => l1.LayerIndex > l2.LayerIndex;
+    public static bool operator <=(LayerSelector l1, LayerSelector l2) => l1.LayerIndex <= l2.LayerIndex;
+    public static bool operator >=(LayerSelector l1, LayerSelector l2) => l1.LayerIndex >= l2.LayerIndex;
 }

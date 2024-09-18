@@ -73,7 +73,7 @@ public class Given_ComponentTree
         
     //    ui.ComponentTree.Roots.Should().HaveCount(1);
     //    ui.ComponentTree.Roots.Should().ContainSingle(item => item == root.Metadata.Node);
-    //    ui.ComponentTree.ByLayerBottomFirst.Should().HaveCount(3);
+    //    ui.ComponentTree.ByLayerTopFirst.Should().HaveCount(3);
     //}
 
     [Fact]

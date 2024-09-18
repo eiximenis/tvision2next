@@ -68,7 +68,7 @@ public class TvButton : TvEventedControl<string>, IButtonActions
     {
         var text = ctx.State;
         var bounds = ctx.Bounds;
-        ctx.Resize(TvBounds.FromRowsAndCols(1, text.Length + 2));
+        ctx.Resize(TvBounds.FromRowsAndCols(1, text.Length + 4));
     }
 
     private DrawResult ButtonDrawer(StyledConsoleContext ctx, string text)
@@ -76,7 +76,8 @@ public class TvButton : TvEventedControl<string>, IButtonActions
         var state = Metadata.IsFocused ? "Focused" : "Normal";
         ctx.Fill(state);
         ctx.DrawStringAt("[", TvPoint.Zero, state);
-        var pos = ctx.GetPositionForString(text, TextPosition.Top().Center(margin: 1));
+
+        var pos = ctx.GetPositionForString(text, TextPosition.Top().Center(Margin.Vertical(1)));
         ctx.DrawStringAt(text, pos, state);
         ctx.DrawStringAt("]", TvPoint.FromXY(ctx.Viewzone.Bounds.Width-1, 0), state);
         return DrawResult.Done;

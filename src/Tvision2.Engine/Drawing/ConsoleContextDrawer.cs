@@ -19,7 +19,7 @@ namespace Tvision2.Engine.Drawing;
 /// use TvPoint.Zero as location parameter. This is because the location is already
 /// based on the position of the ConsoleContext itself.
 /// </summary>
-public class ConsoleContextDrawer : IConsoleDrawer
+public readonly struct ConsoleContextDrawer : IConsoleDrawer
 {
     private readonly ConsoleContext _ctx;
 

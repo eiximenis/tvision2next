@@ -19,7 +19,7 @@ public abstract class TvComponent
     
     public ILayoutManager Layout { get; private set; }
 
-    protected TvComponent(Viewport? viewport)
+    protected TvComponent(Viewport? viewport, LayerSelector layerSelector)
     {
         _invalidated = false;
         _stateChanged = false;
@@ -27,7 +27,7 @@ public abstract class TvComponent
         Metadata = new TvComponentMetadata(this);
         _viewport = viewport ?? Viewports.Null();
         // _viewport.OnUpdated += Viewport_Updated;
-        Layer = LayerSelector.Standard;
+        Layer = layerSelector;
         Layout = LayoutManagers.Absolute;
     }
 
@@ -35,7 +35,7 @@ public abstract class TvComponent
 
     protected void StateChanged() => _stateChanged = true;
 
-    internal void UseLayer(LayerSelector layer) => Layer = layer;
+    internal void MoveToLayer(LayerSelector layer) => Layer = layer;
 
     public void UseLayout(ILayoutManager layout)
     {
@@ -81,7 +81,8 @@ public abstract class TvComponent
     /// Easy shortcut for creating stateless components
     /// </summary>
     public static TvComponent<Unit> CreateStatelessComponent(Viewport? viewport = null) => new TvComponent<Unit>(Unit.Value, viewport);
-    
+    public static TvComponent<Unit> CreateStatelessComponent(LayerSelector layerSelector, Viewport? viewport = null) => new TvComponent<Unit>(Unit.Value, viewport, layerSelector);
+
     public static TvComponent<T> Create<T>(T state, Viewport? viewport = null) => new TvComponent<T>(state, viewport);
     
 }
@@ -112,7 +113,11 @@ public sealed class TvComponent<T> : TvComponent
     public T State { get; private set; }
 
 
-    public TvComponent(T initialState, Viewport? viewport) : base(viewport)
+    public TvComponent(T initialState, Viewport? viewport) : this(initialState, viewport, LayerSelector.Standard)
+    {
+    }
+
+    public TvComponent(T initialState, Viewport? viewport, LayerSelector layerSelector) : base(viewport, layerSelector)
     {
         State = initialState;
         _drawers = new List<ITvDrawer<T>>();

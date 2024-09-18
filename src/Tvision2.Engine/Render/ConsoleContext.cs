@@ -5,6 +5,7 @@ using Tvision2.Core;
 using Tvision2.Core.Console;
 using Tvision2.Drawing;
 using Tvision2.Engine.Components;
+using Tvision2.Engine.Drawing;
 using Wcwidth;
 
 namespace Tvision2.Engine.Render;
@@ -56,6 +57,8 @@ public readonly struct ConsoleContext
         var newViewport = new Viewport(_viewport.Position + drawResult.Displacement, _viewport.Bounds.Reduced(drawResult.BoundsAdjustment));
         return new ConsoleContext(_console, newViewport);
     }
+
+    public ConsoleContextDrawer GetConsoleDrawer() => new ConsoleContextDrawer(in this);
 }
 
 public static class ConsoleContextExtensions_Drawing

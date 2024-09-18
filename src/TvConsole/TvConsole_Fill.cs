@@ -16,9 +16,9 @@ partial class TvConsole
     {
         var oldBg = Background;
         Background = fillColor;
-        for (var row = shapeToFill.TopLeft.Y; row < shapeToFill.BottomRight.Y; row++)
+        for (var row = shapeToFill.TopLeftInside.Y; row <= shapeToFill.BottomRightInside.Y; row++)
         {
-            for (var col = shapeToFill.TopLeft.X; col < shapeToFill.BottomRight.X; col++)
+            for (var col = shapeToFill.TopLeft.X; col <= shapeToFill.BottomRightInside.X; col++)
             {
                 if (shapeToFill.PointIsInside(TvPoint.FromXY(col, row)))
                 {
@@ -34,13 +34,13 @@ partial class TvConsole
     {
         var oldBg = Background;
         
-        for (var row = shapeToFill.TopLeft.Y; row < shapeToFill.BottomRight.Y; row++)
+        for (var row = shapeToFill.TopLeftInside.Y; row <= shapeToFill.BottomRightInside.Y; row++)
         {
-            for (var col = shapeToFill.TopLeft.X; col < shapeToFill.BottomRight.X; col++)
+            for (var col = shapeToFill.TopLeftInside.X; col <= shapeToFill.BottomRightInside.X; col++)
             {
                 if (shapeToFill.PointIsInside(TvPoint.FromXY(col, row)))
                 {
-                    Background = colorResolver(TvPoint.FromXY(col, row) - shapeToFill.TopLeft);
+                    Background = colorResolver(TvPoint.FromXY(col, row) - shapeToFill.TopLeftInside);
                     MoveCursorTo(col, row);
                     Write(" ");
                 }

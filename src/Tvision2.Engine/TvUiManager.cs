@@ -30,12 +30,12 @@ public class TvUiManager
             await hook.BeforeUpdate(events);
         }
     }
-    
+
     internal async Task<bool> Update(UpdateContext ctx)
     {
         await _tree.NewCycle();
         var someDrawPending = false;
-        foreach (var cmpNode in _tree.ByLayerBottomFirst)
+        foreach (var cmpNode in _tree.ByLayerTopFirst)
         {
             var metadata = cmpNode.Metadata;
             var component = metadata.Component;
@@ -45,10 +45,10 @@ public class TvUiManager
         }
         return someDrawPending;
     }
-    
+
     internal async Task CalculateLayout()
     {
-        foreach (var cmpNode in _tree.ByLayerBottomFirst)
+        foreach (var cmpNode in _tree.ByLayerTopFirst)
         {
             var cmp = cmpNode.Metadata.Component;
             if (cmp.Viewport.HasLayoutPending || cmp.Layout.HasLayoutPending)
@@ -65,10 +65,17 @@ public class TvUiManager
 
     internal void Draw()
     {
-        foreach (var cmpNode in _tree.ByLayerBottomFirst)
+        var currentLayer = LayerSelector.Top;
+
+        foreach (var cmpNode in _tree.ByLayerTopFirst)
         {
             var metadata = cmpNode.Metadata;
             var component = metadata.Component;
+            if (component.Layer < currentLayer)
+            {
+                currentLayer = component.Layer;
+                _console.StartNewLayer();
+            }
             component.Draw(_console);
         }
 
@@ -88,7 +95,7 @@ public class TvUiManager
         }
     }
 
-    internal async  Task Init()
+    internal async Task Init()
     {
         foreach (var hook in _hooks)
         {

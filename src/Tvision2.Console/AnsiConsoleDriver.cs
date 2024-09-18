@@ -63,7 +63,7 @@ public class AnsiConsoleDriver : IConsoleDriver
         var sb = new StringBuilder();
         sb.Append(_colorManager.GetCursorSequence(x, y));
         sb.Append(_colorManager.GetAttributeSequence(attribute));
-        FillCharacterSequence(character, 1, sb);
+        FillCharacterSequence(character, count, sb);
         System.Console.Write(sb.ToString());
     }
     private void FillCharacterSequence(Rune character, int count, StringBuilder sb)
