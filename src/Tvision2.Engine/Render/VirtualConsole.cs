@@ -97,7 +97,6 @@ public class VirtualConsole
         while (enumerator.MoveNext())
         {
             var rune = enumerator.Current;
-            ref var cchar = ref lineBuffer[idx].Current;
             var newchar = new ConsoleCharacter(rune, attr);
             var runeWidth = UnicodeCalculator.GetWidth(rune);
             if (runeWidth > 0)
