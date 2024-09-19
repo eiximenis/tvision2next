@@ -41,7 +41,7 @@ public static class TvColorNames
         Five
     }
 
-    public readonly struct TvColor
+    public readonly record struct TvColor
     {
         public readonly int Value;
         private const int RGB_MARKER = (1 << 31);
@@ -70,9 +70,6 @@ public static class TvColorNames
         public static readonly TvColor LightWhite = new TvColor(TvColorNames.LightWhite);
         
         public static explicit operator short(TvColor color) => (short)color.Value;
-        public static bool operator ==(TvColor one, TvColor other) => one.Value == other.Value;
-        public static bool operator !=(TvColor one, TvColor other) => one.Value != other.Value;
-
         public static bool operator ==(TvColor one, int other) => one.Value == other;
         public static bool operator !=(TvColor one, int other) => one.Value == other;
 
@@ -148,16 +145,6 @@ public static class TvColorNames
         /// </summary>
         public (byte red, byte green, byte blue) Rgb =>
             ((byte)(Value & 0xff), (byte)(Value >> 8), (byte)(Value >> 16));
-
-        public override bool Equals(object? obj)
-        {
-            return obj switch
-            {
-                TvColor c => c.Value == Value,
-                int v => v == Value,
-                _ => false
-            };
-        }
 
         public override int GetHashCode() => Value.GetHashCode();
 
