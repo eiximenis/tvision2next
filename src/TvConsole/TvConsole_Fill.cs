@@ -23,10 +23,27 @@ partial class TvConsole
                 if (shapeToFill.PointIsInside(TvPoint.FromXY(col, row)))
                 {
                     MoveCursorTo(col, row);
-                    Write(" ");
+                    Write(' ');
                 }
             }
         }
+        Background = oldBg;
+    }
+
+    public static void Clear<TShape>(TShape shapeToClear, TvColor? clearColor = null) where TShape : IShape
+    {
+        var oldBg = Background;
+        Background = clearColor ?? Background;
+
+        for (var row = shapeToClear.TopLeft.Y; row <= shapeToClear.BottomRight.Y; row++)
+        {
+            for (var col = shapeToClear.TopLeft.X; col <= shapeToClear.BottomRight.X; col++)
+            {
+                MoveCursorTo(col, row);
+                Write(' ');
+            }
+        }
+
         Background = oldBg;
     }
 
@@ -42,7 +59,7 @@ partial class TvConsole
                 {
                     Background = colorResolver(TvPoint.FromXY(col, row) - shapeToFill.TopLeftInside);
                     MoveCursorTo(col, row);
-                    Write(" ");
+                    Write(' ');
                 }
             }
         }

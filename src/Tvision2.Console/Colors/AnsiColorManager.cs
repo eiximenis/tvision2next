@@ -45,7 +45,7 @@ public class AnsiColorManager
 
         else if (fore.IsPalettized)
         {
-            forestring = string.Format(AnsiEscapeSequences.SGR_88_FORE, fore.PaletteIndex);
+            forestring = string.Format(AnsiEscapeSequences.SGR_88_FORE, fore.PaletteIndex.ToString());
         }
         else
         {

@@ -47,9 +47,24 @@ public class AnsiConsoleDriver : IConsoleDriver
 
     public void WriteCharacter(Rune character, int count = 1)
     {
-        var sb = new StringBuilder();
-        FillCharacterSequence(character, count, sb);
-        System.Console.Write(sb.ToString());
+        if (character.Utf16SequenceLength == 1)
+        {
+            for (var idx = 0; idx < count; idx++)
+            {
+                System.Console.Write((char)character.Value);
+            }
+        }
+        else
+        {
+            Span<char> buf = stackalloc char[2];
+            character.EncodeToUtf16(buf);
+            for (var idx = 0; idx < count; idx++)
+            {
+                System.Console.Out.Write(buf);
+            }
+        }
+
+
     }
 
     public void WriteCharacterAt(int x, int y, Rune character, CharacterAttribute attribute)
@@ -63,31 +78,14 @@ public class AnsiConsoleDriver : IConsoleDriver
         var sb = new StringBuilder();
         sb.Append(_colorManager.GetCursorSequence(x, y));
         sb.Append(_colorManager.GetAttributeSequence(attribute));
-        FillCharacterSequence(character, count, sb);
-        System.Console.Write(sb.ToString());
-    }
-    private void FillCharacterSequence(Rune character, int count, StringBuilder sb)
-    {
-        Span<char> buf = stackalloc char[2];                // Assume a rune is at most 2 UTF16 codeunits length
-        for (var idx = 0; idx < count; idx++)
-        {
-            if (character.Utf16SequenceLength > 1)
-            {
-                character.EncodeToUtf16(buf);
-                sb.Append(buf);
-            }
-            else
-            {
-                sb.Append((char)character.Value);
-            }
-        }
+        WriteCharacter(character, count);
     }
 
     public void SetCursorAt(int x, int y)
     {
         System.Console.Write(_colorManager.GetCursorSequence(x, y));
     }
-    
+
     public void SetCursorVisibility(bool isVisible)
     {
         if (isVisible)
@@ -99,7 +97,7 @@ public class AnsiConsoleDriver : IConsoleDriver
             System.Console.Write(AnsiEscapeSequences.DECTCEM_HIDDEN);
         }
     }
-    
+
     public void ClearScreen(TvColor fore, TvColor back)
     {
         System.Console.Write(AnsiEscapeSequences.CLEAR);

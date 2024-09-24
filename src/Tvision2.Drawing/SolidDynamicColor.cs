@@ -1,14 +1,8 @@
 using Tvision2.Core;
 
-namespace Tvision2.Styles;
+namespace Tvision2.Drawing;
 
-public interface IDynamicColor
-{
-    bool IsFixedColor  => false;
-    TvColor GetColorForPosition(TvPoint point);
-}
-
-sealed class SolidDynamicColor : IDynamicColor
+public sealed class SolidDynamicColor : IDynamicColor
 {
     private readonly TvColor _color;
     public static IDynamicColor White { get; } = new SolidDynamicColor(TvColor.White);
@@ -22,4 +16,4 @@ sealed class SolidDynamicColor : IDynamicColor
     }
     
     public TvColor GetColorForPosition(TvPoint point) => _color;
-}   
+}

@@ -17,10 +17,11 @@ partial class TvConsole
         Border.Draw(ConsoleDrawer, value ?? BorderValue.Double(),  topLeft, bounds, colors);
     }
 
-    public static void Draw(Box box)
+    public static void Draw(Box box, IDynamicColor? fgColor = null, IDynamicColor? bgColor = null)
     {
-        var colors = TvColorsPair.FromForegroundAndBackground(Foreground, Background);
-        Border.Draw(ConsoleDrawer, box.Border, box.TopLeft, box.Bounds, colors);
+        var fg = fgColor ?? SolidDynamicColor.FromColor(Foreground);
+        var bg = bgColor ?? SolidDynamicColor.FromColor(Background);
+        Border.Draw(ConsoleDrawer, box.Border, box.TopLeft, box.Bounds, fg, bg);
     }
 
     public static void Write<TShape>(string msg, TShape shape, IPositionResolver positionResolver) where TShape : IShape

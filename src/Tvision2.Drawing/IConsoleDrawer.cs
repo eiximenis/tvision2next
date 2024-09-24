@@ -9,7 +9,12 @@ using Tvision2.Drawing.Borders;
 namespace Tvision2.Drawing;
 public interface IConsoleDrawer
 {
+
     void DrawStringAt(string text, TvPoint location, TvColorsPair colors);
     void DrawChars(char character, int count, TvPoint location, TvColorsPair colors);
     void DrawRunes(Rune rune, int count, TvPoint location, TvColorsPair colors);
+
+    void DrawStringAt(string text, TvPoint location, IDynamicColor fgColor, IDynamicColor bgColor);
+    void DrawChars(char character, int count, TvPoint location, IDynamicColor fgColor, IDynamicColor bgColor);
+    void DrawRunes(Rune rune, int count, TvPoint location, IDynamicColor fgColor, IDynamicColor bgColor);
 }
