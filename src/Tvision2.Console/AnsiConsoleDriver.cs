@@ -78,6 +78,7 @@ public class AnsiConsoleDriver : IConsoleDriver
         var sb = new StringBuilder();
         sb.Append(_colorManager.GetCursorSequence(x, y));
         sb.Append(_colorManager.GetAttributeSequence(attribute));
+        System.Console.Out.Write(sb);
         WriteCharacter(character, count);
     }
 

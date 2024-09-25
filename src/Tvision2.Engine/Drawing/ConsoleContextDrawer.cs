@@ -35,7 +35,14 @@ public readonly struct ConsoleContextDrawer : IConsoleDrawer
 
     public void DrawStringAt(string text, TvPoint location, IDynamicColor fgColor, IDynamicColor bgColor)
     {
-        _ctx.DrawStringAt(text, location, TvColorsPair.FromForegroundAndBackground(fgColor.GetColorForPosition(location), bgColor.GetColorForPosition(location)));
+        var runes = text.EnumerateRunes();
+        foreach (var rune in runes)
+        {
+            var fg = fgColor.GetColorForPosition(location);
+            var bg = bgColor.GetColorForPosition(location);
+            _ctx.DrawRunesAt(rune, 1, location, new CharacterAttribute(fg, bg, CharacterAttributeModifiers.Normal));
+            location = location with { X = location.X + 1 };
+        }
     }
 
     public void DrawChars(char character, int count, TvPoint location, TvColorsPair colors)
@@ -47,9 +54,10 @@ public readonly struct ConsoleContextDrawer : IConsoleDrawer
     {
         for (var idx = 0; idx < count; idx++)
         {
-            var fg = fgColor.GetColorForPosition(location with { X = location.X + idx });
-            var bg = bgColor.GetColorForPosition(location with { X = location.X + idx });
-            _ctx.DrawCharsAt(character, 1, location, TvColorsPair.FromForegroundAndBackground(fg, bg));
+            var idxLocation = location with { X = location.X + idx };
+            var fg = fgColor.GetColorForPosition(idxLocation);
+            var bg = bgColor.GetColorForPosition(idxLocation);
+            _ctx.DrawCharsAt(character, 1, idxLocation, TvColorsPair.FromForegroundAndBackground(fg, bg));
         }
     }
     public void DrawRunes(Rune rune, int count, TvPoint location, TvColorsPair colors)
@@ -62,10 +70,11 @@ public readonly struct ConsoleContextDrawer : IConsoleDrawer
     {
         for (var idx = 0; idx < count; idx++)
         {
-            var fg = fgColor.GetColorForPosition(location with { X = location.X + idx });
-            var bg = bgColor.GetColorForPosition(location with { X = location.X + idx });
+            var idxLocation = location with { X = location.X + idx };
+            var fg = fgColor.GetColorForPosition(idxLocation);
+            var bg = bgColor.GetColorForPosition(idxLocation);
             var attr = new CharacterAttribute(fg, bg, CharacterAttributeModifiers.Normal);
-            _ctx.DrawRunesAt(rune, 1, location, attr);
+            _ctx.DrawRunesAt(rune, 1, idxLocation, attr);
         }
     }
 }
