@@ -14,19 +14,18 @@ public static class LayoutManagers
 
 public class BlockedLayoutManager(TvPoint position, TvBounds bounds) : ILayoutManager
 {
-    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(Viewport viewportToUpdate)
     {
-        var cmp = metadata.Component;
         var updated = ViewportUpdateReason.None;
-        if (cmp.Viewport.Position != position)
+        if (viewportToUpdate.Position != position)
         {
-            updated |= cmp.Viewport.MoveTo(position);
+            updated |= viewportToUpdate.MoveTo(position);
              
         }
 
-        if (cmp.Viewport.Bounds != bounds)
+        if (viewportToUpdate.Bounds != bounds)
         {
-            updated |= cmp.Viewport.Resize(bounds);
+            updated |= viewportToUpdate.Resize(bounds);
         }
         
         return updated;
@@ -35,12 +34,11 @@ public class BlockedLayoutManager(TvPoint position, TvBounds bounds) : ILayoutMa
 
 class FixedLayoutManager(TvPoint position) : ILayoutManager
 {
-    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(Viewport viewportToUpdate)
     {
-        var cmp = metadata.Component;
-        if (cmp.Viewport.Position != position)
+        if (viewportToUpdate.Position != position)
         {
-            return cmp.Viewport.MoveTo(position);
+            return viewportToUpdate.MoveTo(position);
         }
 
         return ViewportUpdateReason.None;
@@ -49,7 +47,7 @@ class FixedLayoutManager(TvPoint position) : ILayoutManager
 
 class AbsoluteLayoutManager : ILayoutManager
 {
-    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(Viewport viewportToUpdate)
     {
         // Absolute position is a no-op because nothing needs to be calculated.
         return ViewportUpdateReason.All;

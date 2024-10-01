@@ -11,19 +11,7 @@ public interface IPositionResolver
 {
     TvPoint Resolve(TvBounds containerBounds, TvBounds innerBounds);
 }
-public readonly record struct Margin(int Left = 0, int Right = 0, int Top = 0, int Bottom = 0)
-{
-    public static Margin FromValue(int value) => new Margin(value, value, value, value);
-    public static Margin LeftMargin(int value) => new Margin(Left: value);
 
-    public static Margin RightMargin(int value) => new Margin(Right: value);
-    public static Margin TopMargin(int value) => new Margin(Top: value);
-    public static Margin BottomMargin(int value) => new Margin(Bottom: value);
-    public static Margin Vertical(int value) => new Margin(Left: value, Right: value);
-    public static Margin Horizontal(int value) => new Margin(Top: value, Right: value);
-    public static Margin HorizontalAndVertical(int hor, int ver) =>
-        new Margin(Top: hor, Bottom: hor, Left: ver, Right: ver);
-}
 public static class TextPosition
 {
     private static readonly BottomTextPosition _bottom = new BottomTextPosition();

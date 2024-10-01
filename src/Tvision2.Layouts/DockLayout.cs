@@ -33,13 +33,13 @@ public enum VerticalAlignment
 
 class DockLayout : ILayoutManager
 {
-    private readonly TvComponentMetadata _container;
+    private readonly ITvContainer _container;
     private readonly HorizontalAlignment _horizontalAlignment;
     private readonly VerticalAlignment _verticalAlignment;
 
     public bool HasLayoutPending { get; private set; }
 
-    public DockLayout(TvComponentMetadata container, Dock dock)
+    public DockLayout(ITvContainer container, Dock dock)
     {
         _container = container;
         _container.On().ViewportUpdated.Do(OnContainerUpdated);
@@ -59,20 +59,19 @@ class DockLayout : ILayoutManager
         HasLayoutPending = true;
     }
 
-    public ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata)
+    public ViewportUpdateReason UpdateLayout(Viewport viewportToUpdate)
     {
-        var viewport = metadata.Component.Viewport;
-        var (pos, bounds) = RecalculateBoundsAndPosition(viewport);
-        viewport.MoveTo(pos);
-        viewport.Resize(bounds);
+        var (pos, bounds) = RecalculateBoundsAndPosition(viewportToUpdate);
+        var updateReason = viewportToUpdate.MoveTo(pos);
+        updateReason |= viewportToUpdate.Resize(bounds);
         
         HasLayoutPending = false;
-        return ViewportUpdateReason.None;
+        return updateReason;
     }
 
     private (TvPoint Position, TvBounds Bounds) RecalculateBoundsAndPosition(Viewport viewportToUpdate)
     {
-        var relative = _container.Component.Viewport;
+        var relative = _container.Viewport;
         var desiredBounds = viewportToUpdate.Bounds;
         var desiredPosition = viewportToUpdate.Position;
         if (relative.IsNull)

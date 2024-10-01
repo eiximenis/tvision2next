@@ -6,10 +6,12 @@ using Tvision2.Controls.Checkbox;
 using Tvision2.Controls.Extensions;
 using Tvision2.Controls.Extensions.Styles;
 using Tvision2.Controls.Label;
+using Tvision2.Controls.Layout.Grid;
 using Tvision2.Controls.Panel;
 using Tvision2.Core;
 using Tvision2.Engine;
 using Tvision2.Engine.Extensions;
+using Tvision2.Layouts;
 using Tvision2.Styles.Extensions;
 
 
@@ -28,24 +30,37 @@ var host = await Tv2App.Setup(
 
 
 var app = host.Services.GetRequiredService<Tvision2Engine>();
+
 int counter = 0;
 var button = CreateButton("Click!", TvPoint.FromXY(1,1));
 button.On().Tapped.Do(b => b.Text = $"Tapped {counter++}!");
 // Can also use the alternate syntax:
 // button.On(b => b.Tapped.Do(db => db.Text = $"Tapped {counter++}!"));
-var check = CreateCheckbox("Check me!", TvPoint.FromXY(1, 2));
-
 var label = new TvLabel("Check is unchecked");
-app.UI.ComponentTree.Add(button);
-app.UI.ComponentTree.Add(check);
-app.UI.ComponentTree.Add(label);
+var check = CreateCheckbox("Check me!", TvPoint.FromXY(1, 2));
+check.On().CheckedChanged.Do(cb => label.Text = $"Checkbox is {cb.AsComponent().State.IsChecked}             ");
+
 
 var panel = new TvPanel();
 panel.AsComponent().Viewport.Resize(TvBounds.FromRowsAndCols(3, 10));
 panel.MoveTo(TvPoint.FromXY(10, 20));
+
+app.UI.ComponentTree.Add(button);
+app.UI.ComponentTree.Add(check);
+app.UI.ComponentTree.Add(label);
 app.UI.ComponentTree.Add(panel);
 
-check.On().CheckedChanged.Do(cb => label.Text = $"Checkbox is {cb.AsComponent().State.IsChecked}             ");
+var ctr = new TvPanel();
+ctr.MoveTo(TvPoint.FromXY(2, 4));
+ctr.Resize(TvBounds.FromRowsAndCols(10, 40));
+var grid = new GridContainer(ctr.AsComponent().AsContainer(Margin.FromValue(1)), new GridState());
+button.Options.WithoutAutoSize();
+button.AsComponent().DockTo(grid.At(1, 0), Dock.Top); 
+
+var tvgrid = new TvGrid(new GridState());
+tvgrid.AsComponent().DockTo(grid.At(1, 1), Dock.Fill);
+app.UI.ComponentTree.Add(ctr);
+app.UI.ComponentTree.Add(tvgrid);
 
 button.Focus();
 await Tv2App.Run();

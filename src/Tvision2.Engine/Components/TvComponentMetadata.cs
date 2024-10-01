@@ -4,13 +4,17 @@ using Tvision2.Engine.Events;
 namespace Tvision2.Engine.Components;
 
 
+
+
 public interface ITvComponentMetadataActions
 {
     IActionsChain<ViewportUpdateReason> ViewportUpdated { get; }
     IActionsChain<Unit> ComponentRemoved { get; }
- 
 }
 
+/// <summary>
+/// Holds extra metadata for a TvComponent. Also implements ITvContainer to allow components to be containers.
+/// </summary>
 public class TvComponentMetadata : ITvComponentMetadataActions
 {
     private readonly TvComponent _owner;
@@ -25,7 +29,6 @@ public class TvComponentMetadata : ITvComponentMetadataActions
     public ITvComponentTree? OwnerTree => _ownerTree;
 
     public ITvComponentMetadataActions On() => this;
-
     IActionsChain<ViewportUpdateReason> ITvComponentMetadataActions.ViewportUpdated => _viewportUpdated;
     IActionsChain<Unit> ITvComponentMetadataActions.ComponentRemoved => _componentRemoved;
 

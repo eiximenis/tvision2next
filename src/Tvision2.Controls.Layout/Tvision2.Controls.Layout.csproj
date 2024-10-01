@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tvision2.Controls\Tvision2.Controls.csproj" />
+    <ProjectReference Include="..\Tvision2.Layouts\Tvision2.Layouts.csproj" />
+  </ItemGroup>
+
+</Project>

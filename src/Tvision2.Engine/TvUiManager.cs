@@ -41,7 +41,6 @@ public class TvUiManager
             var component = metadata.Component;
             var result = component.Update(ctx);
             someDrawPending = result != DirtyStatus.Clean;
-            // TODO: We could calculate pending draws to call only Draw() on components that are needed.
         }
         return someDrawPending;
     }
@@ -53,7 +52,7 @@ public class TvUiManager
             var cmp = cmpNode.Metadata.Component;
             if (cmp.Viewport.HasLayoutPending || cmp.Layout.HasLayoutPending)
             {
-                var updated = cmp.Layout.UpdateLayout(cmp.Metadata);
+                var updated = cmp.Layout.UpdateLayout(cmp.Viewport);
                 cmp.Viewport.LayoutUpdated();
                 if (updated != ViewportUpdateReason.None)
                 {

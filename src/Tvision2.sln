@@ -37,7 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceInvaders", "samples\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tvision2.Drawing", "Tvision2.Drawing\Tvision2.Drawing.csproj", "{9996B919-4AE2-432C-A860-7210C79621AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessViewer", "samples\ProcessViewer\ProcessViewer.csproj", "{EB3618E7-D504-4090-9865-3E6EAF4F2BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessViewer", "samples\ProcessViewer\ProcessViewer.csproj", "{EB3618E7-D504-4090-9865-3E6EAF4F2BF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tvision2.Controls.Layout", "Tvision2.Controls.Layout\Tvision2.Controls.Layout.csproj", "{E29F4B4F-9657-49D5-9413-6DC28A661AE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +111,10 @@ Global
 		{EB3618E7-D504-4090-9865-3E6EAF4F2BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB3618E7-D504-4090-9865-3E6EAF4F2BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB3618E7-D504-4090-9865-3E6EAF4F2BF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E29F4B4F-9657-49D5-9413-6DC28A661AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E29F4B4F-9657-49D5-9413-6DC28A661AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E29F4B4F-9657-49D5-9413-6DC28A661AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E29F4B4F-9657-49D5-9413-6DC28A661AE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

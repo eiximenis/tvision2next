@@ -43,7 +43,8 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
 
     private readonly List<AddParams> _pendingAdds;
     private readonly List<ChildAddParams> _pendingChildAdds;
-    private readonly List<TvComponent> _pendingRemoves;
+
+    private readonly Dictionary<Guid, TvComponent> _pendingRemoves;
 
     public IEnumerable<TvComponentTreeNode> Roots => _roots;
 
@@ -63,7 +64,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
         _roots = new List<TvComponentTreeNode>();
         _pendingAdds = new List<AddParams>();
         _pendingChildAdds = new List<ChildAddParams>();
-        _pendingRemoves = new List<TvComponent>();
+        _pendingRemoves = new Dictionary<Guid, TvComponent>();
         _onRootAdded = new ActionsChain<TvComponentTreeNode>();
         _onNodeAdded = new ActionsChain<TvComponentTreeNode>();
         _onTreeUpdated = new ActionsChain<Unit>();
@@ -86,7 +87,7 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     {
         if (_pendingRemoves.Count == 0) return;
 
-        foreach (var cmpToRemove in _pendingRemoves)
+        foreach (var cmpToRemove in _pendingRemoves.Values)
         {
             var node = cmpToRemove.Metadata.Node;
             if (node.IsRoot)
@@ -169,11 +170,15 @@ class TvComponentTree  :  ITvComponentTreeActions, ITvComponentTree
     {
         if (component.Metadata.OwnerTree == this)
         {
-            _pendingRemoves.Add(component);
+            var allChilds = component.Metadata.Node.SubTree();
+            foreach (var cmpNode in allChilds)
+            {
+                var cmp = cmpNode.Metadata.Component;
+                _pendingRemoves.TryAdd(cmp.Id, cmp);
+            }
+        
         }
     }
-
-
     private static int NodeWithTopComponentFirst(TvComponentTreeNode n1, TvComponentTreeNode n2)
     {
         return LayerSelector.CompareTopFirst(n1.Metadata.Component.Layer, n2.Metadata.Component.Layer);

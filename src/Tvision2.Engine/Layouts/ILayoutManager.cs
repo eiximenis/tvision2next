@@ -16,7 +16,7 @@ public interface ILayoutManager
      /// This method is called if the layout (using HasLayoutPending) OR
      /// the Viewport says that layout needs to be recalculated.
      /// </summary>  
-     ViewportUpdateReason UpdateLayout(TvComponentMetadata metadata);
+     ViewportUpdateReason UpdateLayout(Viewport viewportToUpdate);
 
      /// <summary>
      /// The layout is being dismissed. That is useful to unsubscribe to any event or perform cleaning.

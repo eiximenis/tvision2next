@@ -135,6 +135,12 @@ public class TvControlSetup<T> : TvControlSetup
         return this;
     }
 
+
+    public TvControlSetup<T> WithoutAutoSize()
+    {
+        AutoSize = false;
+        return this;
+    }
     public TvControlSetup<T> WithAutoSize(Action<BehaviorContext<T>> sizeFunc)
     {
         SizeFunc = sizeFunc;
