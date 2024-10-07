@@ -10,17 +10,17 @@ using Tvision2.Engine.Render;
 using Tvision2.Layouts;
 
 namespace Tvision2.Controls.Layout.Grid;
- public class TvGrid : TvEventedControl<GridState>
+ public class TvGrid : TvEventedControl<GridDefinition>
 {
     private readonly GridContainer _gridContainer;
-    public TvGrid(GridState state) : base(state)
+    public TvGrid(GridDefinition definition) : base(definition)
     {
-        _gridContainer = new GridContainer(AsComponent().AsContainer(), state);
+        _gridContainer = new GridContainer(AsComponent().AsContainer(), definition);
         Options.AutoSize = false;
         Component.AddDrawer(GridDrawer);
     }
 
-    private void GridDrawer(ConsoleContext ctx, GridState state)
+    private void GridDrawer(ConsoleContext ctx, GridDefinition definition)
     {
         // Draw outside Border
         var drawer = ctx.GetConsoleDrawer();

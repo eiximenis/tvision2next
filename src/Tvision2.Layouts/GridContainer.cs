@@ -20,23 +20,23 @@ public class GridContainer
 {
 
     private readonly Dictionary<CellRef, CellGridContainer> _cellsLayouts = [];
-    private readonly GridState _gridState;
+    private readonly GridDefinition _gridDefinition;
     private readonly ITvContainer _owner;
     
 
     internal IViewportSnapshot Viewport => _owner.Viewport;
 
-    public int Rows => _gridState.Rows;
-    public int Columns => _gridState.Columns;
+    public int Rows => _gridDefinition.Rows;
+    public int Columns => _gridDefinition.Columns;
 
-    public GridContainer(ITvContainer owner, GridState state)
+    public GridContainer(ITvContainer owner, GridDefinition definition)
     {
         _owner = owner;
         owner.On().ViewportUpdated.Do(OnContainerUpdated);
-        _gridState = state;
-        for (var row = 0; row < _gridState.Rows; row++)
+        _gridDefinition = definition;
+        for (var row = 0; row < _gridDefinition.Rows; row++)
         {
-            for (var col = 0; col < _gridState.Columns; col++)
+            for (var col = 0; col < _gridDefinition.Columns; col++)
             {
                 var cellRef = new CellRef(row, col);
                 _cellsLayouts[cellRef] = new CellGridContainer(this, cellRef);
@@ -46,9 +46,9 @@ public class GridContainer
 
     private async Task OnContainerUpdated(ViewportUpdateReason obj)
     {
-        for (var row = 0; row < _gridState.Rows; row++)
+        for (var row = 0; row < _gridDefinition.Rows; row++)
         {
-            for (var col = 0; col < _gridState.Columns; col++)
+            for (var col = 0; col < _gridDefinition.Columns; col++)
             {
                 var cellRef = new CellRef(row, col);
                 await _cellsLayouts[cellRef].GridViewportUpdated();
@@ -64,7 +64,7 @@ public class GridContainer
 
 }
 
-public class GridState
+public class GridDefinition
 {
     public int Rows { get; } = 2;
     public int Columns { get; } = 2;

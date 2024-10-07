@@ -3,6 +3,7 @@
 public enum BorderType
 {
     None = 0,
+    Spaces = 1,
     Fill = 2,
     Double = 3,
     Single = 4
@@ -21,6 +22,7 @@ public readonly struct BorderValue
     public static BorderValue None() => new BorderValue(BorderType.None, BorderType.None);
     public static BorderValue Double() => new BorderValue(BorderType.Double, BorderType.Double);
     public static BorderValue Single() => new BorderValue(BorderType.Single, BorderType.Single);
+    public static BorderValue Spaces() => new BorderValue(BorderType.Spaces, BorderType.Spaces);
 
     public static BorderValue HorizontalVertical(BorderType horizontal, BorderType vertical) => new BorderValue(horizontal, vertical);
 

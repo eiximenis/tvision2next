@@ -17,8 +17,6 @@ namespace Tvision2.Layouts
         private readonly ActionsChain<ViewportUpdateReason> _viewportUpdated = new();
         private readonly Viewport _viewport = Viewports.Null();
 
-        public bool HasLayoutPending { get; private set; }
-
         public CellGridContainer(GridContainer grid, CellRef cell)
         {
             _grid = grid;

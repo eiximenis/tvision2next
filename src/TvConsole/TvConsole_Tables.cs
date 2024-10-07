@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tvision2.Core;
 using Tvision2.Drawing.Borders;
 using Tvision2.Drawing.Tables;
 
@@ -21,12 +22,15 @@ partial class TvConsole
         {
             row.AddCell(value);
         }
-        Draw(table);
+        // Draw(table);
 
     }
 
-    public static void Draw(Table table)
+    public static void Draw(Table table, TvPoint pos)
     {
+        // Draw outer border
+        Border.Draw(ConsoleDrawer,  BorderValue.Double(), pos, table.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red)); 
+
         foreach (var row in table.Rows)
         {
             // TODO: Continue here :)

@@ -65,13 +65,13 @@ public class Wrapper
     {
         _text = text;
         _runes = text.EnumerateRunes().ToArray();
+        SeparateWords();
     }
 
     public WrapInfo Wrap<TShape>(string text, TShape shape, 
         Justification justification = Justification.None) 
         where TShape : IShape
     {
-        SeparateWords();
         var linesLen = shape.GetLinesLengths().ToArray();                // Space per each line. Note that an Rune can occupy 0,1 or 2 spaces
         var lines = shape.HeightInside;
         var wrapInfo = new WrapInfo();

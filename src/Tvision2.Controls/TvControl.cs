@@ -37,9 +37,9 @@ public class TvControl<TState> : ITvControl<TState>
 
     public TvControlSetup<TState> Options { get; }
 
-    public TvControl(TState initialState, Action<TvComponent<TState>>? config = null)
+    public TvControl(TState initialDefinition, Action<TvComponent<TState>>? config = null)
     {
-        var cmp = new TvComponent<TState>(initialState, null);
+        var cmp = new TvComponent<TState>(initialDefinition, null);
         config?.Invoke(cmp);
         Options = new TvControlSetup<TState>();
         Component = cmp;
@@ -100,7 +100,7 @@ public class TvEventedControl<TState> : TvControl<TState>, ITvEventedControl, IT
 
     ITvEventedControlEventRaiser ITvEventedControl.Raise() => this;
 
-    public TvEventedControl(TState initialState, Action<TvComponent<TState>>? config = null) : base(initialState, config)
+    public TvEventedControl(TState initialDefinition, Action<TvComponent<TState>>? config = null) : base(initialDefinition, config)
     {
     }
     public TvEventedControl(TvComponent<TState> component) : base(component)

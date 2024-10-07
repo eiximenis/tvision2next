@@ -88,6 +88,16 @@ public static partial class TvConsole
         Write(new Rune(character));
     }
 
+    public static void Write(char character, int count)
+    {
+        ConsoleDriver.WriteCharacter(new Rune(character), count);
+    }
+
+    public static void Write(Rune rune, int count)
+    {
+        ConsoleDriver.WriteCharacter(rune, count);
+    }
+
     public static void Write(char character, TvColor fore, TvColor back) => Write(new Rune(character), fore, back);
 
     public static void Write(char character, int top, int left)
@@ -126,12 +136,23 @@ public static partial class TvConsole
         Write(rune, fore, back);
     }
 
+    public static void Write(IEnumerable<Rune> runes)
+    {
+        UpdateTerminalColors();
+        foreach (var rune in runes)
+        {
+            ConsoleDriver.WriteCharacter(rune);
+        }
+    }
+
 
     public static void WriteLine(string msg)
     {
         UpdateTerminalColors();
         System.Console.WriteLine(msg);
     }
+
+    public static void WriteLine() => System.Console.WriteLine();
 
     public static void WriteLine(string msg, TvColor fore, TvColor back)
     {

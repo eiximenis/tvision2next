@@ -66,6 +66,8 @@ public class Table
     private readonly BorderValue _border;
     private readonly List<TableRow> _rows = [];
 
+    public TvBounds Bounds { get; set; }
+    
     public ReadOnlySpan<TableRow> Rows => CollectionsMarshal.AsSpan(_rows);
 
     public Table(BorderValue border)

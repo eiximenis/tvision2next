@@ -53,11 +53,11 @@ app.UI.ComponentTree.Add(panel);
 var ctr = new TvPanel();
 ctr.MoveTo(TvPoint.FromXY(2, 4));
 ctr.Resize(TvBounds.FromRowsAndCols(10, 40));
-var grid = new GridContainer(ctr.AsComponent().AsContainer(Margin.FromValue(1)), new GridState());
+var grid = new GridContainer(ctr.AsComponent().AsContainer(Margin.FromValue(1)), new GridDefinition());
 button.Options.WithoutAutoSize();
 button.AsComponent().DockTo(grid.At(1, 0), Dock.Top); 
 
-var tvgrid = new TvGrid(new GridState());
+var tvgrid = new TvGrid(new GridDefinition());
 tvgrid.AsComponent().DockTo(grid.At(1, 1), Dock.Fill);
 app.UI.ComponentTree.Add(ctr);
 app.UI.ComponentTree.Add(tvgrid);

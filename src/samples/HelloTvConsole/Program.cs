@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Threading.Tasks.Sources;
 using HelloTvConsole;
 using Tvision2.Console;
 using Tvision2.Core;
@@ -49,22 +50,12 @@ var box6 = new Box(TvPoint.FromXY(90, 20), TvBounds.FromRowsAndCols(10, 25), Bor
 TvConsole.Draw(box6, new BlueRangeColor(box6.TopLeft));
 TvConsole.Wrap("Or maybe you want to center text 🤷! Everything is possible!", box6, Justification.Center);
 
-Console.ReadKey();
-await AnimateBox();
-
-async Task AnimateBox()
-{
-    var box = new Box(TvPoint.FromXY(90, 20), TvBounds.FromRowsAndCols(10, 25), 
-        BorderValue.HorizontalVertical(BorderType.Single, BorderType.Double));
-    while (box.Bounds.Width > 12)
-    {
-        await Task.Delay(200);
-        TvConsole.Clear(box, TvColor.Black);
-        box = box.Shrink(rows: 0, columns:1);
-        TvConsole.Draw(box, new BlueRangeColor(box.TopLeft));
-        TvConsole.Wrap("Or maybe you want to center text 🤷! Everything is possible!", 
-            box, Justification.Center);
-    }
-}
-
 Console.ReadLine();
+Console.Clear();
+
+var ttext = new TabulatedText();
+ttext.AddEntry("Line 1", "First Item", 30.1);
+ttext.AddEntry("Line 2", "Second Item\nExtra line with extra data\u2028Another extra line here!", 28);
+ttext.AddEntry("Line 3", "First Item", 30.2);
+TvConsole.Tabulate(ttext);
+
