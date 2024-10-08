@@ -38,33 +38,12 @@ public class StringBoundedElement : IBoundedElement
     }
 }
 
-class TableCell
-{
-    private IBoundedElement? _content;
-
-    public void SetContent(string value) => SetContent(new StringBoundedElement(value));
-
-    public void SetContent(IBoundedElement value) 
-    {
-        _content = value;
-    }
-}
-
-public class TableRow
-{
-    private readonly List<TableCell> _cells = [];
-    public void AddCell(string value)
-    {
-        var cell = new TableCell();
-        cell.SetContent(value);
-        _cells.Add(cell);
-    }
-}
-
 public class Table
 {
     private readonly BorderValue _border;
-    private readonly List<TableRow> _rows = [];
+    private readonly List<TableRow> _rows = []; 
+
+    public BorderValue Border => _border;
 
     public TvBounds Bounds { get; set; }
     

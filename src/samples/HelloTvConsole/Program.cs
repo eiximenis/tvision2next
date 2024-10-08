@@ -6,6 +6,7 @@ using Tvision2.Core;
 using Tvision2.Drawing;
 using Tvision2.Drawing.Borders;
 using Tvision2.Drawing.Shapes;
+using Tvision2.Drawing.Tables;
 using Tvision2.Drawing.Text;
 
 // Draw a box
@@ -58,4 +59,9 @@ ttext.AddEntry("Line 1", "First Item", 30.1);
 ttext.AddEntry("Line 2", "Second Item\nExtra line with extra data\u2028Another extra line here!", 28);
 ttext.AddEntry("Line 3", "First Item", 30.2);
 TvConsole.Tabulate(ttext);
+
+var table = new Table(BorderValue.Single());
+
+TvConsole.Draw(table, TvPoint.FromXY(0, 7));
+
 

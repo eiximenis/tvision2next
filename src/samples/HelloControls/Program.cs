@@ -59,8 +59,13 @@ button.AsComponent().DockTo(grid.At(1, 0), Dock.Top);
 
 var tvgrid = new TvGrid(new GridDefinition());
 tvgrid.AsComponent().DockTo(grid.At(1, 1), Dock.Fill);
+var gbutton = CreateButton("Grid", TvPoint.Zero);
+gbutton.Options.WithoutAutoSize();
+gbutton.AsComponent().DockTo(tvgrid.At(1, 1), Dock.Top);
+
 app.UI.ComponentTree.Add(ctr);
 app.UI.ComponentTree.Add(tvgrid);
+app.UI.ComponentTree.Add(gbutton);
 
 button.Focus();
 await Tv2App.Run();

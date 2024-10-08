@@ -37,7 +37,9 @@ app.UI.ComponentTree.Add(container);
 
 var component2 = TvComponent.CreateStatelessComponent(new Viewport(TvPoint.Zero, TvBounds.FromRowsAndCols(1, 14)));
 component2.AddDrawer(ctx => ctx.DrawStringAt("Hello World!", TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.LightBlack)));
-component2.DockTo(container.AsContainer(), Dock.Top);
+// component2.DockTo(container.AsContainer(), Dock.Top);
+
+component2.AttachWithMargin(container.AsContainer(), Margin.TopMargin(2));
 
 app.UI.ComponentTree.Add(component2);
 

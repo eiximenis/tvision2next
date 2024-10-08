@@ -11,29 +11,14 @@ using Tvision2.Drawing.Tables;
 namespace Tvision2.Console;
 partial class TvConsole
 {
-    /// <summary>
-    /// Draw a row of values inside a one-row-table
-    /// </summary>
-    public static void Draw(IEnumerable<string> values)
-    {
-        var table = new Table(border: BorderValue.None());
-        var row = table.AddRow();
-        foreach (var value in values)
-        {
-            row.AddCell(value);
-        }
-        // Draw(table);
-
-    }
-
     public static void Draw(Table table, TvPoint pos)
     {
         // Draw outer border
-        Border.Draw(ConsoleDrawer,  BorderValue.Double(), pos, table.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red)); 
+        Border.Draw(ConsoleDrawer, table.Border, pos, table.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red)); 
 
         foreach (var row in table.Rows)
         {
-            // TODO: Continue here :)
+            row.AddCell("xxxx");
         }
     }
 }
