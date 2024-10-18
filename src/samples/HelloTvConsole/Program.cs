@@ -61,7 +61,13 @@ ttext.AddEntry("Line 3", "First Item", 30.2);
 TvConsole.Tabulate(ttext);
 
 var table = new Table(BorderValue.Single());
+table.AddRow(RowHeight.Fixed(1));
+table.AddRow(RowHeight.Relative(3));
+table.AddRows(3);
+table.Bounds = TvBounds.FromRowsAndCols(15, 50);
 
 TvConsole.Draw(table, TvPoint.FromXY(0, 7));
+
+Console.ReadKey();
 
 

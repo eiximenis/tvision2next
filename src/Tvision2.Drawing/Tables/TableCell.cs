@@ -2,12 +2,9 @@
 
 class TableCell
 {
-    private IBoundedElement? _content;
-
-    public void SetContent(string value) => SetContent(new StringBoundedElement(value));
-
-    public void SetContent(IBoundedElement value) 
+    public ColumnWidth Width { get; }
+    public TableCell(ColumnWidth width)
     {
-        _content = value;
+        Width = width;
     }
 }

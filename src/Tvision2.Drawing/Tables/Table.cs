@@ -10,33 +10,6 @@ using Tvision2.Drawing.Borders;
 namespace Tvision2.Drawing.Tables;
 
 
-public interface IBoundedElement
-{
-    TvBounds CalculateDesiredBounds();
-    void Draw<TD>(TvBounds bounds, TD drawer) where TD: IConsoleDrawer;
-}
-
-public class StringBoundedElement : IBoundedElement
-{
-    private readonly string _value;
-    private readonly int _len;
-
-    public StringBoundedElement(string value)
-    {
-        _value = value ?? "";
-        _len = Length.WidthFromString(_value);
-    } 
-
-    public TvBounds CalculateDesiredBounds()
-    {
-        return TvBounds.FromRowsAndCols(1, _len);
-    }
-
-    public void Draw<TD>(TvBounds bounds, TD consoleDrawer) where TD: IConsoleDrawer
-    {
-        consoleDrawer.DrawStringAt(_value, TvPoint.Zero, TvColorsPair.FromForegroundAndBackground(TvColor.White, TvColor.Black));
-    }
-}
 
 public class Table
 {
@@ -53,10 +26,49 @@ public class Table
     {
         _border = border;
     }
-    public TableRow AddRow()
+    public TableRow AddRow(RowHeight rowHeight)
     {
-        var row = new TableRow();
+        var row = new TableRow(rowHeight);
         _rows.Add(row);
         return row;
+    }
+
+    public void AddRows(int rowCount)
+    {
+        for (var idx=0; idx < rowCount; idx++)
+        {
+            _rows.Add(new TableRow(RowHeight.Relative(1)));
+        }
+    }
+
+    private void CalculateCellsBounds()
+    {
+        var height = Bounds.Height;
+        var bordersHeight = _rows.Count - 1;
+        var totalFixedHeight = _rows.Where(r => r.Height.Type == RowHeightType.Fixed).Sum(r => r.Height.Value);
+        var totalRelativeHeight = _rows.Where(r => r.Height.Type == RowHeightType.Relative).Sum(r => r.Height.Value);
+        var relativeUnit = (height - bordersHeight - totalFixedHeight) / totalRelativeHeight;
+        foreach (var row in _rows)
+        {
+            row.ComputedHeight = row.Height.Type == RowHeightType.Fixed ? row.Height.Value : row.Height.Value * relativeUnit;
+        }
+    }
+
+    public void Draw<TD>(TD drawer, TvPoint pos) where TD : IConsoleDrawer
+    {
+        // Draw outer border
+        Borders.Border.Draw(drawer, Border, pos, Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red));
+        CalculateCellsBounds();
+        var idx = 0;
+        var currentPos = pos + TvPoint.FromXY(1, 1);
+        foreach (var row in _rows)
+        {
+            idx++;
+            drawer.DrawStringAt($"row {idx}", currentPos , TvColorsPair.FromForegroundAndBackground(TvColor.Red, TvColor.White));
+            currentPos = currentPos with { Y = currentPos.Y + row.ComputedHeight };
+            var line = new Line(LineType.Dotted, BorderType.None);
+            line.Draw(drawer, currentPos, Bounds.Width - 2, TvColorsPair.FromForegroundAndBackground(TvColor.Green, TvColor.White));
+            currentPos = currentPos with { Y = currentPos.Y + 1 };
+        }
     }
 }

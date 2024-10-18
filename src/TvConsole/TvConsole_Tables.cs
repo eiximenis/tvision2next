@@ -14,11 +14,6 @@ partial class TvConsole
     public static void Draw(Table table, TvPoint pos)
     {
         // Draw outer border
-        Border.Draw(ConsoleDrawer, table.Border, pos, table.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red)); 
-
-        foreach (var row in table.Rows)
-        {
-            row.AddCell("xxxx");
-        }
+        table.Draw(ConsoleDrawer, pos);
     }
 }

@@ -2,11 +2,19 @@
 
 public class TableRow
 {
-    private readonly List<TableCell> _cells = [];
-    public void AddCell(string value)
+    public RowHeight Height { get; }
+
+    internal int ComputedHeight { get; set; }
+
+    public TableRow(RowHeight height)
     {
-        var cell = new TableCell();
-        cell.SetContent(value);
+        Height = height;
+    }
+
+    private readonly List<TableCell> _cells = [];
+    public void AddCell(ColumnWidth width)
+    {
+        var cell = new TableCell(width);
         _cells.Add(cell);
     }
 }

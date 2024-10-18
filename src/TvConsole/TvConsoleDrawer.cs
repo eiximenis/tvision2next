@@ -13,7 +13,7 @@ class TvConsoleDrawer : IConsoleDrawer
     {
         TvConsole.Foreground = colors.Foreground;
         TvConsole.Background = colors.Background;
-        TvConsole.MoveCursorTo(location.Y, location.X);
+        TvConsole.MoveCursorTo(location.X, location.Y);
         TvConsole.Write(text);
     }
     public void DrawStringAt(string text, TvPoint location, IDynamicColor fgColor, IDynamicColor bgColor)
