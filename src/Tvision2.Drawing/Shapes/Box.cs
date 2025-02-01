@@ -29,7 +29,7 @@ public readonly record struct Box(TvPoint TopLeft, TvBounds Bounds, BorderValue 
     public TvPoint BottomRightInside => BottomRight - TvPoint.FromXY(Border.HasVerticalBorder ? 1 : 0, Border.HasVerticalBorder ? 1 : 0);
 
     public bool PointIsInside(TvPoint point) =>
-        point.X > TopLeft.X && point.X < BottomRight.X && point.Y > TopLeft.Y && point.Y < BottomRight.Y;
+        point.X >= TopLeftInside.X && point.X <= BottomRightInside.X && point.Y >= TopLeftInside.Y && point.Y <=  BottomRightInside.Y;
 }
 
 public static class ShapeExtensions

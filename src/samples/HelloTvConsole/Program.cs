@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Threading.Tasks.Sources;
 using HelloTvConsole;
 using Tvision2.Console;
@@ -48,7 +49,7 @@ var box5 = new Box(TvPoint.FromXY(70, 20), TvBounds.FromRowsAndCols(7, 20), Bord
 TvConsole.Draw(box5);
 TvConsole.Wrap("Or maybe (only maybe) you want full justification 😊 So Easy!", box5, Justification.Full);
 var box6 = new Box(TvPoint.FromXY(90, 20), TvBounds.FromRowsAndCols(10, 25), BorderValue.HorizontalVertical(BorderType.Single, BorderType.Double));
-TvConsole.Draw(box6, new BlueRangeColor(box6.TopLeft));
+TvConsole.Draw(box6, new BlueRangeColor(box6.TopLeft ,6));
 TvConsole.Wrap("Or maybe you want to center text 🤷! Everything is possible!", box6, Justification.Center);
 
 Console.ReadLine();
@@ -61,12 +62,30 @@ ttext.AddEntry("Line 3", "First Item", 30.2);
 TvConsole.Tabulate(ttext);
 
 var table = new Table(BorderValue.Single());
-table.AddRow(RowHeight.Fixed(1));
-table.AddRow(RowHeight.Relative(3));
-table.AddRows(3);
-table.Bounds = TvBounds.FromRowsAndCols(15, 50);
+table.AddRow(RowHeight.Fixed(1)).AddCells(2);
+table.AddRow(RowHeight.Relative(3))
+    .AddCell(ColumnWidth.Fixed(10))
+    .AddCells(2);
+table.AddRows(3).AddCells(4);
+table.AddRow(RowHeight.Relative(5)).AddCells(1);
+table.Bounds = TvBounds.FromRowsAndCols(21, 50);
 
-TvConsole.Draw(table, TvPoint.FromXY(0, 7));
+var pos = TvPoint.FromXY(0, 7);
+TvConsole.Draw(table, pos);
+var cell11 = table.GetCellBox(pos, 1, 1);
+TvConsole.Wrap("Ufo", cell11, Justification.Center);
+
+var cell01 = table.GetCellBox(pos, 2, 1);
+TvConsole.Fill(cell01, new BlueRangeColor(cell01.TopLeftInside, 20));
+
+var cell40 = table.GetCellBox(pos, 4, 0);
+TvConsole.Fill(cell40, TvColor.FromHexString("#ddaa90"));
+var cell50 = table.GetCellBox(pos, 5, 0);
+var table2 = new Table(BorderValue.Single());
+table2.AddRow(RowHeight.Fixed(1)).AddCells(3);
+table2.AddRow(RowHeight.Fixed(1)).AddCells(2);
+table2.Bounds = cell50.Bounds.Reduced(TvBounds.FromRowsAndCols(2, 2));
+TvConsole.Draw(table2, cell50.TopLeftInside + TvPoint.FromXY(1, 1));
 
 Console.ReadKey();
 

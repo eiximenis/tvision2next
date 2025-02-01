@@ -1,5 +1,6 @@
 using System.Drawing;
 using Tvision2.Core;
+using Tvision2.Drawing;
 using Tvision2.Drawing.Shapes;
 
 namespace Tvision2.Console;
@@ -28,6 +29,22 @@ partial class TvConsole
             }
         }
         Background = oldBg;
+    }
+
+    public static void Fill<TShape>(TShape shapeToFill, IDynamicColor fillColor) where TShape : IShape
+    {
+        for (var row = shapeToFill.TopLeftInside.Y; row <= shapeToFill.BottomRightInside.Y; row++)
+        {
+            for (var col = shapeToFill.TopLeft.X; col <= shapeToFill.BottomRightInside.X; col++)
+            {
+                if (shapeToFill.PointIsInside(TvPoint.FromXY(col, row)))
+                {
+                    MoveCursorTo(col, row);
+                    var color = fillColor.GetColorForPosition(TvPoint.FromXY(col, row));
+                    Write(' ', color, color);
+                }
+            }
+        }
     }
 
     public static void Clear<TShape>(TShape shapeToClear, TvColor? clearColor = null) where TShape : IShape

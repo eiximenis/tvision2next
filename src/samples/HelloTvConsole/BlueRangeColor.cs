@@ -10,14 +10,16 @@ namespace HelloTvConsole;
 class BlueRangeColor : IDynamicColor
 {
     private readonly TvPoint _initial;
-    public BlueRangeColor(TvPoint initial)
+    private readonly int _increment;
+    public BlueRangeColor(TvPoint initial, int increment)
     {
         _initial = initial;
+        _increment = increment;
     }
 
     public TvColor GetColorForPosition(TvPoint point)
     {
-        var blue = (byte)((point.X - _initial.X + point.Y - _initial.Y) *  6);
+        var blue = (byte)((point.X - _initial.X + point.Y - _initial.Y) * _increment);
         return TvColor.FromRgb((byte)0, (byte)blue, blue);
     }
 }
