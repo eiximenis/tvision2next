@@ -14,14 +14,14 @@ partial class TvConsole
         var topLeft = TvPoint.FromXY(left, top);
         var bounds = TvBounds.FromRowsAndCols(rows, columns);
         var colors = TvColorsPair.FromForegroundAndBackground(Foreground, Background);
-        Border.Draw(ConsoleDrawer, value ?? BorderValue.Double(),  topLeft, bounds, colors);
+        BorderDrawer.Draw(ConsoleDrawer, value ?? BorderValue.Double(),  topLeft, bounds, colors);
     }
 
     public static void Draw(Box box, IDynamicColor? fgColor = null, IDynamicColor? bgColor = null)
     {
         var fg = fgColor ?? SolidDynamicColor.FromColor(Foreground);
         var bg = bgColor ?? SolidDynamicColor.FromColor(Background);
-        Border.Draw(ConsoleDrawer, box.Border, box.TopLeft, box.Bounds, fg, bg);
+        BorderDrawer.Draw(ConsoleDrawer, box.Border, box.TopLeft, box.Bounds, fg, bg);
     }
 
     public static void Write<TShape>(string msg, TShape shape, IPositionResolver positionResolver) where TShape : IShape

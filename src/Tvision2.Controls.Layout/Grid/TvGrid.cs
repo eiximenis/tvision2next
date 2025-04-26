@@ -25,7 +25,7 @@ namespace Tvision2.Controls.Layout.Grid;
     {
         // Draw outside Border
         var drawer = ctx.GetConsoleDrawer();
-        Border.Draw(drawer, BorderValue.Single(), TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.LightGreen, TvColor.Blue));
+        BorderDrawer.Draw(drawer, BorderValue.Single(), TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.LightGreen, TvColor.Blue));
     }
 
     public ITvContainer At(int row, int column) => _gridContainer.At(row, column);

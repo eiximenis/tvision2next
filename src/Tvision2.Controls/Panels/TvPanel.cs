@@ -27,6 +27,6 @@ public class TvPanel : TvEventedControl<TvPanelState>
     private void PanelDrawer(ConsoleContext ctx, TvPanelState state)
     {
         var drawer = ctx.GetConsoleDrawer();
-        Border.Draw(drawer, state.Border, TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.LightRed, TvColor.Black));
+        BorderDrawer.Draw(drawer, state.Border, TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.LightRed, TvColor.Black));
     }
 }

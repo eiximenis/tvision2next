@@ -53,15 +53,22 @@ public class TvList : TvEventedControl<ListState>
     private DrawResult ListDrawer(StyledConsoleContext ctx, ListState state)
     {
         var drawer = ctx.GetConsoleDrawer();
-        Border.Draw(drawer, BorderValue.Single(), TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Green, TvColor.Blue));
+        BorderDrawer.Draw(drawer, BorderValue.Single(), TvPoint.Zero, ctx.Viewzone.Bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Green, TvColor.Blue));
         var rows = ctx.Viewzone.Bounds.Height - 2;
         var lim = rows < state.ItemsCount ? rows : state.ItemsCount;
+
+        var innerWitdh = ctx.Viewzone.Bounds.Width - 2;
         for (var idx = 0; idx < lim; idx++)
         {
             var item = state.ItemAt(idx);
             if (item is not null)
             {
+                var paddingNeeded = innerWitdh - item.Length;
                 ctx.DrawStringAt(item, TvPoint.FromXY(1, idx + 1));
+                if (paddingNeeded > 0)
+                {
+                    ctx.DrawCharsAt(' ', paddingNeeded, TvPoint.FromXY(1 + item.Length, idx + 1));
+                }
             }
         }
 

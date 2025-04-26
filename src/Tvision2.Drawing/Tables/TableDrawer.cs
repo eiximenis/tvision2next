@@ -53,7 +53,7 @@ namespace Tvision2.Drawing.Tables
         public static void Draw<TD>(TD drawer, TableDefinition table, in TvPoint topLeft, in TvBounds bounds) where TD : IConsoleDrawer
         {
             // Draw outer border
-            Borders.Border.Draw(drawer, table.Border, topLeft, bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red));
+            Borders.BorderDrawer.Draw(drawer, table.Border, topLeft, bounds, TvColorsPair.FromForegroundAndBackground(TvColor.Blue, TvColor.Red));
             CalculateCellsBounds(table, in bounds);
             var idx = 0;
             var currentPos = topLeft + TvPoint.FromXY(0, 1);

@@ -30,6 +30,7 @@ public readonly struct StyledConsoleContext
 
     private void DrawStringAt(string text, TvPoint location, StyleState state) => _consoleContext.DrawStringAt(text, location, state.ColorsPairAt(location));
 
+    public void DrawCharsAt(char value, int count, TvPoint location) => _consoleContext.DrawCharsAt(value, count, location, _styleSet.DefaultStyle.DefaultState.ColorsPairAt(location));
     public void DrawCharsAt(char value, int count, TvPoint location, StyleState state) => _consoleContext.DrawCharsAt(value, count, location, state.ColorsPairAt(location));
 
     public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Tvision2.Core;
 
 namespace Tvision2.Drawing.Borders;
-public static class Border
+public static class BorderDrawer
 {
     public static void Draw<TD>(TD drawer, BorderValue border, TvPoint topLeft, TvBounds bounds, TvColorsPair colors) where TD : IConsoleDrawer
     {
