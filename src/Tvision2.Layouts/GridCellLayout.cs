@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,9 +39,23 @@ namespace Tvision2.Layouts
         private (TvPoint Pos, TvBounds Bounds) RecalculateBoundsAndPosition()
         {
             var gridViewport = _grid.Viewport;
-            var cellWidth = gridViewport.Bounds.Width / _grid.Columns;
-            var cellHeight = gridViewport.Bounds.Height / _grid.Rows;
-            var pos = TvPoint.FromXY(gridViewport.Position.X + _cell.Column * cellWidth, gridViewport.Position.Y + _cell.Row * cellHeight);
+            var row = _grid.Definition.Rows[_cell.Row];
+            var cell = row.CellAt(_cell.Column);
+            var cellWidth = cell.ComputedWidth;
+            var cellHeight = row.ComputedHeight;
+
+            var accHeight = 0;
+            for (var prevRow = 0; prevRow < _cell.Row; prevRow++)
+            {
+                accHeight += _grid.Definition.Rows[prevRow].ComputedHeight;
+            }
+            var accWidth = 0;
+            for (var prevCol = 0; prevCol < _cell.Column; prevCol++)
+            {
+                accWidth += _grid.Definition.Rows[_cell.Row].CellAt(prevCol).ComputedWidth;
+            }
+
+            var pos = TvPoint.FromXY(gridViewport.Position.X + accWidth , gridViewport.Position.Y + accHeight);
             var bounds = TvBounds.FromRowsAndCols(cellHeight, cellWidth);
             return (pos, bounds);
         }

@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 using Tvision2.Core;
 using Tvision2.Core.Console;
 using Tvision2.Drawing;
@@ -34,6 +35,13 @@ public readonly struct StyledConsoleContext
     public void Fill() => Fill(_styleSet.DefaultStyle.DefaultState);
     public void Fill(string stateName) => Fill(_styleSet.DefaultStyle.GetStateOrDefault(stateName));
     public void Fill(string styleName, string stateName) => Fill(_styleSet[styleName].GetStateOrDefault(stateName));
+
+    // Duplicate ConsoleContext functions to support "override styling" with fixed colors
+    public void Fill(TvColor color) => _consoleContext.Fill(color);
+    public void DrawCharsAt(char value, int count, TvPoint location, TvColorsPair colors) => _consoleContext.DrawCharsAt(value, count, location, colors);
+    public void DrawRunesAt(Rune rune, int count, TvPoint location, CharacterAttribute attribute) => _consoleContext.DrawRunesAt(rune, count, location, attribute);
+    public void DrawStringAt(string text, TvPoint location, TvColorsPair colors) => _consoleContext.DrawStringAt(text, location, colors);
+
 
     public ConsoleContextDrawer GetConsoleDrawer() => _consoleContext.GetConsoleDrawer();
 

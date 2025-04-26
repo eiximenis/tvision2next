@@ -61,32 +61,33 @@ ttext.AddEntry("Line 2", "Second Item\nExtra line with extra data\u2028Another e
 ttext.AddEntry("Line 3", "First Item", 30.2);
 TvConsole.Tabulate(ttext);
 
-var table = new Table(BorderValue.Single());
-table.AddRow(RowHeight.Fixed(1)).AddCells(2);
-table.AddRow(RowHeight.Relative(3))
+
+var tableDefinition = new TableDefinition();
+tableDefinition.AddRow(RowHeight.Fixed(1)).AddCells(2);
+tableDefinition.AddRow(RowHeight.Relative(3))
     .AddCell(ColumnWidth.Fixed(10))
     .AddCells(2);
-table.AddRows(3).AddCells(4);
-table.AddRow(RowHeight.Relative(5)).AddCells(1);
+tableDefinition.AddRows(3).AddCells(4);
+tableDefinition.AddRow(RowHeight.Relative(5)).AddCells(1);
+var table = new Table(TvPoint.FromXY(0, 7), tableDefinition );
 table.Bounds = TvBounds.FromRowsAndCols(21, 50);
 
-var pos = TvPoint.FromXY(0, 7);
-TvConsole.Draw(table, pos);
-var cell11 = table.GetCellBox(pos, 1, 1);
+TvConsole.Draw(table);
+var cell11 = table.GetCellBox(1, 1);
 TvConsole.Wrap("Ufo", cell11, Justification.Center);
 
-var cell01 = table.GetCellBox(pos, 2, 1);
+var cell01 = table.GetCellBox(2, 1);
 TvConsole.Fill(cell01, new BlueRangeColor(cell01.TopLeftInside, 20));
 
-var cell40 = table.GetCellBox(pos, 4, 0);
+var cell40 = table.GetCellBox(4, 0);
 TvConsole.Fill(cell40, TvColor.FromHexString("#ddaa90"));
-var cell50 = table.GetCellBox(pos, 5, 0);
-var table2 = new Table(BorderValue.Single());
-table2.AddRow(RowHeight.Fixed(1)).AddCells(3);
-table2.AddRow(RowHeight.Fixed(1)).AddCells(2);
-table2.Bounds = cell50.Bounds.Reduced(TvBounds.FromRowsAndCols(2, 2));
-TvConsole.Draw(table2, cell50.TopLeftInside + TvPoint.FromXY(1, 1));
-
+var table2Definition = new TableDefinition();
+table2Definition.AddRow(RowHeight.Fixed(1)).AddCells(3);
+table2Definition.AddRow(RowHeight.Fixed(1)).AddCells(2);
+var table2 = new Table(table.GetCellBox(5, 0), table2Definition);
 Console.ReadKey();
-
+TvConsole.Draw(table2);
+TvConsole.Fill(table2.GetCellBox(1,1), TvColor.FromHexString("#776655"));
+Console.ReadKey();
+     
 

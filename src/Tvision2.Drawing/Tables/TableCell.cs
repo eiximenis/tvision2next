@@ -4,7 +4,7 @@ public class TableCell
 {
     public ColumnWidth Width { get; }
 
-    internal int ComputedWidth { get; set; }
+    public int  ComputedWidth { get; internal set; }
     public TableCell(ColumnWidth width)
     {
         Width = width;

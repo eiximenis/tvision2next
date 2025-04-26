@@ -45,6 +45,7 @@ public class TvLabel : TvEventedControl<string>
 
     private static DrawResult LabelDrawer(StyledConsoleContext ctx, string text)
     {
+        ctx.Fill(TvColor.Yellow);
         ctx.DrawStringAt(text, TvPoint.Zero);
         return DrawResult.Done;
     }

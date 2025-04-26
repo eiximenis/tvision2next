@@ -5,22 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Tvision2.Core;
 using Tvision2.Drawing.Borders;
+using Tvision2.Drawing.Tables;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Render;
 using Tvision2.Layouts;
 
 namespace Tvision2.Controls.Layout.Grid;
- public class TvGrid : TvEventedControl<GridDefinition>
+ public class TvGrid : TvEventedControl<TableDefinition>
 {
     private readonly GridContainer _gridContainer;
-    public TvGrid(GridDefinition definition) : base(definition)
+    public TvGrid(TableDefinition definition) : base(definition)
     {
         _gridContainer = new GridContainer(AsComponent().AsContainer(), definition);
         Options.AutoSize = false;
         Component.AddDrawer(GridDrawer);
     }
 
-    private void GridDrawer(ConsoleContext ctx, GridDefinition definition)
+    private void GridDrawer(ConsoleContext ctx, TableDefinition definition)
     {
         // Draw outside Border
         var drawer = ctx.GetConsoleDrawer();

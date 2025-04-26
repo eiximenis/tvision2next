@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Tvision2.Core;
+using Tvision2.Drawing;
 using Tvision2.Drawing.Borders;
 using Tvision2.Drawing.Tables;
 using Tvision2.Drawing.Text;
@@ -12,8 +13,8 @@ using Tvision2.Drawing.Text;
 namespace Tvision2.Console;
 partial class TvConsole
 {
-    public static void Draw(Table table, TvPoint pos)
+    public static void Draw(Table table)
     {
-        table.Draw(ConsoleDrawer, pos);
+        TableDrawer.Draw(ConsoleDrawer, table.Definition, table.TopLeft, table.Bounds);
     }
 }

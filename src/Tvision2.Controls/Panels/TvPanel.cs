@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tvision2.Core;
+﻿using Tvision2.Core;
 using Tvision2.Drawing.Borders;
 using Tvision2.Engine.Render;
 
-namespace Tvision2.Controls.Panel;
+namespace Tvision2.Controls.Panels;
 
 
 public class TvPanelState

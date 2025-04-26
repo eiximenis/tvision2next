@@ -7,7 +7,7 @@ public class TableRow
 {
     public RowHeight Height { get; }
 
-    internal int ComputedHeight { get; set; }
+    public int ComputedHeight { get; internal set; }
 
     public TableRow(RowHeight height)
     {

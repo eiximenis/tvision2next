@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tvision2.Drawing.Tables;
 using Tvision2.Engine.Components;
 using Tvision2.Engine.Events;
 using Tvision2.Engine.Layouts;
@@ -20,37 +21,42 @@ public class GridContainer
 {
 
     private readonly Dictionary<CellRef, CellGridContainer> _cellsLayouts = [];
-    private readonly GridDefinition _gridDefinition;
+    private readonly TableDefinition _gridDefinition;
     private readonly ITvContainer _owner;
+
+    internal TableDefinition Definition => _gridDefinition;
     
-
     internal IViewportSnapshot Viewport => _owner.Viewport;
-
-    public int Rows => _gridDefinition.Rows;
-    public int Columns => _gridDefinition.Columns;
-
-    public GridContainer(ITvContainer owner, GridDefinition definition)
+    public int Rows => _gridDefinition.RowsCount;
+    public GridContainer(ITvContainer owner, TableDefinition definition)
     {
         _owner = owner;
         owner.On().ViewportUpdated.Do(OnContainerUpdated);
         _gridDefinition = definition;
-        for (var row = 0; row < _gridDefinition.Rows; row++)
+        for (var rowIdx = 0; rowIdx < _gridDefinition.RowsCount; rowIdx++)
         {
-            for (var col = 0; col < _gridDefinition.Columns; col++)
+            var row = _gridDefinition.Rows[rowIdx];
+            for (var col = 0; col < row.CellsCount ; col++)
             {
-                var cellRef = new CellRef(row, col);
+                var cellRef = new CellRef(rowIdx, col);
                 _cellsLayouts[cellRef] = new CellGridContainer(this, cellRef);
             }
         }
+
+        OnContainerUpdated(ViewportUpdateReason.MovedAndResized).Wait();
     }
 
     private async Task OnContainerUpdated(ViewportUpdateReason obj)
     {
-        for (var row = 0; row < _gridDefinition.Rows; row++)
+
+        TableDrawer.CalculateCellsBounds(_gridDefinition, Viewport.Bounds);
+
+        for (var rowIdx = 0; rowIdx < _gridDefinition.RowsCount; rowIdx++)
         {
-            for (var col = 0; col < _gridDefinition.Columns; col++)
+            var row = _gridDefinition.Rows[rowIdx];
+            for (var col = 0; col < row.CellsCount; col++)
             {
-                var cellRef = new CellRef(row, col);
+                var cellRef = new CellRef(rowIdx, col);
                 await _cellsLayouts[cellRef].GridViewportUpdated();
             }
         }
@@ -61,12 +67,5 @@ public class GridContainer
         var cellRef = new CellRef(row, column);
         return _cellsLayouts[cellRef];
     }
-
-}
-
-public class GridDefinition
-{
-    public int Rows { get; } = 2;
-    public int Columns { get; } = 2;
 
 }
