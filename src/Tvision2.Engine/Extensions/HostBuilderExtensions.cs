@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tvision2.Engine.Layouts;
 
 namespace Tvision2.Engine.Extensions;
 
@@ -19,6 +20,7 @@ public static class HostBuilderExtensions
                 services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
                 services.AddSingleton<Tvision2Options>(tv2Options);
                 services.AddSingleton<Tvision2Engine>();
+                services.AddSingleton<ConsoleContainer>();
                 services.AddHostedService<Tvision2EngineController>();
             })
             .UseConsoleLifetime();

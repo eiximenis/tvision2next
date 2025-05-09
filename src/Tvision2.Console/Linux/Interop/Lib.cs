@@ -8,6 +8,7 @@ using static Types;
 using nfds_t = UInt64;
 static class Libc
 {
+
     // int tcgetattr(int fildes, struct termios *termios_p);
     [DllImport("libc.so.6", EntryPoint="tcgetattr")]
     public static extern int tcgetattr(int fildes, ref termios termios_p);
@@ -32,7 +33,6 @@ static class Libc
         
     [DllImport("libc.so.6", EntryPoint = "poll")]
     private static extern int __poll (ref pollfd __fds, nfds_t __nfds, int __timeout);
-
 
     public static bool poll()
     {

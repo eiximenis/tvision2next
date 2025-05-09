@@ -1,20 +1,22 @@
 namespace Tvision2.Console.Events;
 
-public class TvWindowEvent
+public sealed class TvWindowEvent 
 {
     public int NewColumns { get; private set; }
     public int NewRows { get; private set; }
 
+    public bool IsHandled { get; private set; }
+
 
     public TvWindowEvent(int cols, int rows)
     {
-        NewColumns = cols;
-        NewRows = rows;
+        Update(cols, rows); 
     }
 
-    public void Update(int newCols, int newRows)
+    internal void Update(int cols, int rows)
     {
-        NewColumns = newCols;
-        NewRows = newRows;
+        NewColumns = cols;
+        NewRows = rows;
+        IsHandled = false;
     }
 }

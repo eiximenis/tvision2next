@@ -3,6 +3,8 @@ using Tvision2.Console.Events;
 using Tvision2.Console.Input;
 using Tvision2.Console.Linux.Interop;
 
+using System.Runtime.InteropServices;
+
 namespace Tvision2.Console.Linux
 {
     public class LinuxConsoleEventsReader : IConsoleEventsReader
@@ -27,8 +29,15 @@ namespace Tvision2.Console.Linux
             }
             Libc.cfmakeraw(ref termios);
             retval = Libc.tcsetattr(1, Constants.TCSANOW, ref termios);
+            // Register the SIGWINCH signal to handle terminal window changes
+            PosixSignalRegistration.Create(PosixSignal.SIGWINCH, OnSignalWinchReceived);
         }
-        
+
+        private void OnSignalWinchReceived(PosixSignalContext context)
+        {
+            throw new InvalidDataException("SIGWINCH signal received");
+        }
+
         public void ReadEvents(TvConsoleEvents events)
         {
             var data = Libc.read();

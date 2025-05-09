@@ -14,6 +14,11 @@ public static  class Constants
     public const int POLLIN = 0x001;
 }
 
+public static class Signals
+{
+    public const int SIGWINCH = 28;
+}
+
 static class Types
 {
     // /usr/include/x86_64-linux-gnu/bits/termios.h
@@ -57,4 +62,5 @@ static class Types
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
         public IntPtr[] fds_bits;
     }
+
 }

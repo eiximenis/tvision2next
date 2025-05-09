@@ -58,7 +58,8 @@ public class WindowsConsoleEventsReader : IConsoleEventsReader
                     events.Add(CreateMouseEventFromWin32(in record.MouseEvent));
                     break;
                 case ConsoleEventTypes.WINDOW_BUFFER_SIZE_EVENT:
-                    // events.SetWindowEvent(new Win32WindowsEvent(record.WindowBufferSizeEvent));
+                    var dwSize = record.WindowBufferSizeEvent.dwSize;
+                    events.UpdateWindowSize(dwSize.X, dwSize.Y);
                     break;
             }
         }
